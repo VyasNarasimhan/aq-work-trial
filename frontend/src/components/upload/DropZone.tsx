@@ -80,7 +80,7 @@ export function DropZone() {
       setUploading(false);
       setUploadProgress("");
     }
-  }, [uploadResult, selectedHarness, router]);
+  }, [uploadResult, selectedHarness, selectedModel, router]);
 
   const handleCancel = () => {
     setUploadResult(null);

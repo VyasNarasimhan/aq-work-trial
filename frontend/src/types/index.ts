@@ -2,9 +2,9 @@ export type HarnessType = "harbor" | "terminus";
 
 export type ModelType =
   | "openrouter/anthropic/claude-sonnet-4"
-  | "openrouter/anthropic/claude-sonnet-4-5"
+  | "openrouter/anthropic/claude-sonnet-4.5"
   | "openrouter/openai/gpt-5"
-  | "openrouter/google/gemini-2.0-flash";
+  | "openrouter/google/gemini-2.0-flash-lite-001";
 
 export interface ModelOption {
   value: ModelType;
@@ -13,9 +13,9 @@ export interface ModelOption {
 
 export const MODEL_OPTIONS: ModelOption[] = [
   { value: "openrouter/anthropic/claude-sonnet-4", label: "Claude Sonnet 4" },
-  { value: "openrouter/anthropic/claude-sonnet-4-5", label: "Claude Sonnet 4.5" },
+  { value: "openrouter/anthropic/claude-sonnet-4.5", label: "Claude Sonnet 4.5" },
   { value: "openrouter/openai/gpt-5", label: "GPT-5" },
-  { value: "openrouter/google/gemini-2.0-flash", label: "Gemini 2.0 Flash" },
+  { value: "openrouter/google/gemini-2.0-flash-lite-001", label: "Gemini 2.0 Flash" },
 ];
 
 export const DEFAULT_MODEL: ModelType = "openrouter/openai/gpt-5";

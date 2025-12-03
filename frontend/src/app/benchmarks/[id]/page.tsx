@@ -62,7 +62,19 @@ export default function BenchmarkPage({
           <h1 className="text-2xl font-bold text-gray-900 mt-2">
             {benchmark.task_name}
           </h1>
-          <p className="text-gray-500 text-sm">
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+              benchmark.harness === "harbor"
+                ? "bg-purple-100 text-purple-800"
+                : "bg-orange-100 text-orange-800"
+            }`}>
+              {benchmark.harness}
+            </span>
+            <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+              {benchmark.model?.split("/").pop() || "unknown"}
+            </span>
+          </div>
+          <p className="text-gray-500 text-sm mt-1">
             Started{" "}
             {benchmark.started_at
               ? new Date(benchmark.started_at).toLocaleString()
