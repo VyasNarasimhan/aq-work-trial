@@ -426,22 +426,35 @@ class BenchmarkManager:
                 benchmark["job_dirs"].append(str(self.jobs_dir / job_name))
             self._save_benchmarks()
 
-            # Run all jobs in parallel
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-
-            # Process results
-            run_results = []
+            # Run all jobs in parallel, updating progress as each completes
             errors = []
+            completed_count = 0
+            passed_count = 0
 
-            for result in results:
-                if isinstance(result, Exception):
-                    errors.append(str(result))
-                else:
+            for coro in asyncio.as_completed(tasks):
+                try:
+                    result = await coro
                     run_num, job_name, job_result = result
                     job_dir = self.jobs_dir / job_name
-                    test_case_results = self._get_test_case_results(job_dir)
 
-            benchmark["run_results"] = test_case_results
+                    # Check if this run passed
+                    passed = self._check_job_passed(job_dir)
+
+                    completed_count += 1
+                    if passed:
+                        passed_count += 1
+
+                    # Update benchmark progress
+                    benchmark["completed_runs"] = completed_count
+                    benchmark["passed_runs"] = passed_count
+                    self._save_benchmarks()
+
+                except Exception as e:
+                    errors.append(str(e))
+                    completed_count += 1
+                    benchmark["completed_runs"] = completed_count
+                    self._save_benchmarks()
+
             benchmark["status"] = "completed"
             benchmark["finished_at"] = datetime.now().isoformat()
 
