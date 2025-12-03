@@ -1,0 +1,10 @@
+terraform
+examples
+
+backend/.venv/
+backend/jobs
+backend/uploads
+backend/.env
+
+frontend/node_modules/
+frontend/.next/

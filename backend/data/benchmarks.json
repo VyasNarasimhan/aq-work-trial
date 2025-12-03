@@ -1,0 +1,3036 @@
+{
+  "benchmarks": [
+    {
+      "id": "910d86a6-3440-40aa-9c4c-191bcd0f3abd",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f1596e22-9a14-4e59-900a-0b7edf224d9a/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-910d86a6-run-1",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-910d86a6-run-2"
+      ],
+      "total_runs": 10,
+      "completed_runs": 2,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:23:21.834741",
+      "finished_at": null,
+      "error": null
+    },
+    {
+      "id": "4c8a696c-799c-4e12-afce-c51611896a03",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/38d67baa-4f49-4d09-9808-fc7c01ac4890/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-4c8a696c-run-1"
+      ],
+      "total_runs": 10,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:26:34.738499",
+      "finished_at": null,
+      "error": null
+    },
+    {
+      "id": "4348a4b9-b0f8-42ec-bb22-23866b45c9e7",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/04d4e059-293e-4b2b-841f-4690d6f550fa/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-4348a4b9-run-1"
+      ],
+      "total_runs": 10,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:30:03.572309",
+      "finished_at": null,
+      "error": null
+    },
+    {
+      "id": "7eb274ae-4c43-420f-be0c-a631f84a0aed",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/00523222-5975-48f8-92ef-2cef0b149685/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-1",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-2",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-3",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-4",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-5",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-6",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-7",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-8",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-9",
+        "/Users/vyas/code/aq/backend/jobs/benchmark-7eb274ae-run-10"
+      ],
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:33:18.248743",
+      "finished_at": null,
+      "error": null
+    },
+    {
+      "id": "291ecdad-c7cc-44ff-a829-5c89f1337029",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/efe7e08c-13f8-4a32-9504-c1c11df75311/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-291ecdad-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:36:21.841717",
+      "finished_at": "2025-12-01T19:37:30.207218",
+      "error": null
+    },
+    {
+      "id": "b49697d0-eb6c-4b1a-a783-983e476c7fe1",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8b692cb1-e127-48a0-a5ff-4aa18fa1f752/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-b49697d0-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T19:41:53.016604",
+      "finished_at": "2025-12-01T19:42:59.860482",
+      "error": null
+    },
+    {
+      "id": "a0427fcf-66b5-4ceb-b407-bd7083f769c2",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/d6849821-b513-4abf-bf5b-adae0e6e3f14/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-a0427fcf-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-01T20:07:45.750295",
+      "finished_at": "2025-12-01T20:08:53.956964",
+      "error": null
+    },
+    {
+      "id": "1c17f897-52bf-4ac1-b85d-5f740d2213b9",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/63f6a4dd-c7a7-4f19-b1c4-d3d923652402/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-1c17f897-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-01T20:13:43.996894",
+      "finished_at": "2025-12-01T20:14:55.717611",
+      "error": null
+    },
+    {
+      "id": "ccc7039b-0cf7-412d-b7af-5d2191a907ee",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f237edcb-d0ec-4494-ae0a-068be8806f37/adaptive-rejection-sampler",
+      "status": "failed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-ccc7039b-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T20:34:24.019406",
+      "finished_at": "2025-12-01T20:35:34.979466",
+      "error": "cannot access local variable 'completed' where it is not associated with a value"
+    },
+    {
+      "id": "bb92a247-1e30-4974-b9de-be03088818ac",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/4d163fb7-7262-4a7d-9655-36ccc9ab6d48/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-bb92a247-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T20:37:59.767542",
+      "finished_at": "2025-12-01T20:39:10.855064",
+      "error": null,
+      "run_results": [
+        {
+          "name": "test_ars_function_exists",
+          "status": "passed"
+        },
+        {
+          "name": "test_can_generate_standard_distribution_samples",
+          "status": "passed"
+        },
+        {
+          "name": "test_has_test_function",
+          "status": "passed"
+        },
+        {
+          "name": "test_formal_testing_with_known_truth",
+          "status": "passed"
+        },
+        {
+          "name": "test_sample_files_generated",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_is_modular",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_handles_errors",
+          "status": "passed"
+        },
+        {
+          "name": "test_input_validation_functionality",
+          "status": "passed"
+        },
+        {
+          "name": "test_log_concavity_functionality",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "36906bee-3b8a-4c25-8227-38ad4ad4d310",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8826c335-f448-4d9c-be4a-b990abee0f31/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-36906bee-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T20:46:01.956004",
+      "finished_at": "2025-12-01T20:47:10.949963",
+      "error": null,
+      "run_results": [
+        {
+          "name": "test_ars_function_exists",
+          "status": "passed"
+        },
+        {
+          "name": "test_can_generate_standard_distribution_samples",
+          "status": "passed"
+        },
+        {
+          "name": "test_has_test_function",
+          "status": "passed"
+        },
+        {
+          "name": "test_formal_testing_with_known_truth",
+          "status": "passed"
+        },
+        {
+          "name": "test_sample_files_generated",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_is_modular",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_handles_errors",
+          "status": "passed"
+        },
+        {
+          "name": "test_input_validation_functionality",
+          "status": "passed"
+        },
+        {
+          "name": "test_log_concavity_functionality",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "634f7350-0d93-4579-a2f5-c30f22fea8fb",
+      "task_name": "caffe-cifar-10",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/fc127266-cfb6-436d-a4b7-2d027221f4ed/caffe-cifar-10",
+      "status": "running",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-634f7350-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T20:49:16.032299",
+      "finished_at": null,
+      "error": null
+    },
+    {
+      "id": "edd00124-fe0a-4444-9cac-cbb5c8e686c7",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/50ab68e0-695c-406c-9767-1586a2b49123/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-edd00124-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T20:53:02.373801",
+      "finished_at": "2025-12-01T20:53:44.353967",
+      "error": null,
+      "run_results": []
+    },
+    {
+      "id": "fa75bc85-f356-411f-8fdf-8f3f47b4297b",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/89ffa032-84c8-4842-a0ad-d522369257d0/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-fa75bc85-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T23:02:22.513386",
+      "finished_at": "2025-12-01T23:05:36.991886",
+      "error": null,
+      "run_results": [
+        {
+          "name": "test_ars_function_exists",
+          "status": "passed"
+        },
+        {
+          "name": "test_can_generate_standard_distribution_samples",
+          "status": "passed"
+        },
+        {
+          "name": "test_has_test_function",
+          "status": "passed"
+        },
+        {
+          "name": "test_formal_testing_with_known_truth",
+          "status": "passed"
+        },
+        {
+          "name": "test_sample_files_generated",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_is_modular",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_handles_errors",
+          "status": "passed"
+        },
+        {
+          "name": "test_input_validation_functionality",
+          "status": "passed"
+        },
+        {
+          "name": "test_log_concavity_functionality",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "3c2db81a-477a-4541-8e84-95e4065a9745",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/25e58a07-4501-48da-ab66-7694a661968c/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-3c2db81a-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-01T23:06:02.036973",
+      "finished_at": "2025-12-01T23:07:14.702883",
+      "error": null,
+      "run_results": []
+    },
+    {
+      "id": "a67d5c9f-3079-4699-805b-10d6cd9554e4",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/a4615076-e9a5-45f2-b2b6-c9bfc5592bcd/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-a67d5c9f-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T07:45:06.894795",
+      "finished_at": "2025-12-02T07:49:19.642107",
+      "error": null,
+      "run_results": []
+    },
+    {
+      "id": "c724fdd5-637f-403b-9e4b-92501a800df8",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/72b35daf-1161-43b7-8286-6cae006f1e24/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [
+        "/Users/vyas/code/aq/backend/jobs/benchmark-c724fdd5-run-1"
+      ],
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T07:52:01.753017",
+      "finished_at": "2025-12-02T08:05:35.518234",
+      "error": null,
+      "run_results": [
+        {
+          "name": "test_ars_function_exists",
+          "status": "passed"
+        },
+        {
+          "name": "test_can_generate_standard_distribution_samples",
+          "status": "passed"
+        },
+        {
+          "name": "test_has_test_function",
+          "status": "passed"
+        },
+        {
+          "name": "test_formal_testing_with_known_truth",
+          "status": "passed"
+        },
+        {
+          "name": "test_sample_files_generated",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_is_modular",
+          "status": "passed"
+        },
+        {
+          "name": "test_implementation_handles_errors",
+          "status": "passed"
+        },
+        {
+          "name": "test_input_validation_functionality",
+          "status": "passed"
+        },
+        {
+          "name": "test_log_concavity_functionality",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "f4f94aeb-f992-4bda-8d56-f85d5dfb948a",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f09eddfd-a722-4dc1-b61f-bf488a576eb9/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "e868a10e-19b0-4b32-8662-f236447b5c07",
+          "job_id": "0265e834-3fc5-4503-a4ba-815ecfa7d2ca"
+        },
+        {
+          "run_number": 2,
+          "run_id": "897a214e-12c9-497b-b7ae-9db5ae098b2d",
+          "job_id": "79e0bbce-3172-42c5-9826-02d51b870f3b"
+        },
+        {
+          "run_number": 3,
+          "run_id": "8ecc2af0-c8f3-47ce-9d17-e14dd2c78b52",
+          "job_id": "0fa51cad-ecf6-402b-9334-df942c2d77d8"
+        },
+        {
+          "run_number": 4,
+          "run_id": "a1cf752b-8c91-4b64-9f0b-c8d1cf78b712",
+          "job_id": "f6bd59de-856b-4cb7-8ba5-f073ae9bd4af"
+        },
+        {
+          "run_number": 5,
+          "run_id": "a8c0f025-466b-49d7-9061-c85e95f0a622",
+          "job_id": "bbeea42a-2975-4628-bba7-f90d488bcf13"
+        },
+        {
+          "run_number": 6,
+          "run_id": "e7bb4568-a598-4449-ac6e-fbd0e338b225",
+          "job_id": "de7a3426-8c55-43f2-ad8f-cdb398ff0e53"
+        },
+        {
+          "run_number": 7,
+          "run_id": "4fc701cf-f927-48ab-b856-40efd0e9865e",
+          "job_id": "70a162a2-b868-434b-bea4-3b8cc3c75795"
+        },
+        {
+          "run_number": 8,
+          "run_id": "2bc5238a-f004-40b9-b4e2-128c934ea1a4",
+          "job_id": "573ff87b-4f4e-4311-befa-4afbae09b23f"
+        },
+        {
+          "run_number": 9,
+          "run_id": "fe29aeac-5eba-42f8-86ef-eb5c1dba4fd8",
+          "job_id": "9a20607f-09b0-4362-94b9-63705e5f168d"
+        },
+        {
+          "run_number": 10,
+          "run_id": "50b10d47-cc36-4cb1-a4cc-92d476f27ce7",
+          "job_id": "71bde85e-4123-47e7-b6d8-0651abcbc808"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f4f94aeb-f992-4bda-8d56-f85d5dfb948a/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T10:29:04.748050",
+      "finished_at": "2025-12-02T10:31:07.820763",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "925bc20b-e426-419a-a1b6-1ccb7dfc8a9c",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/19671a27-ecb2-473c-b647-4e0b8b66462a/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "0235fe19-4946-4112-b646-c93742759b0b",
+          "job_id": "c3607e2a-59a5-4bc7-b61a-8de8f9b5057d"
+        },
+        {
+          "run_number": 2,
+          "run_id": "c1198634-17f8-441a-8600-7cf81af78ebc",
+          "job_id": "04e463a1-bee3-4f3c-853a-fd93aa4a6350"
+        },
+        {
+          "run_number": 3,
+          "run_id": "c9453e0a-c1c0-49f0-aa7e-7918219de906",
+          "job_id": "670cec2a-170e-4b36-bdad-cd836367af3a"
+        },
+        {
+          "run_number": 4,
+          "run_id": "d80be2b9-4c2c-49c2-afab-f9b6ab41d5c2",
+          "job_id": "4ed0eb76-794b-4f71-9a2b-d8b33dc2f28b"
+        },
+        {
+          "run_number": 5,
+          "run_id": "ba95c717-85b7-42c7-ba32-f2722173bf02",
+          "job_id": "62a5fbcc-efcc-4527-9528-7de5a7dc1e9d"
+        },
+        {
+          "run_number": 6,
+          "run_id": "0bf96e71-8fee-4781-81c4-120ae287f295",
+          "job_id": "0cc90d0c-8fb6-4377-bb6b-86cafd2cb91e"
+        },
+        {
+          "run_number": 7,
+          "run_id": "2d2888cb-efab-46ed-99d5-d27710809743",
+          "job_id": "b19c041a-0bcd-4747-8c72-fb4b2ae9ffbc"
+        },
+        {
+          "run_number": 8,
+          "run_id": "2277a936-e330-4665-96b8-f79f3d742ea9",
+          "job_id": "8edcfd88-abd8-43c0-b43b-e995eff142e2"
+        },
+        {
+          "run_number": 9,
+          "run_id": "d023b4a6-de9a-4068-a0d2-76a97ed03bea",
+          "job_id": "e4259a10-6e08-4c04-b585-04191f76c58e"
+        },
+        {
+          "run_number": 10,
+          "run_id": "882430d8-ccc5-4dab-8cd6-4d68c6e90de5",
+          "job_id": "160e8e06-1cbf-44d8-aa88-a7aa6d288312"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/925bc20b-e426-419a-a1b6-1ccb7dfc8a9c/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T10:35:28.993400",
+      "finished_at": "2025-12-02T10:37:42.564206",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "097cb65b-d696-49c8-804d-5778787e7f3c",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/b4ef82e4-31aa-40e7-817e-1d6303dd597d/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "0b511d0b-090f-4da3-9bfe-af68160db8b5",
+          "job_id": "a479c9e5-debd-4024-a328-e7a61437cc6c"
+        },
+        {
+          "run_number": 2,
+          "run_id": "26fe5dea-4086-487e-bca9-2e2854bec4bd",
+          "job_id": "f7e70462-c7d2-44c6-81c5-c1deb7e11bff"
+        },
+        {
+          "run_number": 3,
+          "run_id": "b6ffba73-a545-45ac-aa43-e4de5016eba7",
+          "job_id": "05035551-aaa1-49d1-8b58-580d1edfb541"
+        },
+        {
+          "run_number": 4,
+          "run_id": "2497a9b3-0668-46d4-8644-107df6b6fa9c",
+          "job_id": "f2a305e0-29ba-48a9-9001-bdcfa4620d45"
+        },
+        {
+          "run_number": 5,
+          "run_id": "4290bfee-2b44-4dfc-b57d-f2b6e74fde72",
+          "job_id": "d20cc233-6631-4df9-a42f-ff82bb8e1c47"
+        },
+        {
+          "run_number": 6,
+          "run_id": "90f11a38-ad65-4c04-9ce2-6aa778492ab8",
+          "job_id": "0bf9901b-325c-467d-b991-4ef05c3646f7"
+        },
+        {
+          "run_number": 7,
+          "run_id": "91e0351c-d3f2-499f-a9e8-c9935d817543",
+          "job_id": "cc343595-4289-4a1c-8d97-2a5e4a26e6d7"
+        },
+        {
+          "run_number": 8,
+          "run_id": "536702ce-40cd-4876-8f0b-fa1c07d19f6b",
+          "job_id": "6a673bc1-61a1-47e0-879f-a1e8ccfb8174"
+        },
+        {
+          "run_number": 9,
+          "run_id": "220f8675-8fce-493b-9edf-2e80be13576b",
+          "job_id": "bcbf13e2-e0b7-4c08-b8b5-09fd43469686"
+        },
+        {
+          "run_number": 10,
+          "run_id": "84020d3e-0885-4a08-b898-7f0c6f96375f",
+          "job_id": "4df835f8-d9da-46d4-8824-7e45bb37dc13"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/097cb65b-d696-49c8-804d-5778787e7f3c/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T10:43:12.901489",
+      "finished_at": "2025-12-02T11:02:12.732504",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2e330896-2688-41b9-89d0-170c7e4ad4a4",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/e4e69aa3-520e-4589-b676-d2e7b2882010/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "8bbe6e0b-4901-4aa7-bbc2-53e815085817",
+          "job_id": "e94f6668-3830-4077-979b-01921cebcb13"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2e330896-2688-41b9-89d0-170c7e4ad4a4/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T11:05:02.029655",
+      "finished_at": "2025-12-02T11:11:36.679221",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "65b4b0f3-fede-4838-bc86-ad7531614ff1",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f8f1beba-02b6-46ad-ab52-ee0ccf821645/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "d549f4d6-9814-4a1d-8101-c4e9a6193aff",
+          "job_id": "68f8d9bc-5c02-489e-b6db-ffa1f87482c3"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/65b4b0f3-fede-4838-bc86-ad7531614ff1/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T11:17:50.201871",
+      "finished_at": "2025-12-02T11:29:37.228395",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2534fc0c-f6a0-4ea9-8109-6440675cf318",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/d165273b-4d8f-4030-a038-e04db656a9df/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "8963b913-8600-4219-aca1-387dbd414c03",
+          "job_id": "6f5a8c05-68da-45b1-bd90-7531ff4ab543"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2534fc0c-f6a0-4ea9-8109-6440675cf318/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T11:44:19.403353",
+      "finished_at": "2025-12-02T11:54:34.734405",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "e899a108-53a1-4f95-8233-5db21539bc05",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8a783bb0-1798-4931-8893-01dc96e6e296/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "0579654f-fc5e-401e-89d2-ee39aff71b8c",
+          "job_id": "a68eded5-1151-491c-b19f-917f71ca637c"
+        },
+        {
+          "run_number": 2,
+          "run_id": "871a2555-5339-4738-ab40-13a773d7cf2f",
+          "job_id": "6ebad706-84e1-4020-a9df-33a0ea50802f"
+        },
+        {
+          "run_number": 3,
+          "run_id": "7c73d160-74c1-4cde-8ef6-26e6966e5ac6",
+          "job_id": "27c06890-1c68-4d0d-9692-783ee81b2f2b"
+        },
+        {
+          "run_number": 4,
+          "run_id": "33cafe6f-e8eb-40f1-94d5-ebff0f526272",
+          "job_id": "b9c64e1f-c277-4b2d-8b95-b638632f834f"
+        },
+        {
+          "run_number": 5,
+          "run_id": "9d6508df-7ae0-4b02-a7c0-6d71aa4f8179",
+          "job_id": "21a72213-1cd0-4576-84ea-dbd20b397f8f"
+        },
+        {
+          "run_number": 6,
+          "run_id": "83014f90-66ef-4664-a6b5-851d31cad148",
+          "job_id": "74bc271d-c632-4c77-a12c-0c57e482add5"
+        },
+        {
+          "run_number": 7,
+          "run_id": "d55e0e13-9c15-47b7-9328-373ed9e5cd39",
+          "job_id": "433a5cb1-1a77-4099-b02b-1024a509f4d0"
+        },
+        {
+          "run_number": 8,
+          "run_id": "c2803d57-2dfe-4d6f-80a8-c83bc862e658",
+          "job_id": "036c6f8e-1c8d-4deb-93f2-8b40a55241f6"
+        },
+        {
+          "run_number": 9,
+          "run_id": "ede74a17-9ecc-48d0-8a9b-3ae840264f70",
+          "job_id": "33f462ec-9e50-4060-a3b0-f741569134cc"
+        },
+        {
+          "run_number": 10,
+          "run_id": "35713941-6edd-4189-86e6-94bd049167aa",
+          "job_id": "3d3a7e17-dfec-4346-97a2-b4cb2cd89d17"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/e899a108-53a1-4f95-8233-5db21539bc05/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 6,
+      "started_at": "2025-12-02T11:56:19.017945",
+      "finished_at": "2025-12-02T12:16:51.712909",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "504126ec-b98c-4f93-b911-5bf78c5d5b26",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/c410a705-2ed0-4442-aee3-df307cf293db/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "e4e83649-b36c-42de-b67f-6633da39634b",
+          "job_id": "44ac863c-2f19-46c5-9726-cb8595b53759"
+        },
+        {
+          "run_number": 2,
+          "run_id": "3602984b-3909-461d-9dcb-37fe674db6db",
+          "job_id": "1d62c7ec-1acc-4edc-b822-7ac6bdddb3f8"
+        },
+        {
+          "run_number": 3,
+          "run_id": "94253d2e-d6c1-4d2d-8074-1427f89c74fb",
+          "job_id": "11468b64-07cc-4e94-9ecb-a19bba100e12"
+        },
+        {
+          "run_number": 4,
+          "run_id": "3d7fec62-e3c5-4361-83b0-3ebac8e4e8bf",
+          "job_id": "2c698e1b-3399-4a40-a267-6b3150605b54"
+        },
+        {
+          "run_number": 5,
+          "run_id": "3077a06e-0357-47c4-b240-47fe6af24d83",
+          "job_id": "ff08c8c6-597d-4b84-8eae-1964145cf810"
+        },
+        {
+          "run_number": 6,
+          "run_id": "2767d08e-703a-43e5-a3a1-68e4e92fb778",
+          "job_id": "08d1953e-6160-44ca-88b3-96bdababc4a2"
+        },
+        {
+          "run_number": 7,
+          "run_id": "406cbb48-742e-40e8-848a-dacc4994eecf",
+          "job_id": "b2b1e897-74b8-458d-bd27-8ae911afc905"
+        },
+        {
+          "run_number": 8,
+          "run_id": "8eb33441-7788-4849-b1c0-10bef44b40a6",
+          "job_id": "af3e2407-a69c-4486-9d7e-7e55613a19fe"
+        },
+        {
+          "run_number": 9,
+          "run_id": "fe1fb72a-314e-4915-a1d5-6cf389f513e0",
+          "job_id": "57393f26-d23c-47f7-8ce0-eb7ab298f38c"
+        },
+        {
+          "run_number": 10,
+          "run_id": "d18736f8-cf1d-49b3-bf64-6493f8bd2387",
+          "job_id": "4adb235d-2331-4365-a8fa-983643e894e3"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/504126ec-b98c-4f93-b911-5bf78c5d5b26/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-02T12:20:36.052728",
+      "finished_at": "2025-12-02T12:32:41.148222",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2fd83e45-982c-40d1-a942-d68a21232ed5",
+      "task_name": "caffe-cifar-10",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/9370262a-f05d-4258-a6b7-61f4ae9d4c9e/caffe-cifar-10",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "1036560f-8cb9-43a9-ba6d-f125a68779eb",
+          "job_id": "06cf5094-c4b7-47b3-97ef-8b3101a006d6"
+        },
+        {
+          "run_number": 2,
+          "run_id": "12bfd11f-9e4b-4c72-a183-95ee22765cd0",
+          "job_id": "e537e75d-1e45-46d7-8d59-27701a8c1212"
+        },
+        {
+          "run_number": 3,
+          "run_id": "4034f6e6-e126-4d36-9994-649e8c9e2b00",
+          "job_id": "51b5e94a-174f-471c-9023-96256a640b93"
+        },
+        {
+          "run_number": 4,
+          "run_id": "f0e458d7-3bde-4554-be78-ea1e8e3997ab",
+          "job_id": "f19d5956-65dd-44bc-8c61-9008e5968660"
+        },
+        {
+          "run_number": 5,
+          "run_id": "ebdc038b-304f-4c6b-96b7-151b6ac76af0",
+          "job_id": "f50fab54-6ad7-4757-8258-1ab89580a0ba"
+        },
+        {
+          "run_number": 6,
+          "run_id": "497a0325-7af2-413e-9443-e0ec47349b49",
+          "job_id": "52aca5bc-c410-4f8c-8c81-0fb79e0a5f5c"
+        },
+        {
+          "run_number": 7,
+          "run_id": "0788073b-178a-4c3f-b23a-d6f4006d42c5",
+          "job_id": "bdf52cc6-dee9-4732-a132-c431924f2526"
+        },
+        {
+          "run_number": 8,
+          "run_id": "5212fa0f-a26a-443d-bd71-4e87d7b88475",
+          "job_id": "86bda467-5bb9-4604-8eca-fdc999499358"
+        },
+        {
+          "run_number": 9,
+          "run_id": "e0509b66-b8e8-4b66-be60-443ba452943b",
+          "job_id": "ea21d07b-6a05-4629-8cb6-741ec0d11560"
+        },
+        {
+          "run_number": 10,
+          "run_id": "2954c613-77e5-4bed-9c29-5a81397e01ee",
+          "job_id": "632b6007-394a-444e-86f1-e3c12c5da411"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2fd83e45-982c-40d1-a942-d68a21232ed5/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T12:20:46.358843",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "cfec4f83-9549-40e5-a1ee-68815f03e270",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/be5eb6d0-2142-463d-ac15-8cb35c09128d/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "f5041d51-324e-4bcf-a685-d40e8f38723b",
+          "job_id": "da67e6aa-fda5-4cbe-af22-c02292ee15bb"
+        },
+        {
+          "run_number": 2,
+          "run_id": "40921c4f-1dc7-48fd-bc73-4e1c74d5d8a4",
+          "job_id": "6aeff73d-4b3c-4ac1-a35b-a4bc05bc4534"
+        },
+        {
+          "run_number": 3,
+          "run_id": "41258d8f-3b16-47dd-8977-65ee8e04b030",
+          "job_id": "2ee9b134-984a-4cc4-b857-170258e9db18"
+        },
+        {
+          "run_number": 4,
+          "run_id": "8ebe9ad4-7987-442a-b732-acf22380f82b",
+          "job_id": "77803c06-a5f6-4a99-8610-6fa7b869bcf8"
+        },
+        {
+          "run_number": 5,
+          "run_id": "3b8dad8c-dc19-4c0b-9f67-8258900e768e",
+          "job_id": "118a3312-e0cc-421b-8829-efcace3a3169"
+        },
+        {
+          "run_number": 6,
+          "run_id": "c4de0c1e-1322-499b-816a-ae8edc0fce1c",
+          "job_id": "2a417d0d-a67b-4384-98ea-f7ff0480e582"
+        },
+        {
+          "run_number": 7,
+          "run_id": "5ea0b28d-6010-47c3-8eb6-56563f4aecff",
+          "job_id": "c6f73a62-c289-4547-b931-152b64c46597"
+        },
+        {
+          "run_number": 8,
+          "run_id": "fc125063-611a-4055-bcca-9e9ded2e352c",
+          "job_id": "a446f087-ef7c-4c25-94a0-843bb54aacaa"
+        },
+        {
+          "run_number": 9,
+          "run_id": "3ad7ae27-ba74-4249-8396-8c457e168b6c",
+          "job_id": "5111fd8b-267c-4ae5-82dc-790cfc8e688e"
+        },
+        {
+          "run_number": 10,
+          "run_id": "1b7bbf89-ec39-4242-824e-8ba36c377117",
+          "job_id": "1ebe5b07-f7ea-4484-b3d7-a3f07107303b"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/cfec4f83-9549-40e5-a1ee-68815f03e270/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 4,
+      "started_at": "2025-12-02T12:38:51.055870",
+      "finished_at": "2025-12-02T12:59:05.158778",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "e7dfe64e-65c8-485e-88fe-17e66967bd57",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/a054ba1b-c38b-4256-9efc-a4132ccf8b85/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "7c8348e5-5c3f-4c42-b512-8574d1ecad97",
+          "job_id": "29a37dfb-db4b-446b-a165-b4864682ec30"
+        },
+        {
+          "run_number": 2,
+          "run_id": "88f1e075-3412-44da-8eac-18c7b10c5101",
+          "job_id": "21212587-20c8-41fa-adcd-e2e502d6a765"
+        },
+        {
+          "run_number": 3,
+          "run_id": "371cc45f-9c77-44cf-b549-1146a21c700a",
+          "job_id": "1b237e6e-cabc-4bfd-b865-33f41b6d171e"
+        },
+        {
+          "run_number": 4,
+          "run_id": "219cc0de-362d-460a-a6b6-3ff139879c9c",
+          "job_id": "88e66831-b2e8-4407-adb6-8fdc782101c4"
+        },
+        {
+          "run_number": 5,
+          "run_id": "35f37e4a-1407-472d-bff4-5cf3b4137521",
+          "job_id": "cd6d182e-49d8-445d-9fad-b6008e300a94"
+        },
+        {
+          "run_number": 6,
+          "run_id": "a712c726-26e0-493e-a730-efb13aad5fcb",
+          "job_id": "0ac16ff2-7e85-44b0-bfcc-1e6c481d690c"
+        },
+        {
+          "run_number": 7,
+          "run_id": "b6a91230-b4ee-485f-88aa-a78e49616014",
+          "job_id": "07031ce2-964d-45fd-9064-bb686a43ae61"
+        },
+        {
+          "run_number": 8,
+          "run_id": "e00279d8-4a30-4c1e-a245-01046262a032",
+          "job_id": "27e6f68b-b513-4256-8f53-62b5df9fd52a"
+        },
+        {
+          "run_number": 9,
+          "run_id": "75960645-b9bc-496e-b89c-011f71be98d2",
+          "job_id": "8160bcad-6475-45c3-8630-5a415a35c1b9"
+        },
+        {
+          "run_number": 10,
+          "run_id": "60c26f0a-f4f2-45f2-a2a0-a9c53859bd4a",
+          "job_id": "1c46b349-9c6b-4003-9dd4-5fb0741f7727"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/e7dfe64e-65c8-485e-88fe-17e66967bd57/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 7,
+      "started_at": "2025-12-02T12:38:58.568125",
+      "finished_at": "2025-12-02T13:04:49.517781",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "49b610f5-2614-4c31-8597-f68073a97e2b",
+      "task_name": "caffe-cifar-10",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/7022dad2-ac0f-4caa-b428-58b9f27a760c/caffe-cifar-10",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "7c4b7be7-2185-490c-a0a6-8b3bd34f9340",
+          "job_id": "a04ef971-9820-4d5e-b67a-9e7c9662103b"
+        },
+        {
+          "run_number": 2,
+          "run_id": "8cd8ae68-d72c-4b8f-aba8-965cc4204e93",
+          "job_id": "a18ccb7a-12e8-4f64-914b-d889221d9cd7"
+        },
+        {
+          "run_number": 3,
+          "run_id": "083cb582-c67c-4079-a362-4a4e2a0e1bd8",
+          "job_id": "e99ecb67-b4f5-455d-ac38-abe1439b2300"
+        },
+        {
+          "run_number": 4,
+          "run_id": "4008f6de-5241-41f6-942a-e45280a55c28",
+          "job_id": "3d06632c-7588-4545-bce0-d30249427863"
+        },
+        {
+          "run_number": 5,
+          "run_id": "4e394f71-41fe-4b90-87f3-812a3ee16cab",
+          "job_id": "cca17582-ecbc-426e-9c70-eaf04d8576e5"
+        },
+        {
+          "run_number": 6,
+          "run_id": "eccac3f1-69f0-4c34-8a15-01cc4273c7cf",
+          "job_id": "0189ca15-c8fa-4b0e-aa21-a429654cfa9b"
+        },
+        {
+          "run_number": 7,
+          "run_id": "37c7fdca-287d-4865-a215-d25a7fcfded3",
+          "job_id": "7082c96b-89be-47b8-b88b-05ee43dbbc10"
+        },
+        {
+          "run_number": 8,
+          "run_id": "1ca90fa1-65fa-4c8a-b6ce-3182692eb082",
+          "job_id": "15ca4ab6-0d5b-4bfd-b79c-7026a98379cf"
+        },
+        {
+          "run_number": 9,
+          "run_id": "af7d7d8a-27ed-4772-a1f0-7f12a7943e48",
+          "job_id": "2381fed1-01ab-43fe-aed9-7c557da6880b"
+        },
+        {
+          "run_number": 10,
+          "run_id": "a5fa009c-6014-41cc-9071-4313d2e4a371",
+          "job_id": "5b54013f-1642-4de3-a132-ac069aff2f19"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/49b610f5-2614-4c31-8597-f68073a97e2b/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T13:07:48.012332",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c97472fc-3c63-45dc-b40f-60413e3cee1a",
+      "task_name": "chess-best-move",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/806d0412-c150-4cda-b269-2621f66d06d9/chess-best-move",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "636f27b4-aaec-4814-b8c1-d96317b92be6",
+          "job_id": "09d741ba-b6ce-4187-af2e-cc39a31d42e8"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c97472fc-3c63-45dc-b40f-60413e3cee1a/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T13:10:12.393092",
+      "finished_at": "2025-12-02T13:32:51.105167",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "d37d09a2-ef37-400a-8058-6f71b15f1f3a",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/7613037d-29a3-47da-b031-8ed92e16b898/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "5bd1b564-a60a-42cb-a1c4-be2b20fa8eb5",
+          "job_id": "0dbec9af-97c6-4f27-809a-63b110e0c78c"
+        },
+        {
+          "run_number": 2,
+          "run_id": "14c38232-0957-41e0-befe-272c11a421b6",
+          "job_id": "54141756-0470-4390-8ccf-2c7aba2a3c18"
+        },
+        {
+          "run_number": 3,
+          "run_id": "b71512b5-5e89-4d1c-b4a2-51431188076e",
+          "job_id": "aea2ceb4-4a4f-47e6-97ad-1d3d6e5abb1b"
+        },
+        {
+          "run_number": 4,
+          "run_id": "fb15e2cb-c462-4d0e-9ce7-5e11c86c5f32",
+          "job_id": "66c41c13-85c9-4b9b-9614-c05d98d6aece"
+        },
+        {
+          "run_number": 5,
+          "run_id": "66ca4b0c-77d2-44a2-b5b7-b888569346cd",
+          "job_id": "a2ee33aa-b92a-4ef3-bbf7-91f93e305032"
+        },
+        {
+          "run_number": 6,
+          "run_id": "ff66daf7-2547-429f-bdec-85591a2f5bce",
+          "job_id": "22c0dbe9-d71f-45be-bebc-360610f8f705"
+        },
+        {
+          "run_number": 7,
+          "run_id": "eae01a5a-da06-422e-8358-054939f00921",
+          "job_id": "625c2aa3-8635-45a1-bad9-28553cfaa19d"
+        },
+        {
+          "run_number": 8,
+          "run_id": "2524cecc-6d9d-451c-9cb0-7feadce95686",
+          "job_id": "40cf8dca-3dea-41ca-8414-ce3d7d7aa31a"
+        },
+        {
+          "run_number": 9,
+          "run_id": "547ab01a-74d6-45d6-9d07-54120e5a79a3",
+          "job_id": "671145ba-a86b-4cbb-b478-b063bf0c1c1c"
+        },
+        {
+          "run_number": 10,
+          "run_id": "3bfda1c5-e180-4f3e-9d91-439fd4468b80",
+          "job_id": "ec4f6b1e-2759-44e0-b661-f53abf843d95"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/d37d09a2-ef37-400a-8058-6f71b15f1f3a/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 2,
+      "started_at": "2025-12-02T13:52:31.400384",
+      "finished_at": "2025-12-02T14:17:14.880958",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c952508c-3bed-4a13-ae64-0bf4976650f3",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/4101429b-1203-4ab2-9eef-50a3db2afb13/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "e79710bb-d4cc-43e9-a041-188b96a14d77",
+          "job_id": "fc47fb7a-c29a-4556-93aa-180654a60054"
+        },
+        {
+          "run_number": 2,
+          "run_id": "efb84bff-64aa-483f-b984-18d50a71a83f",
+          "job_id": "4b320075-5747-4413-b612-29ba5c82185d"
+        },
+        {
+          "run_number": 3,
+          "run_id": "9e676558-7279-4bd1-a7cc-ed167851b06a",
+          "job_id": "51d4f4f2-1ab6-4717-a5ef-b18c9d730ac6"
+        },
+        {
+          "run_number": 4,
+          "run_id": "4c9e6706-bd7b-424d-a96e-7fc384be1c55",
+          "job_id": "ffb56933-f653-42e2-a9de-25833e18cf3c"
+        },
+        {
+          "run_number": 5,
+          "run_id": "75aabfe2-3da1-4525-a397-6f712c4b4b0e",
+          "job_id": "6427a343-4df2-442d-8c06-1bd258e712f3"
+        },
+        {
+          "run_number": 6,
+          "run_id": "a7a9455e-bb3a-48eb-b1cf-2215c1f864d5",
+          "job_id": "7666e677-768f-4baa-8a75-38983d3da50b"
+        },
+        {
+          "run_number": 7,
+          "run_id": "2f3106a2-2ea3-4bd6-abc6-dfdb23b2be12",
+          "job_id": "0d488b63-749f-4ce3-b2f8-e7832ee7bf67"
+        },
+        {
+          "run_number": 8,
+          "run_id": "78eaa20f-94db-4d71-8cb0-fbe059b98b00",
+          "job_id": "79a6f4a7-6a77-4d37-bf32-1da79cb44e3c"
+        },
+        {
+          "run_number": 9,
+          "run_id": "98576c01-d1f2-4e15-916d-3ae0be0f48e5",
+          "job_id": "97fc28b7-04f8-4069-bdf4-ae1d41ca38fa"
+        },
+        {
+          "run_number": 10,
+          "run_id": "30bf0d46-37b1-48f5-b19f-0773a3c203a7",
+          "job_id": "f8f02853-a291-4f09-86ce-31eaa4b01917"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c952508c-3bed-4a13-ae64-0bf4976650f3/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 3,
+      "started_at": "2025-12-02T14:20:12.464991",
+      "finished_at": "2025-12-02T14:40:49.553702",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "811ddf06-ee84-422c-9d06-87a753526ca6",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/6879f0b3-3728-4c8c-bb7d-d4b5530c4a48/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "75e6e0f4-f391-4c19-b2fb-c43d6cf6d791",
+          "job_id": "f99376c1-8bd1-4058-8ed7-4a34e3311620"
+        },
+        {
+          "run_number": 2,
+          "run_id": "f5b8cbe5-4fe4-483b-a297-debe563d0ab4",
+          "job_id": "6fa2c907-f782-477b-8187-53fc35f71384"
+        },
+        {
+          "run_number": 3,
+          "run_id": "37887a4d-9ec7-4e56-978b-ffd3837f7c41",
+          "job_id": "eefadd93-8d70-40d9-8f5a-3cbc58e8a363"
+        },
+        {
+          "run_number": 4,
+          "run_id": "3af10e43-be8b-438e-9693-1ea2412603ec",
+          "job_id": "18e646fb-ead4-41ea-a09d-3f653eb07623"
+        },
+        {
+          "run_number": 5,
+          "run_id": "c6d03197-914d-4f35-99a4-e56727d5e581",
+          "job_id": "92783e76-01d1-456f-9a5b-08dd1bf37ab8"
+        },
+        {
+          "run_number": 6,
+          "run_id": "205e9397-8fb7-47c2-b1a8-baa23a4cd3a4",
+          "job_id": "bf5fc3ba-5ef9-495d-87ff-209467c3251b"
+        },
+        {
+          "run_number": 7,
+          "run_id": "4d416dfb-aeb9-4b66-8d98-e84480e8bde3",
+          "job_id": "712cfbc0-ac0e-47d8-b19d-19b2342c8c3a"
+        },
+        {
+          "run_number": 8,
+          "run_id": "2b592b37-4cee-4306-b3c5-464950e63319",
+          "job_id": "308a08b7-6fbd-4bb9-a7ad-98ad36d5d40e"
+        },
+        {
+          "run_number": 9,
+          "run_id": "d4ba38c8-a671-4777-825c-14388327d72c",
+          "job_id": "e665bc4a-b958-404a-af8d-5567865ed592"
+        },
+        {
+          "run_number": 10,
+          "run_id": "00029c2a-e5f8-491c-817a-0f74bf0e2de5",
+          "job_id": "dd7a08af-8f09-4507-b0d9-1dd25241659b"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/811ddf06-ee84-422c-9d06-87a753526ca6/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 4,
+      "started_at": "2025-12-02T14:20:22.207082",
+      "finished_at": "2025-12-02T14:47:56.178522",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "54beaef5-ef0e-49e9-b9d4-df03f1ba8464",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/183d91ec-f8e3-4d76-8bfc-3dc2f011551b/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "01f1d2e0-cd83-44bb-a1c8-2445cde0a4ff",
+          "job_id": "e4171d64-8018-4f8c-be5b-c1434fa1865f"
+        },
+        {
+          "run_number": 2,
+          "run_id": "87dd1c65-e627-4c94-b7bd-cb2aa3938ff4",
+          "job_id": "2b00542d-00b4-4ecc-bf26-e7cc112dda8d"
+        },
+        {
+          "run_number": 3,
+          "run_id": "d6a44a53-e820-466f-8df0-8b49da43ab3d",
+          "job_id": "b2cb6813-d5f4-494a-a3ff-5bdf05d83358"
+        },
+        {
+          "run_number": 4,
+          "run_id": "932c34ac-bd50-4928-bfed-3a87a4f4e0d7",
+          "job_id": "a4d58134-fa44-46f9-9180-35df40b79df1"
+        },
+        {
+          "run_number": 5,
+          "run_id": "4e4239fb-16c0-453e-aba3-bd169a4886d4",
+          "job_id": "1be4a649-d701-4eb3-bca6-677a0d3fb4b5"
+        },
+        {
+          "run_number": 6,
+          "run_id": "18079113-a17b-40df-96ae-f93010d005a5",
+          "job_id": "2fda8c3f-358e-498d-be26-120a79c0095a"
+        },
+        {
+          "run_number": 7,
+          "run_id": "f02430c6-9993-4edb-9388-1fef0135dc0f",
+          "job_id": "d7678a8e-d330-4463-b042-663cfd57dabd"
+        },
+        {
+          "run_number": 8,
+          "run_id": "af888a53-b759-4175-afaf-a8279d4ff665",
+          "job_id": "106c5aae-c5f4-422b-b1d5-c3fe311c2851"
+        },
+        {
+          "run_number": 9,
+          "run_id": "c63c6c1d-66b3-4ccc-8531-f4e7ab494ddd",
+          "job_id": "1a5a4701-7dc5-4e76-8aa6-a9be6a646792"
+        },
+        {
+          "run_number": 10,
+          "run_id": "49623167-c24e-4b83-8aeb-a21eb4f66692",
+          "job_id": "81010b6b-21e1-42ed-8629-6cee761aef79"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/54beaef5-ef0e-49e9-b9d4-df03f1ba8464/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-02T14:51:16.948765",
+      "finished_at": "2025-12-02T15:11:15.676365",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "cec4d012-8e46-44a9-96e9-44ffbf1e97ee",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/a9199924-1a15-4675-ade4-c870a0d4b2ac/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "acd26e6d-fefa-49c4-923f-9c7ba2381891",
+          "job_id": "f7e4da03-b775-40ee-9176-42d34f145b35"
+        },
+        {
+          "run_number": 2,
+          "run_id": "7fbd2d0a-194f-40ff-b45a-ebd78c9ac47f",
+          "job_id": "7e307064-3c17-47e2-9184-93a951470315"
+        },
+        {
+          "run_number": 3,
+          "run_id": "364c947d-7d6b-4c3b-85d6-e13fb8ab5714",
+          "job_id": "fcf1f851-43d6-4368-8a71-ceec814f2195"
+        },
+        {
+          "run_number": 4,
+          "run_id": "3c5a1ae8-4998-4f27-96d9-5c21f6546f1d",
+          "job_id": "95f0ea92-a16d-4eef-b40c-6ffa594d305e"
+        },
+        {
+          "run_number": 5,
+          "run_id": "0e4d9ac4-777e-446e-b119-c6ad62310962",
+          "job_id": "1462360a-a783-4f25-aea7-bba171166cd2"
+        },
+        {
+          "run_number": 6,
+          "run_id": "403d7544-38a1-47df-960d-9d4954f604e0",
+          "job_id": "f4c01199-93dd-4251-90e0-33979b80072e"
+        },
+        {
+          "run_number": 7,
+          "run_id": "5330ef60-3368-478e-89b9-3b78a4cfea9e",
+          "job_id": "66bb7f32-1b39-44fd-8753-3d0cf957534c"
+        },
+        {
+          "run_number": 8,
+          "run_id": "585496c9-bf5c-49f9-93fb-b9044c1ecb2f",
+          "job_id": "6885feee-07ad-495b-9380-08719b844590"
+        },
+        {
+          "run_number": 9,
+          "run_id": "a4079594-234c-43bb-b4d6-ca9e2713d02b",
+          "job_id": "83ecaf7d-6ff0-49fb-89ea-1d2df955f91f"
+        },
+        {
+          "run_number": 10,
+          "run_id": "230e6dca-effb-4878-badb-11ef4744cad0",
+          "job_id": "f3fdd86c-05ea-462f-af10-feaca1d0aaea"
+        },
+        {
+          "run_number": 11,
+          "run_id": "2de46a02-6a54-4fab-8bf9-66f078fc8612",
+          "job_id": "23631d7d-3d52-4f75-83db-d2bd6b4f288f"
+        },
+        {
+          "run_number": 12,
+          "run_id": "f40b262b-2553-4b14-a424-26a2d011228f",
+          "job_id": "3477025d-da6a-4e2b-a34d-ecf7e52a4439"
+        },
+        {
+          "run_number": 13,
+          "run_id": "797c216a-bfec-48db-a522-f41df1c3a7ed",
+          "job_id": "6988a96d-8de6-481b-985a-54a5eae5da1f"
+        },
+        {
+          "run_number": 14,
+          "run_id": "9644b6e1-2baa-4213-ac55-f1fedb2abef4",
+          "job_id": "78c0dc49-7350-4f1a-960f-ec0b6e9e172b"
+        },
+        {
+          "run_number": 15,
+          "run_id": "ac851435-4593-4431-944b-28bb1f4e4b04",
+          "job_id": "490d7d5d-6947-4da3-8e8b-d8845f248b26"
+        },
+        {
+          "run_number": 16,
+          "run_id": "34cffb0f-dd01-4ed2-91dd-f5bb88d1b5b9",
+          "job_id": "02416f13-7933-4ac6-ae4e-fbc44332038a"
+        },
+        {
+          "run_number": 17,
+          "run_id": "6aab58c8-fc15-44da-be89-2d46a107e53c",
+          "job_id": "6e2c03ab-333f-4d8f-8f18-5e048f8943b3"
+        },
+        {
+          "run_number": 18,
+          "run_id": "93bc616f-ca8e-4af8-82d0-e67ba120f71f",
+          "job_id": "3d46b327-33ce-4d70-9e86-f3d57f9f7f77"
+        },
+        {
+          "run_number": 19,
+          "run_id": "d7b96dfe-fc9a-47e9-a0f0-bca5cabe71b5",
+          "job_id": "139a0a1d-21a3-4bd9-873e-9ba131903542"
+        },
+        {
+          "run_number": 20,
+          "run_id": "b6bfa169-db96-466f-9500-df9d4f67e848",
+          "job_id": "86104250-7d70-48bd-87dd-e746502c2f49"
+        },
+        {
+          "run_number": 21,
+          "run_id": "5b41057c-da3d-4141-a774-e8ce43cd56cc",
+          "job_id": "a322f9fb-1507-46b8-8b94-81b8f1c4bbb8"
+        },
+        {
+          "run_number": 22,
+          "run_id": "c10270b8-2736-4b16-9aee-d476a3e904d6",
+          "job_id": "4e7d31b0-21f5-4bd5-b42c-273ef02735bd"
+        },
+        {
+          "run_number": 23,
+          "run_id": "4abd55e2-045a-49f4-b815-9151e614c6df",
+          "job_id": "11c52318-74bd-4682-bf86-11b65606cdf0"
+        },
+        {
+          "run_number": 24,
+          "run_id": "475aee20-2320-41d9-869b-92a69fcebb75",
+          "job_id": "94e82a0b-0061-402f-9bff-2d3afb8f321b"
+        },
+        {
+          "run_number": 25,
+          "run_id": "3955216a-2d56-465e-ba16-c339fbb79467",
+          "job_id": "b9b3555d-5388-46a9-ba68-e65fd5917461"
+        },
+        {
+          "run_number": 26,
+          "run_id": "6b028136-35f7-47d1-b999-1ca8f7408100",
+          "job_id": "75cdaa46-13ff-44d5-88ca-4d545319488c"
+        },
+        {
+          "run_number": 27,
+          "run_id": "3a70409e-8a2c-454f-a05d-5ad707c10f52",
+          "job_id": "564e8130-2adf-4fe1-8035-49862b18c3c7"
+        },
+        {
+          "run_number": 28,
+          "run_id": "55f9a53e-baa0-4701-9131-ea9f435970cf",
+          "job_id": "e3e11cb5-74f4-40e7-bcbf-6b8da2e6c120"
+        },
+        {
+          "run_number": 29,
+          "run_id": "10e4ff07-7bde-4ae2-9bc1-d8fe754c7366",
+          "job_id": "63802f02-428a-412f-aa64-de006aabfadf"
+        },
+        {
+          "run_number": 30,
+          "run_id": "5f44d475-e2b8-4a02-9415-536fc081a5f6",
+          "job_id": "1fd22ed6-cd19-46a9-ab38-96e66e95eb8b"
+        },
+        {
+          "run_number": 31,
+          "run_id": "9ecd6fb6-a4e3-4942-b8e9-81749da2ef3e",
+          "job_id": "ed77c1b5-6c62-4d62-87c7-7d2126285e06"
+        },
+        {
+          "run_number": 32,
+          "run_id": "10240676-f760-428d-8aef-9c4ff689998b",
+          "job_id": "07fec6ba-7bc5-4f99-a272-01d179a8a958"
+        },
+        {
+          "run_number": 33,
+          "run_id": "64841c01-70fc-4cd5-9981-b84179e14528",
+          "job_id": "2b8c61ce-878b-4ee9-9158-586f4cbcc42b"
+        },
+        {
+          "run_number": 34,
+          "run_id": "71218e34-6d53-4e18-a808-ae864fc53913",
+          "job_id": "7004646c-ee7c-4aad-b8b2-8b93ef339f87"
+        },
+        {
+          "run_number": 35,
+          "run_id": "5566a9e8-91a6-4f93-bd95-3c91312e6326",
+          "job_id": "2a7b029f-f87c-434d-bbd1-3e040e14f909"
+        },
+        {
+          "run_number": 36,
+          "run_id": "7d90a0fa-dc09-4c0c-a617-4659c2d61a0e",
+          "job_id": "d0d961f1-4c7a-4d6d-b3b2-95e076d8dddb"
+        },
+        {
+          "run_number": 37,
+          "run_id": "8a08be60-5b37-4f38-a49f-481ffbe24e1e",
+          "job_id": "9cc8c5ef-0b17-46dd-8ba1-37a088d5479e"
+        },
+        {
+          "run_number": 38,
+          "run_id": "772ad4fe-0be3-4e6f-ad5d-55f4a3bfe62c",
+          "job_id": "9f820a48-f5db-41e6-96df-9c08c9c79fd2"
+        },
+        {
+          "run_number": 39,
+          "run_id": "34e42ebf-11fb-48f9-beb1-0c7b7f21f643",
+          "job_id": "c6dc2447-cc67-473e-b662-bc68c249a6af"
+        },
+        {
+          "run_number": 40,
+          "run_id": "eb0ef39c-9e64-41cb-b53d-501e89b3c094",
+          "job_id": "8e372bba-99b1-4b02-8f1f-53a8de86c6b7"
+        },
+        {
+          "run_number": 41,
+          "run_id": "927d8e29-4791-4bab-b934-e544d7692a63",
+          "job_id": "db861c97-0c40-4a8d-98cc-7e759e442333"
+        },
+        {
+          "run_number": 42,
+          "run_id": "a2c4bd4f-9a36-4f21-a41e-98a169622cb0",
+          "job_id": "419837be-b484-4492-857b-d8967b7e7540"
+        },
+        {
+          "run_number": 43,
+          "run_id": "56805a16-0397-4bfc-aa0f-a5cd441dceb9",
+          "job_id": "64dd5fe5-5011-41d7-8e20-6c1b42fb8455"
+        },
+        {
+          "run_number": 44,
+          "run_id": "dfb66b97-2c55-45ed-af8c-992f8f9fb3e8",
+          "job_id": "51f52a95-0cf7-4150-b085-a4ad66e0924f"
+        },
+        {
+          "run_number": 45,
+          "run_id": "7db1c23d-fddd-4d90-b7bc-2a7ac1e74506",
+          "job_id": "9b07ba52-8336-45af-a79f-1b5e9c3bf6af"
+        },
+        {
+          "run_number": 46,
+          "run_id": "d6d76810-eb5b-42bc-9ac9-92d9ef30789d",
+          "job_id": "16db8ce1-9aaa-4743-97e7-08818d79cac2"
+        },
+        {
+          "run_number": 47,
+          "run_id": "96f79eda-113c-45cd-82be-43794f0d7bdf",
+          "job_id": "2f09e010-1a8d-4876-871c-d4e7bb8f1e9e"
+        },
+        {
+          "run_number": 48,
+          "run_id": "75739eec-1a2d-449c-81ac-0686af703f5d",
+          "job_id": "f36c9d2c-1426-4969-8b0c-cf6b00f22405"
+        },
+        {
+          "run_number": 49,
+          "run_id": "cf2952be-60b0-40c5-8025-45b4993b2710",
+          "job_id": "ffb621ea-0e3a-4a79-a167-6eb480443909"
+        },
+        {
+          "run_number": 50,
+          "run_id": "efbeb420-3dd2-4647-8c7a-5981c17ebb50",
+          "job_id": "c37fba7b-f933-4ec2-9958-a6b22d67dd41"
+        },
+        {
+          "run_number": 51,
+          "run_id": "0cb79969-d4d0-4da1-80ae-2604c780fd5b",
+          "job_id": "776493af-7488-4d9d-a3ed-23972b85c53c"
+        },
+        {
+          "run_number": 52,
+          "run_id": "80eb2798-8645-4a68-97ba-7298d3ee9278",
+          "job_id": "10d33d28-2698-46be-a1ad-b98093765ac5"
+        },
+        {
+          "run_number": 53,
+          "run_id": "fe0ab96d-2096-4043-97e3-814c5137107f",
+          "job_id": "7c7c58f7-c27e-45a9-aefb-28e389b0994b"
+        },
+        {
+          "run_number": 54,
+          "run_id": "c623d5a9-2f03-454c-94b0-44d002e86ac2",
+          "job_id": "40d8a939-2cbf-4b0d-a22e-8ca0a69b20b8"
+        },
+        {
+          "run_number": 55,
+          "run_id": "9ed91acf-d8c4-4e6d-a31d-29481fd541b4",
+          "job_id": "686e99c0-57fc-462c-b4f4-9783464dbb17"
+        },
+        {
+          "run_number": 56,
+          "run_id": "f1c3ce61-6d8e-42a5-983b-0ca44df016f9",
+          "job_id": "d6efe2e1-4231-4d76-9a29-19b85c1da8f2"
+        },
+        {
+          "run_number": 57,
+          "run_id": "4f8b62d9-d59f-4f7f-b38e-c598e1e7e959",
+          "job_id": "cb77cd81-745f-45c3-8bf3-380790e463d9"
+        },
+        {
+          "run_number": 58,
+          "run_id": "f4dbbf19-1324-4896-980b-f17d06e2c42b",
+          "job_id": "1c84ee9a-b1ff-4c66-bdc3-ba5dd3f38304"
+        },
+        {
+          "run_number": 59,
+          "run_id": "98ada48b-d891-4811-a334-a760f259303c",
+          "job_id": "d04a625f-137a-49fc-baba-e27a5e7ed3f7"
+        },
+        {
+          "run_number": 60,
+          "run_id": "9b2c6110-6584-4de4-8c8a-35e11b4d4eae",
+          "job_id": "39c7f96c-7e93-4687-82e7-a38097985f79"
+        },
+        {
+          "run_number": 61,
+          "run_id": "79825c29-e12b-4df6-a391-8e3ef9ca35c3",
+          "job_id": "6dc84c38-31e6-4318-8c57-2a5f3ea2abf6"
+        },
+        {
+          "run_number": 62,
+          "run_id": "e70aef25-fd03-4085-bf7c-9d24c017b00b",
+          "job_id": "b1a8e08b-a187-458d-80c3-fa6b07459c78"
+        },
+        {
+          "run_number": 63,
+          "run_id": "43893ea3-7ea8-452a-9685-53ec18c688d1",
+          "job_id": "f041408a-4fd5-4a9d-9836-f1bf3b34564c"
+        },
+        {
+          "run_number": 64,
+          "run_id": "1d072a91-02ef-47b5-b749-afdaf81f82e1",
+          "job_id": "4bf269c8-bb2d-4eaa-a36e-435ba6fb4788"
+        },
+        {
+          "run_number": 65,
+          "run_id": "2d03e061-ace4-4dc6-8929-a07b5a9c6f10",
+          "job_id": "4609065e-3801-4b0d-848d-c37cc5b44d5d"
+        },
+        {
+          "run_number": 66,
+          "run_id": "fe0d4047-7128-40ec-ac37-bb7736a7a43b",
+          "job_id": "cd52b487-4e05-4a32-961f-190e8af68f27"
+        },
+        {
+          "run_number": 67,
+          "run_id": "6a80a2fa-468f-4567-be64-cc7ecb877af3",
+          "job_id": "ae043ebe-0c9f-4352-b463-c00adc8f6972"
+        },
+        {
+          "run_number": 68,
+          "run_id": "6c11823f-6ba3-4e73-8da4-2cd38a7624d1",
+          "job_id": "f50bcbbe-8a6c-4874-8c9c-b034f3371709"
+        },
+        {
+          "run_number": 69,
+          "run_id": "edc813c4-8240-48c3-a700-33d340053634",
+          "job_id": "067a22e9-493c-471f-9ee7-96f49f147ebb"
+        },
+        {
+          "run_number": 70,
+          "run_id": "ea4db915-6330-43aa-84b9-fbb4cd7f0863",
+          "job_id": "2d1aa877-0392-4927-8fbc-b6331d7cfb9a"
+        },
+        {
+          "run_number": 71,
+          "run_id": "cbb0fe2b-6296-45eb-bc15-1a96f5c67bf7",
+          "job_id": "b2b2b43a-e51e-4295-9ae6-ec20dd25a7e3"
+        },
+        {
+          "run_number": 72,
+          "run_id": "e81e7ee2-826a-4dd0-b54a-9b21ebfa558e",
+          "job_id": "fd8bf0e8-c36d-4301-9e6d-7e4a2392d66d"
+        },
+        {
+          "run_number": 73,
+          "run_id": "20e84620-de92-4e4a-99cd-1fcc103b3216",
+          "job_id": "aed3b6eb-8dd4-4aa8-831a-2ac8b10d0bb2"
+        },
+        {
+          "run_number": 74,
+          "run_id": "91ec4c48-6551-4601-8745-43ea65fea743",
+          "job_id": "73f9fc3e-b457-4edb-902d-45b808872c28"
+        },
+        {
+          "run_number": 75,
+          "run_id": "47ce392d-9960-41be-b202-bcd1dd1235cb",
+          "job_id": "c70af5aa-beac-40ac-b26a-f1f1840157d0"
+        },
+        {
+          "run_number": 76,
+          "run_id": "7032233f-2f07-43ef-b213-624a4eb00aba",
+          "job_id": "9a35e6a5-2e65-4b83-8b6e-f6db33e4e222"
+        },
+        {
+          "run_number": 77,
+          "run_id": "8c6730d4-faaa-42e5-9e29-51cf11c3860b",
+          "job_id": "fd1698f5-88e6-4253-ba38-5569272995f1"
+        },
+        {
+          "run_number": 78,
+          "run_id": "506264e9-0bc2-4f5e-bff3-81abd0e96ebf",
+          "job_id": "c945d649-5126-4adc-9d55-891f9d033d21"
+        },
+        {
+          "run_number": 79,
+          "run_id": "d6e93af1-ef07-429a-8ad0-73c48d8d210d",
+          "job_id": "066ef4fc-d064-45d6-851b-69c8380d26c9"
+        },
+        {
+          "run_number": 80,
+          "run_id": "9f32c196-fc06-4080-817e-f9d6584c807e",
+          "job_id": "c23738d2-ba98-495a-87a3-4ac96b364c0a"
+        },
+        {
+          "run_number": 81,
+          "run_id": "b9cb3b59-81c2-44ef-81ef-a331ed120340",
+          "job_id": "d0018419-a73f-49e1-bba8-c7c5f8956ebe"
+        },
+        {
+          "run_number": 82,
+          "run_id": "fb70b5fc-99aa-4ba8-95ec-0a00852cd0b6",
+          "job_id": "971bb413-6396-4f9a-a0bd-10bdecb08fe7"
+        },
+        {
+          "run_number": 83,
+          "run_id": "889c2410-40e6-40f8-b9bb-2cec5d4dcbd5",
+          "job_id": "111fb148-972e-462b-b184-fb08e160b546"
+        },
+        {
+          "run_number": 84,
+          "run_id": "2996dac4-6825-4d41-b894-4880a633f7a0",
+          "job_id": "70479bb1-345f-4343-a292-a6c75182c8e7"
+        },
+        {
+          "run_number": 85,
+          "run_id": "7dc585be-2b88-4d64-a3ce-4a64ec76bae7",
+          "job_id": "4edf0246-23b6-4266-98d3-81d4f0fc183c"
+        },
+        {
+          "run_number": 86,
+          "run_id": "ba9af4d1-c506-417c-b6ac-fb3427b6f1cd",
+          "job_id": "0d607548-175f-4d83-92fb-fe2d9fc0fc14"
+        },
+        {
+          "run_number": 87,
+          "run_id": "c6836443-c2d8-4a8c-b8c9-0c67450b567a",
+          "job_id": "e04aeac3-b06e-462c-80c6-335e5f8f56f2"
+        },
+        {
+          "run_number": 88,
+          "run_id": "df4df861-1682-4b28-80d2-e90c0784d226",
+          "job_id": "9af8c73c-6935-4807-bc1d-0d78c871d110"
+        },
+        {
+          "run_number": 89,
+          "run_id": "81828c86-761c-478d-acc6-4d02df5a1009",
+          "job_id": "ed13c86f-795f-45bb-bdbd-b01a8c416145"
+        },
+        {
+          "run_number": 90,
+          "run_id": "0b02ac61-13ef-4a34-898a-ceaed23f5d4a",
+          "job_id": "b32f4657-363c-40c7-8bf0-4cf4ad69f25a"
+        },
+        {
+          "run_number": 91,
+          "run_id": "444d2960-13fc-4074-b2a6-74d4a04a085a",
+          "job_id": "2b248631-fa2a-4c79-9b76-c065bc80c601"
+        },
+        {
+          "run_number": 92,
+          "run_id": "c71c122a-0d18-4d86-9f3e-d4a75d6c8f16",
+          "job_id": "d1e94684-35de-4258-a311-2e988899c191"
+        },
+        {
+          "run_number": 93,
+          "run_id": "2c34777b-cc0f-4d96-885d-e0dbfbf8a935",
+          "job_id": "23375c9d-941b-4630-b13d-ad751c6a1a2d"
+        },
+        {
+          "run_number": 94,
+          "run_id": "81292169-4293-48ef-9cef-da2623089dce",
+          "job_id": "2c7fa1cd-aa9c-4936-b9c1-da88e691c656"
+        },
+        {
+          "run_number": 95,
+          "run_id": "4e8397ae-ed85-497b-8214-ff11610a8e0e",
+          "job_id": "cc930451-dbcf-4766-929e-3ba0c9d2dd03"
+        },
+        {
+          "run_number": 96,
+          "run_id": "5dd0a0a6-2615-4c49-a054-f85dd6b0d346",
+          "job_id": "c349d8ff-eaa8-4b47-befc-25727cf15e90"
+        },
+        {
+          "run_number": 97,
+          "run_id": "5a5c064a-63d7-47ff-b075-5b2580d1f01b",
+          "job_id": "87ee9ddb-965c-46da-a4c7-18a01bfc7b36"
+        },
+        {
+          "run_number": 98,
+          "run_id": "ad788d05-17dc-4aae-a45c-bfcb13c62a5c",
+          "job_id": "6f254f41-0d6c-4890-97ec-b147c53069f2"
+        },
+        {
+          "run_number": 99,
+          "run_id": "7498dea3-437c-4e4f-a050-4721a24a88db",
+          "job_id": "3406aaa9-89f7-4b43-9e90-655144dc1f6c"
+        },
+        {
+          "run_number": 100,
+          "run_id": "0e03c75c-8ceb-4e8e-9fc2-2daffc7ec02f",
+          "job_id": "d42f7572-e6cc-4cc8-8f9d-3da47dbf9597"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/cec4d012-8e46-44a9-96e9-44ffbf1e97ee/",
+      "total_runs": 100,
+      "completed_runs": 100,
+      "passed_runs": 42,
+      "started_at": "2025-12-02T15:12:31.607597",
+      "finished_at": "2025-12-02T16:20:19.921835",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "8995c7f5-3785-44d3-8fd9-36b9e90928ba",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/57170817-4ed4-44e8-892d-2ef6e5b8e517/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "a097f2bb-0306-4523-8a2e-a030413baebb",
+          "job_id": "5036d181-4616-4c44-bf32-3c2854a4acaa"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/8995c7f5-3785-44d3-8fd9-36b9e90928ba/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-02T16:22:54.507186",
+      "finished_at": "2025-12-02T16:32:40.785307",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2a5d3c7d-6084-4f49-83b8-4d8023f8c733",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/3a7a7795-bbee-4927-b404-39900c9ab988/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "ac8dc4ef-ae26-4f7a-961c-dcf39effb5bc",
+          "job_id": "c2ed7c7a-d115-4ba0-8d81-04a70b2e2993"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2a5d3c7d-6084-4f49-83b8-4d8023f8c733/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T16:44:31.920293",
+      "finished_at": "2025-12-02T16:53:27.564020",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "044bfeea-bc2b-4dd7-b79c-9ec302eddc8e",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8cdca7d3-0426-4644-a311-aa76ea5e5d8b/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "f57fa1d3-b543-40d5-8b86-06079304cb80",
+          "job_id": "b08bfbc2-7ae0-4b12-8d4d-a45669fa9036"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/044bfeea-bc2b-4dd7-b79c-9ec302eddc8e/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T16:54:07.632166",
+      "finished_at": "2025-12-02T17:01:42.708030",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "311183e8-33ab-4021-88fb-271b1429fd6e",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/08da8642-f091-47a0-825c-02e56a9679e1/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "b14ca645-ebca-403b-8542-c0aae028fba1",
+          "job_id": "7dc3fd52-b106-45e3-a67d-f504f337d307"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/311183e8-33ab-4021-88fb-271b1429fd6e/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T17:00:25.133747",
+      "finished_at": "2025-12-02T17:06:19.076028",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "7ce5e0db-342a-4687-8efb-53a7b2b9471c",
+      "task_name": "adaptive-rejection-sampler-go",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8b2dbdbe-0466-4a8c-954d-2e48bf0252a8/adaptive-rejection-sampler-go",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "cb6d5c36-4bbd-4ff3-aacf-307a923933ce",
+          "job_id": "50ca3e27-a05e-43ef-b155-27a97b70d586"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/7ce5e0db-342a-4687-8efb-53a7b2b9471c/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T17:22:05.614241",
+      "finished_at": "2025-12-02T17:30:31.829494",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "02945fa7-fd76-4dc3-9db6-35c0371babdb",
+      "task_name": "adaptive-rejection-sampler-go",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/488a705c-8ece-40b7-9214-db7359f77136/adaptive-rejection-sampler-go",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "97d8a49c-acd9-4f45-ae1e-4e861853caeb",
+          "job_id": "60f330c5-43e1-4101-afc7-f85b81f20829"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/02945fa7-fd76-4dc3-9db6-35c0371babdb/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T17:37:04.282270",
+      "finished_at": "2025-12-02T17:44:39.477085",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "3020a88a-5f47-4f1c-9968-1bcdc2d2de84",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/9621d409-c8a3-44e3-9262-bfb4be0da151/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "b2e32a28-b35d-431a-9c30-63344759e084",
+          "job_id": "4fafa3ee-97ec-4694-99e2-7abb376113e9"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/3020a88a-5f47-4f1c-9968-1bcdc2d2de84/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-02T17:46:35.619480",
+      "finished_at": "2025-12-02T18:01:34.652159",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "991a6bc3-b47a-4406-9141-9888710ef805",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/4ccdf405-6883-400d-9d32-280618495b34/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "05576f9d-b1b1-41f8-b66b-fc96976df146",
+          "job_id": "ad5afdbc-d353-4810-93b6-2d133671b37f"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/991a6bc3-b47a-4406-9141-9888710ef805/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T18:05:08.767381",
+      "finished_at": "2025-12-02T18:08:15.173898",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "f02c2f1f-7e93-46b8-972b-1a529b2ae650",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/684fcfdf-2972-4cb0-9bdc-852d1b09f2a2/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "7bebd0bb-e5b9-4014-b32b-4031c1372d87",
+          "job_id": "ab754a5d-207c-4d43-867a-8f15cf45dcbc"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f02c2f1f-7e93-46b8-972b-1a529b2ae650/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T18:11:32.566613",
+      "finished_at": "2025-12-02T18:18:37.867792",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "f680721e-1e84-42ce-a2c1-03ccec6564d5",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f2ed4782-9c45-4950-bbb7-5d5ffe316df3/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "fa3dfbc4-dfba-40e6-ab50-8d651f1104b8",
+          "job_id": "ce543426-3efa-4cd0-b891-1bf6384f5237"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f680721e-1e84-42ce-a2c1-03ccec6564d5/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T18:21:58.076191",
+      "finished_at": "2025-12-02T18:29:33.657964",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "f719fc72-cd72-45dc-adc6-32a9b5d0118d",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/873a52cc-74f9-4513-882c-766c6623a26c/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "2c5a1e4f-ebe8-4809-aac3-c5ec3215408c",
+          "job_id": "09cd8a42-cc21-48b3-b858-4a25faa5aad7"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f719fc72-cd72-45dc-adc6-32a9b5d0118d/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T18:36:10.406485",
+      "finished_at": "2025-12-02T18:42:35.474580",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "ebff82cc-c0e6-42a2-a8e2-4c512758dd6e",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/50eaaf99-b51f-4280-a6a2-dd32a4e56e71/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "99cb4886-f38d-459e-9449-d35dc3f90017",
+          "job_id": "916fd2da-e75f-4667-913e-d2d122cf7393"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/ebff82cc-c0e6-42a2-a8e2-4c512758dd6e/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-02T18:45:49.633930",
+      "finished_at": "2025-12-02T18:51:13.842370",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "5734d34d-27a8-4b43-9dc1-5d2d10a6b37d",
+      "task_name": "fix-broken-gradle-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/ea686993-5d97-4cf6-b5a6-ccd37f7dc63d/fix-broken-gradle-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "5f7ddd21-8ccd-4113-91c4-0cfe99122d4b",
+          "job_id": "8962a3b1-a7d8-43a0-bee4-ac4b26f5df5a"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/5734d34d-27a8-4b43-9dc1-5d2d10a6b37d/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-02T18:52:07.101845",
+      "finished_at": "2025-12-02T18:54:50.532173",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "5f2121a2-d251-47c3-9812-9ea0a0567ec9",
+      "task_name": "fargate-task-launch-failure-analyzer-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/4a8396cf-0952-4aa9-acf6-b17e9f715642/fargate-task-launch-failure-analyzer-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "85dcea0e-fe4b-4b7b-871f-2f9f8c1fd218",
+          "job_id": "0f58e461-be90-431b-86e6-d83533060200"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/5f2121a2-d251-47c3-9812-9ea0a0567ec9/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T18:57:38.745501",
+      "finished_at": "2025-12-02T19:01:41.871839",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c9da65bc-112a-4899-a569-91ea7552de3f",
+      "task_name": "broken-postgres-backup-restore-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/eb90dafa-1047-4d13-87db-18066c03b8af/broken-postgres-backup-restore-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "ae140c2c-a72c-48bf-a3cc-ac93e961e4ff",
+          "job_id": "1b659ecb-7267-4355-94d7-7e62d27664ff"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c9da65bc-112a-4899-a569-91ea7552de3f/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T19:06:41.039600",
+      "finished_at": "2025-12-02T19:15:05.895219",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "5372be4c-1657-4692-9ba2-a2fc64b49228",
+      "task_name": "fix-broken-gradle-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/b80b77f5-ba40-4370-89cc-0f333ccd6675/fix-broken-gradle-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "c8753c70-c68c-47bd-99f7-52cda8e3b80a",
+          "job_id": "1a1fbd85-7d3b-4a96-86de-94e56ea7773e"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/5372be4c-1657-4692-9ba2-a2fc64b49228/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 1,
+      "started_at": "2025-12-02T19:06:48.188454",
+      "finished_at": "2025-12-02T19:11:41.815529",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "f00e63e1-7617-4532-9e5e-42e2b0a931f6",
+      "task_name": "fargate-task-launch-failure-analyzer-harbor",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/fa33392e-ce7e-4f6e-9eba-ec6bd4f80164/fargate-task-launch-failure-analyzer-harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "00043398-4ccf-4697-9574-ff24f4301e0c",
+          "job_id": "0cbb4994-736a-489d-8679-b5c45d44bfd2"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f00e63e1-7617-4532-9e5e-42e2b0a931f6/",
+      "total_runs": 1,
+      "completed_runs": 1,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T19:07:01.098697",
+      "finished_at": "2025-12-02T19:11:43.432884",
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "a653e7e0-4e57-4127-9753-0344b61a729e",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/cdc808f8-9daa-4c7d-8753-04867db17df1/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "48b23145-ee7e-42a7-bdfe-0807aded2745",
+          "job_id": "d978ff50-13fc-4133-a9a2-6af3f7b1d7f6"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/a653e7e0-4e57-4127-9753-0344b61a729e/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T19:57:49.294791",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "e27edf0b-0220-4034-a9e8-467f891c9129",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8e2c49b8-2dc0-41ac-8ef1-4b6f1cb9f52d/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [
+        {
+          "run_number": 1,
+          "run_id": "a471864f-f6a7-4b21-b949-facc0864102a",
+          "job_id": "332fa771-3905-4234-98d3-3c31514b9289"
+        }
+      ],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/e27edf0b-0220-4034-a9e8-467f891c9129/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:03:42.871995",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "dbb9753a-37d5-4115-a6ab-cc0ab9bc3d69",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/28554d84-a3ba-4542-8fcd-f96009edd7d0/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/dbb9753a-37d5-4115-a6ab-cc0ab9bc3d69/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:09:48.652225",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "1063a02e-449a-479f-b800-7e7e1c034977",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/e888ed02-8956-47fc-98ef-b7127999f000/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/1063a02e-449a-479f-b800-7e7e1c034977/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:13:31.393678",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "a63b7044-0531-4c88-bde8-8c1957bdb30e",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/d7e49773-9eb4-4132-af45-268c32793095/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/a63b7044-0531-4c88-bde8-8c1957bdb30e/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:21:25.068709",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "836d314d-c9ff-4525-a2d1-d51bd45cb3ab",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8b1e3967-fa2c-465b-b842-bd453a42dc9e/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/836d314d-c9ff-4525-a2d1-d51bd45cb3ab/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:24:17.222284",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c88d051b-04a1-4caa-b27c-8c6403965ac0",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/85f0b55f-c1c4-457a-b32c-ecb4f34e703c/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c88d051b-04a1-4caa-b27c-8c6403965ac0/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:26:17.641598",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "a785098f-02f9-4167-8139-0327ad860242",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/948a33c6-b4ca-4d00-904e-4d70097cb78a/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/a785098f-02f9-4167-8139-0327ad860242/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:36:38.616845",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "4c8d2568-abf1-46f8-a156-12d839686246",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f3ea61c1-9dbb-4324-97c4-011698326c07/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/4c8d2568-abf1-46f8-a156-12d839686246/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:42:58.721545",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "f6064292-78cf-4ed5-8256-b2320e7310bd",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/549be585-61fc-49f2-967d-32d6c2524656/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/f6064292-78cf-4ed5-8256-b2320e7310bd/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T20:51:18.015895",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "dd581edc-8866-450d-9fe8-20abc6064ad7",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/62a58161-3769-42c4-96b4-898429f4ee66/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/dd581edc-8866-450d-9fe8-20abc6064ad7/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T21:15:21.823208",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2b38bd48-bc31-4a4a-831a-21c457a2272a",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/39286512-c459-4055-b121-a2f874f512f5/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2b38bd48-bc31-4a4a-831a-21c457a2272a/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T21:38:12.603692",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "4acf5113-a85f-4096-953a-3abfac490436",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/84b98c0e-2e24-4cf6-abf9-627c9617209a/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/4acf5113-a85f-4096-953a-3abfac490436/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:21:42.751688",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "2750a81a-d805-4cc8-9e2f-d6afaa559d7f",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/2ff50386-5750-42b3-8009-50f4bea851d0/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2750a81a-d805-4cc8-9e2f-d6afaa559d7f/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:23:04.642187",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "9683a41c-b8ae-4257-b4c4-fe87e7c8c158",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/256a13ce-1156-430b-b736-bee2dad8c195/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/9683a41c-b8ae-4257-b4c4-fe87e7c8c158/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:28:49.375945",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "0ec48fa4-9368-4956-9036-267514d64096",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/7c5fbfad-bb24-494c-bc46-8e04f454b6d8/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/0ec48fa4-9368-4956-9036-267514d64096/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:39:29.798468",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "9f1cb3a0-c8ca-48fb-b99f-74562b1e4e1a",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/6efbcb0a-5179-4629-a08a-e3edd2f11af0/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/9f1cb3a0-c8ca-48fb-b99f-74562b1e4e1a/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:43:08.903739",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "8b091bb4-b0f8-4a2b-93ea-8a51e1e5a1f6",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/11990e70-3afa-4fc6-a0c5-76b48a80a76e/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/8b091bb4-b0f8-4a2b-93ea-8a51e1e5a1f6/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T22:50:15.323521",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "7e63f984-d06e-4ea8-b02e-b94e58e2580b",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/793bbef3-661f-48c9-b22b-30f7a122677e/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/7e63f984-d06e-4ea8-b02e-b94e58e2580b/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T23:00:25.882744",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c2d58bd9-dd52-4df3-aa6c-9d6a6b8abb67",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/6411a852-ec88-45ff-ad87-5f118d24c404/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c2d58bd9-dd52-4df3-aa6c-9d6a6b8abb67/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T23:07:45.731496",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "1a7c4684-4cb4-4fb4-9214-55c6e680c4a7",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/e93db104-ba44-4612-b5ba-2be27ed049de/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/1a7c4684-4cb4-4fb4-9214-55c6e680c4a7/",
+      "total_runs": 1,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-02T23:09:23.546090",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "834559cc-f469-448f-be62-066b95a802f5",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/6d610904-2c2b-4466-b943-65c3f0573d7a/adaptive-rejection-sampler",
+      "status": "pending",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/834559cc-f469-448f-be62-066b95a802f5/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T08:02:15.874428",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true
+    },
+    {
+      "id": "c0d24e60-7a36-4e82-b7ed-4fa76b020c21",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/bac4f420-69b5-4708-8111-ab8ad286c3cd/adaptive-rejection-sampler",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c0d24e60-7a36-4e82-b7ed-4fa76b020c21/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T08:07:58.819803",
+      "finished_at": "2025-12-03T08:12:26.640243",
+      "error": "Terminated by user via console",
+      "use_aws_batch": true,
+      "batch_job_id": "20164c3c-2541-431b-91af-ef4058882f4c"
+    },
+    {
+      "id": "18116953-d312-4bc5-9dd1-3f45df4bbc3b",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/3d1016da-b3fb-4beb-bad2-5a82a3322331/adaptive-rejection-sampler",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/18116953-d312-4bc5-9dd1-3f45df4bbc3b/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T08:13:37.661058",
+      "finished_at": "2025-12-03T08:15:04.647421",
+      "error": "Task failed to start",
+      "use_aws_batch": true,
+      "batch_job_id": "65ffa651-13df-44ce-a282-37a08866aaba"
+    },
+    {
+      "id": "c62796ee-7ba9-4aaf-9c10-3f61adcfc4fd",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f08300fd-d66e-4d91-9f6b-a40cb9dcc447/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/c62796ee-7ba9-4aaf-9c10-3f61adcfc4fd/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-03T08:20:15.715107",
+      "finished_at": "2025-12-03T08:41:03.926823",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "3c044313-eb86-44b5-b6d9-87ed9b9198ff"
+    },
+    {
+      "id": "184ff91a-1f5b-4ad2-bd4b-d1938b4e1ce3",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/d033d739-a620-486f-b0e4-1f1fb7337dab/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/184ff91a-1f5b-4ad2-bd4b-d1938b4e1ce3/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 7,
+      "started_at": "2025-12-03T08:45:54.935950",
+      "finished_at": "2025-12-03T09:08:15.629435",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "90e06eab-41d5-4547-8c05-d119a565c2dc"
+    },
+    {
+      "id": "40246333-0e97-4b33-9bae-ea9133f5a800",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/760f0ff2-d6be-4072-be8a-49c9416da17d/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/40246333-0e97-4b33-9bae-ea9133f5a800/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-03T08:45:58.330282",
+      "finished_at": "2025-12-03T09:07:46.392782",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "3c8eda19-7ff4-44c7-8f30-2eabde12295c"
+    },
+    {
+      "id": "5c6d5e9c-af9e-4acb-a4f5-ab4586285863",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/b08ec3f3-1b4b-4822-90eb-6dfd57dffb6b/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/5c6d5e9c-af9e-4acb-a4f5-ab4586285863/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 3,
+      "started_at": "2025-12-03T08:46:01.516725",
+      "finished_at": "2025-12-03T09:08:00.383257",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "443113ae-6ee8-412a-ba43-ab9658f7b6be"
+    },
+    {
+      "id": "bb34050a-a472-47c1-9b6e-ea951f71330d",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/41a245d0-b3f4-4824-8e4e-222f77a5e7d6/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/bb34050a-a472-47c1-9b6e-ea951f71330d/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-03T08:46:04.889360",
+      "finished_at": "2025-12-03T09:08:14.251880",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "8f69622b-6ef2-4b7c-940d-67bdc5b31d95"
+    },
+    {
+      "id": "42d2a139-efb1-42dc-a383-f7fa8ac3f18d",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/9335324c-aefc-414d-865a-942eff13e733/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/42d2a139-efb1-42dc-a383-f7fa8ac3f18d/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 9,
+      "started_at": "2025-12-03T08:46:07.834029",
+      "finished_at": "2025-12-03T09:06:10.023598",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "9c48f62b-9c82-4751-b697-ff04f5f0330d"
+    },
+    {
+      "id": "2c5909ca-92db-48d7-8716-411f88c3bdb6",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/c7e52217-7aa3-471e-863d-51c131341688/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/2c5909ca-92db-48d7-8716-411f88c3bdb6/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 4,
+      "started_at": "2025-12-03T08:46:11.065736",
+      "finished_at": "2025-12-03T09:07:49.374684",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "4dc276d5-5d48-46c2-98b1-77a3736fb224"
+    },
+    {
+      "id": "1f04912c-9915-46f4-9717-a6904735acd5",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/16ee034e-4611-43dc-895c-ceef69098e4c/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/1f04912c-9915-46f4-9717-a6904735acd5/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-03T08:46:13.963108",
+      "finished_at": "2025-12-03T09:06:06.894437",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "2cac0938-7f6f-4569-a8bd-ffa2812fbd98"
+    },
+    {
+      "id": "d4d565e2-05a7-4035-9dbd-efa82965c355",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/121abe78-8ab5-4f84-876f-2ccf9214b33c/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/d4d565e2-05a7-4035-9dbd-efa82965c355/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 7,
+      "started_at": "2025-12-03T08:46:16.900524",
+      "finished_at": "2025-12-03T09:07:34.580611",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "0ee18dff-5881-40fe-973b-3d9c985febe3"
+    },
+    {
+      "id": "822e3c9e-6a77-4624-9d83-0db046a89de5",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/bf1a6899-05e4-41b2-898e-daa5f6fb472c/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/822e3c9e-6a77-4624-9d83-0db046a89de5/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 4,
+      "started_at": "2025-12-03T08:46:20.241542",
+      "finished_at": "2025-12-03T09:08:08.013639",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "0464db11-ca87-40ae-8fc4-a5a468809dd3"
+    },
+    {
+      "id": "0396301e-49ec-4ec5-b637-25ee45a68d66",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/82899960-acb6-4b67-aad3-f5240fb9ac79/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/0396301e-49ec-4ec5-b637-25ee45a68d66/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 5,
+      "started_at": "2025-12-03T08:46:23.593600",
+      "finished_at": "2025-12-03T09:07:41.856490",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "cc06a3d9-15b3-41b6-bff4-ab8efaa3e6f2"
+    },
+    {
+      "id": "d3e86a54-fcdd-491f-81d3-ec762766a240",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/93b71d7a-da7a-45be-a151-ff67760d447e/adaptive-rejection-sampler",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/d3e86a54-fcdd-491f-81d3-ec762766a240/",
+      "total_runs": 10,
+      "completed_runs": 4,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T09:29:47.131933",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "b316a95a-c37f-49c2-8f93-1c28ec54259d"
+    },
+    {
+      "id": "93cdd243-0754-41b8-89d4-1142df2fd70d",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/cf8f1967-3115-41ba-89f4-382233303f72/adaptive-rejection-sampler",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/93cdd243-0754-41b8-89d4-1142df2fd70d/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 4,
+      "started_at": "2025-12-03T09:41:44.406093",
+      "finished_at": "2025-12-03T10:01:51.090390",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "b7c0b074-d020-44bb-8bfa-a20b4952dd33"
+    },
+    {
+      "id": "4d86d6db-ed27-4a34-a457-fd041bfa5ea3",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/8e2833f2-56ac-4578-8137-4112676f5d98/adaptive-rejection-sampler",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/4d86d6db-ed27-4a34-a457-fd041bfa5ea3/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T10:07:17.483533",
+      "finished_at": "2025-12-03T10:11:31.299161",
+      "error": "Terminated via console",
+      "use_aws_batch": true,
+      "batch_job_id": "8d592a17-186e-4480-963d-0bf89a3eb8f9"
+    },
+    {
+      "id": "d555e8e1-a684-4a81-aea4-e3b4504e7100",
+      "task_name": "194a7531-8beb-4a1f-b91a-fb8c2ef19451",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/194a7531-8beb-4a1f-b91a-fb8c2ef19451",
+      "harness": "terminus",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/d555e8e1-a684-4a81-aea4-e3b4504e7100/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T10:36:38.889325",
+      "finished_at": "2025-12-03T10:38:58.471286",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "030fcebc-7dba-429d-bcb6-200fcfa92d27"
+    },
+    {
+      "id": "30ad8354-0407-48d7-929b-83a9a549ad76",
+      "task_name": "fargate-task-launch-failure-analyzer",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/61f8b958-48e6-4bd5-b026-3de719d67cdd/fargate-task-launch-failure-analyzer",
+      "harness": "terminus",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/30ad8354-0407-48d7-929b-83a9a549ad76/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T10:47:46.745389",
+      "finished_at": "2025-12-03T10:51:49.335340",
+      "error": "Essential container in task exited",
+      "use_aws_batch": true,
+      "batch_job_id": "13933372-e6f0-4a68-bfe3-8f4fd273c8b5"
+    },
+    {
+      "id": "dcd9a5ff-9bae-4e61-97ff-2677c134e04f",
+      "task_name": "fargate-task-launch-failure-analyzer",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/a6186c39-334c-4b5e-923a-ce7ebcc14262/fargate-task-launch-failure-analyzer",
+      "harness": "terminus",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/dcd9a5ff-9bae-4e61-97ff-2677c134e04f/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T10:53:58.440082",
+      "finished_at": "2025-12-03T10:57:19.297226",
+      "error": "Essential container in task exited",
+      "use_aws_batch": true,
+      "batch_job_id": "ca468862-b365-475a-8902-93938d047962"
+    },
+    {
+      "id": "7277dd53-9cbe-4824-948a-d6b24c339258",
+      "task_name": "fargate-task-launch-failure-analyzer",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/60ece00f-038e-4ade-bd1e-d7941c15baea/fargate-task-launch-failure-analyzer",
+      "harness": "terminus",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/7277dd53-9cbe-4824-948a-d6b24c339258/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T10:59:58.533578",
+      "finished_at": "2025-12-03T11:04:43.818326",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "3f3c86a6-1c25-4763-82af-b48f8c0b673b"
+    },
+    {
+      "id": "e47b9aa7-038d-4218-9e5d-f045b15dd00c",
+      "task_name": "fargate-task-launch-failure-analyzer",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/f991f7ba-045a-4755-a30e-ccf2f1799975/fargate-task-launch-failure-analyzer",
+      "harness": "terminus",
+      "status": "failed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/e47b9aa7-038d-4218-9e5d-f045b15dd00c/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T11:07:54.193566",
+      "finished_at": "2025-12-03T11:11:25.746801",
+      "error": "Terminated via console",
+      "use_aws_batch": true,
+      "batch_job_id": "183c3f26-0b9c-43dc-9caa-d11a090b0bdf"
+    },
+    {
+      "id": "1bb04535-93fb-41a5-9d4e-7624baf18e04",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/76a14bda-2a57-4253-8f55-10d568147320/adaptive-rejection-sampler",
+      "harness": "harbor",
+      "status": "completed",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/1bb04535-93fb-41a5-9d4e-7624baf18e04/",
+      "total_runs": 10,
+      "completed_runs": 10,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T11:14:31.045382",
+      "finished_at": "2025-12-03T11:18:13.561562",
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "dc357e69-451d-451d-b841-dc7fa403b18d"
+    },
+    {
+      "id": "20248df5-1465-4139-9b60-c3da1c31e9d6",
+      "task_name": "adaptive-rejection-sampler",
+      "task_path": "/Users/vyas/code/aq/backend/uploads/69737598-e3f0-43fd-a140-a3d24f5d130a/adaptive-rejection-sampler",
+      "harness": "harbor",
+      "status": "running",
+      "job_dirs": [],
+      "batch_job_ids": [],
+      "s3_task_path": "s3://aq-benchmark-jobs-956152913627/tasks/20248df5-1465-4139-9b60-c3da1c31e9d6/",
+      "total_runs": 10,
+      "completed_runs": 0,
+      "passed_runs": 0,
+      "started_at": "2025-12-03T11:33:22.290528",
+      "finished_at": null,
+      "error": null,
+      "use_aws_batch": true,
+      "batch_job_id": "14effafb-3a8d-43e6-b5f7-774007fb8fcb"
+    }
+  ]
+}

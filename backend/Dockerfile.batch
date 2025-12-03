@@ -1,0 +1,28 @@
+# AWS Batch runner for Harbor benchmark jobs
+FROM python:3.12-slim
+
+# Install system dependencies and Docker Compose v2
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /usr/local/lib/docker/cli-plugins \
+    && curl -SL https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose \
+    && chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the batch runner script
+COPY batch_runner.py .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Run the batch runner
+ENTRYPOINT ["python", "batch_runner.py"]
