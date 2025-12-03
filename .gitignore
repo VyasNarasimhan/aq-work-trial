@@ -6,6 +6,7 @@ backend/jobs
 backend/uploads
 backend/.env
 backend/app/*/__pycache__
+backend/data
 
 frontend/node_modules/
 frontend/.next/
