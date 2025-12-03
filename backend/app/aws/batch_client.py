@@ -38,8 +38,8 @@ class BatchClient:
         self,
         benchmark_id: str,
         s3_task_path: str,
-        total_runs: int = 10,
-        n_concurrent_trials: int = 10,
+        n_attempts: int = 10,
+        total_runs: int | None = None,
         model_name: str | None = None,
         agent_name: str | None = None,
         harness: str = "harbor",
@@ -52,8 +52,9 @@ class BatchClient:
         Args:
             benchmark_id: ID of the parent benchmark.
             s3_task_path: S3 path to the task files.
-            total_runs: Total number of trials to run (default: 10).
-            n_concurrent_trials: Number of trials to run concurrently (default: 10).
+            n_attempts: Number of trials to run (default: 10).
+            total_runs: Number of run-N/ folders for S3 upload/polling.
+                        Defaults to n_attempts for harbor, should be 1 for terminus.
             model_name: Optional model name override.
             agent_name: Optional agent name override.
             harness: Harness to use ('harbor' or 'terminus').
@@ -63,11 +64,16 @@ class BatchClient:
         """
         job_name = f"benchmark-{benchmark_id[:8]}"
 
+        # total_runs defaults to n_attempts (harbor uses separate run-N/ folders)
+        # For terminus, caller should pass total_runs=1
+        actual_total_runs = total_runs if total_runs is not None else n_attempts
+
         environment = [
             {"name": "BENCHMARK_ID", "value": benchmark_id},
             {"name": "S3_TASK_PATH", "value": s3_task_path},
-            {"name": "TOTAL_RUNS", "value": str(total_runs)},
-            {"name": "N_CONCURRENT_TRIALS", "value": str(n_concurrent_trials)},
+            {"name": "TOTAL_RUNS", "value": str(actual_total_runs)},
+            {"name": "N_CONCURRENT_TRIALS", "value": str(n_attempts)},
+            {"name": "N_ATTEMPTS", "value": str(n_attempts)},
             {"name": "S3_BUCKET", "value": self.s3_bucket},
             {"name": "AWS_REGION", "value": self.region},
             {"name": "HARNESS", "value": harness},

@@ -161,12 +161,14 @@ class BenchmarkManager:
             s3_task_path = self.s3_client.upload_task(upload_id, task_path)
             benchmark["s3_task_path"] = s3_task_path
 
-            # Submit SINGLE job to AWS Batch (runs all trials concurrently)
+            # Submit job to AWS Batch
+            # Terminus: all trials go under run-1/, so total_runs=1
+            # Harbor: each trial in run-N/, so total_runs=n_attempts (default)
             job_id = self.batch_client.submit_job(
                 benchmark_id=benchmark_id,
                 s3_task_path=s3_task_path,
-                total_runs=self.num_runs,
-                n_concurrent_trials=self.num_runs,
+                n_attempts=self.num_runs,
+                total_runs=1 if harness == "terminus" else None,
                 harness=harness,
                 model_name=model,
             )
@@ -193,7 +195,84 @@ class BenchmarkManager:
             raise
 
     def _poll_aws_batch_jobs(self, benchmark_id: str):
-        """Poll single AWS Batch job and check S3 for individual run statuses."""
+        """Poll single AWS Batch job and check S3 for individual run statuses.
+
+        Routes to terminus-specific or harbor polling logic based on harness type.
+        """
+        import time
+
+        benchmark = self.benchmarks.get(benchmark_id)
+        if not benchmark:
+            return
+
+        harness = benchmark.get("harness", "harbor")
+
+        # Use terminus-specific polling for terminus benchmarks
+        if harness == "terminus":
+            self._poll_terminus_job(benchmark_id)
+        else:
+            self._poll_harbor_job(benchmark_id)
+
+    def _poll_terminus_job(self, benchmark_id: str):
+        """Poll terminus job - only checks run-1/results.json for all trial statuses."""
+        import time
+
+        benchmark = self.benchmarks.get(benchmark_id)
+        if not benchmark:
+            return
+
+        job_id = benchmark.get("batch_job_id")
+        if not job_id:
+            return
+
+        # Poll until job completes or fails
+        while True:
+            job_status = self.batch_client.get_job_status(job_id)
+            if not job_status:
+                time.sleep(10)
+                continue
+
+            aws_status = job_status.get("status", "UNKNOWN")
+
+            # For terminus, check results.json which has all trial results
+            terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+
+            if terminus_results and isinstance(terminus_results, list):
+                completed_count = len(terminus_results)
+                passed_count = sum(1 for r in terminus_results if r.get("is_resolved", False))
+                benchmark["completed_runs"] = completed_count
+                benchmark["passed_runs"] = passed_count
+
+            if aws_status in ["SUBMITTED", "PENDING", "RUNNABLE", "STARTING", "RUNNING"]:
+                self._save_benchmarks()
+                time.sleep(10)
+                continue
+
+            elif aws_status == "SUCCEEDED":
+                # Final count from results.json
+                terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+                if terminus_results and isinstance(terminus_results, list):
+                    benchmark["completed_runs"] = len(terminus_results)
+                    benchmark["passed_runs"] = sum(1 for r in terminus_results if r.get("is_resolved", False))
+
+                benchmark["status"] = "completed"
+                benchmark["finished_at"] = datetime.now().isoformat()
+                self._save_benchmarks()
+                break
+
+            elif aws_status == "FAILED":
+                benchmark["status"] = "failed"
+                benchmark["error"] = job_status.get("statusReason", "Batch job failed")
+                benchmark["finished_at"] = datetime.now().isoformat()
+                self._save_benchmarks()
+                break
+
+            else:
+                self._save_benchmarks()
+                time.sleep(10)
+
+    def _poll_harbor_job(self, benchmark_id: str):
+        """Poll harbor job - checks run-{N}/status.json for each run."""
         import time
 
         benchmark = self.benchmarks.get(benchmark_id)
@@ -450,6 +529,112 @@ class BenchmarkManager:
 
     def _get_aws_batch_runs(self, benchmark: dict) -> list[dict]:
         """Get run information for AWS Batch-based benchmark.
+
+        Routes to terminus-specific or harbor logic based on harness type.
+        """
+        harness = benchmark.get("harness", "harbor")
+
+        # Use terminus-specific parsing for terminus benchmarks
+        if harness == "terminus":
+            return self._get_terminus_runs(benchmark)
+
+        # Harbor: Queries S3 for each run number (1 to total_runs)
+        return self._get_harbor_runs(benchmark)
+
+    def _get_terminus_runs(self, benchmark: dict) -> list[dict]:
+        """Get run information for terminus benchmark from S3.
+
+        Terminus stores all trials under run-1/task/task.X-of-10.../
+        and results in run-1/results.json.
+        """
+        benchmark_id = benchmark["id"]
+        job_id = benchmark.get("batch_job_id")
+        total_runs = benchmark.get("total_runs", 10)
+        runs = []
+
+        # Get AWS Batch job status
+        batch_status = None
+        aws_status = "UNKNOWN"
+        if job_id and self.batch_client:
+            batch_status = self.batch_client.get_job_status(job_id)
+            if batch_status:
+                aws_status = batch_status.get("status", "UNKNOWN")
+
+        # Try to get terminus results.json (contains all trial results)
+        terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+
+        if terminus_results and isinstance(terminus_results, list):
+            # Parse each trial result from results.json
+            for idx, trial_result in enumerate(terminus_results):
+                run_number = idx + 1
+                is_resolved = trial_result.get("is_resolved", False)
+                trial_name = trial_result.get("trial_name", f"task.{run_number}-of-{total_runs}")
+
+                # Parse test cases from parser_results
+                test_cases = []
+                parser_results = trial_result.get("parser_results", {})
+                if isinstance(parser_results, dict):
+                    for test_name, result in parser_results.items():
+                        status = "passed" if result == "passed" else "failed"
+                        test_cases.append({"name": test_name, "status": status})
+
+                passed_count = sum(1 for tc in test_cases if tc.get("status") == "passed")
+                total_count = len(test_cases)
+
+                run_info = {
+                    "id": trial_result.get("trial_id", f"run-{run_number}"),
+                    "run_number": run_number,
+                    "name": trial_name,
+                    "status": "completed",
+                    "passed": is_resolved,
+                    "test_cases": test_cases,
+                    "passed_count": passed_count,
+                    "total_count": total_count,
+                    "started_at": trial_result.get("started_at"),
+                    "finished_at": trial_result.get("finished_at"),
+                    "error": None,
+                    "aws_batch_job_id": job_id,
+                    "aws_batch_status": aws_status,
+                }
+                runs.append(run_info)
+        else:
+            # No results yet - check if job is still running
+            # Also try to get trial names from S3 to show progress
+            trial_names = self.s3_client.list_terminus_trial_names(benchmark_id)
+
+            for run_number in range(1, total_runs + 1):
+                if aws_status in ["SUBMITTED", "PENDING", "RUNNABLE"]:
+                    status = "pending"
+                elif aws_status in ["STARTING", "RUNNING"]:
+                    status = "running"
+                elif aws_status == "SUCCEEDED":
+                    status = "completed"
+                elif aws_status == "FAILED":
+                    status = "failed"
+                else:
+                    status = "pending"
+
+                run_info = {
+                    "id": f"run-{run_number}",
+                    "run_number": run_number,
+                    "name": f"run-{run_number}",
+                    "status": status,
+                    "passed": None,
+                    "test_cases": [],
+                    "passed_count": 0,
+                    "total_count": 0,
+                    "started_at": batch_status.get("startedAt") if batch_status else None,
+                    "finished_at": batch_status.get("stoppedAt") if batch_status else None,
+                    "error": batch_status.get("statusReason") if batch_status and aws_status == "FAILED" else None,
+                    "aws_batch_job_id": job_id,
+                    "aws_batch_status": aws_status,
+                }
+                runs.append(run_info)
+
+        return runs
+
+    def _get_harbor_runs(self, benchmark: dict) -> list[dict]:
+        """Get run information for harbor benchmark from S3.
 
         Queries S3 for each run number (1 to total_runs) to get individual run statuses.
         """
@@ -832,7 +1017,128 @@ class BenchmarkManager:
         return None
 
     def _get_aws_batch_run_logs(self, benchmark: dict, run_id: str) -> dict | None:
-        """Get logs for an AWS Batch run from S3."""
+        """Get logs for an AWS Batch run from S3.
+
+        Routes to terminus-specific or harbor logic based on harness type.
+        """
+        harness = benchmark.get("harness", "harbor")
+
+        if harness == "terminus":
+            return self._get_terminus_run_logs(benchmark, run_id)
+        else:
+            return self._get_harbor_run_logs(benchmark, run_id)
+
+    def _get_terminus_run_logs(self, benchmark: dict, run_id: str) -> dict | None:
+        """Get logs for a terminus run from S3.
+
+        Terminus stores logs at run-1/task/task.X-of-10.../agent-logs/episode-N/.
+        """
+        import re
+        import tempfile
+
+        benchmark_id = benchmark["id"]
+        total_runs = benchmark.get("total_runs", 10)
+
+        # Initialize empty logs
+        logs = {
+            "trial_log": "",
+            "agent_logs": [],
+            "test_stdout": "",
+            "test_stderr": "",
+            "episodes": [],
+        }
+
+        # Find the run number from run_id
+        run_number = None
+        match = re.match(r"run-(\d+)", run_id)
+        if match:
+            run_number = int(match.group(1))
+
+        # Also try UUID format - search in terminus results
+        if run_number is None:
+            terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+            if terminus_results and isinstance(terminus_results, list):
+                for idx, result in enumerate(terminus_results):
+                    if result.get("trial_id") == run_id:
+                        run_number = idx + 1
+                        break
+
+        if run_number is None:
+            return logs
+
+        # Get list of terminus trials to find the matching one
+        trial_names = self.s3_client.list_terminus_trial_names(benchmark_id)
+        if not trial_names or run_number > len(trial_names):
+            return logs
+
+        trial_name = trial_names[run_number - 1]
+
+        # Download trial files to temp directory
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            self.s3_client.download_terminus_trial(benchmark_id, trial_name, temp_path)
+
+            # Read agent logs from agent-logs/episode-N directories
+            agent_logs_dir = temp_path / "agent-logs"
+            if agent_logs_dir.exists():
+                # Find all episode directories
+                episode_dirs = []
+                for item in agent_logs_dir.iterdir():
+                    if item.is_dir() and item.name.startswith("episode-"):
+                        try:
+                            episode_num = int(item.name.split("-")[1])
+                            episode_dirs.append((episode_num, item))
+                        except (IndexError, ValueError):
+                            continue
+
+                episode_dirs.sort(key=lambda x: x[0])
+
+                for episode_num, episode_dir in episode_dirs:
+                    # Look for response.json or response.txt
+                    response_file = episode_dir / "response.json"
+                    if not response_file.exists():
+                        response_file = episode_dir / "response.txt"
+
+                    if response_file.exists():
+                        try:
+                            content = response_file.read_text()
+                            response_data = json.loads(content)
+
+                            analysis = response_data.get("analysis", "")
+                            plan = response_data.get("plan", "")
+
+                            # Extract commands
+                            commands_list = response_data.get("commands", [])
+                            commands_text = ""
+                            if isinstance(commands_list, list):
+                                keystrokes = []
+                                for cmd in commands_list:
+                                    if isinstance(cmd, dict) and "keystrokes" in cmd:
+                                        ks = cmd["keystrokes"]
+                                        if ks:
+                                            keystrokes.append(ks.rstrip("\n"))
+                                commands_text = "\n".join(keystrokes)
+
+                            logs["episodes"].append({
+                                "state_analysis": analysis,
+                                "explanation": plan,
+                                "commands": commands_text,
+                            })
+                        except (json.JSONDecodeError, KeyError):
+                            pass
+
+            # Read results.json for trial-specific info
+            results_file = temp_path / "results.json"
+            if results_file.exists():
+                try:
+                    logs["trial_log"] = results_file.read_text()
+                except Exception:
+                    pass
+
+        return logs
+
+    def _get_harbor_run_logs(self, benchmark: dict, run_id: str) -> dict | None:
+        """Get logs for a harbor run from S3."""
         import re
         import tempfile
 

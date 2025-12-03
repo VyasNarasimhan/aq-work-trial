@@ -12,9 +12,9 @@ bp = Blueprint("benchmarks", __name__, url_prefix="/api/benchmarks")
 VALID_HARNESSES = {"harbor", "terminus"}
 VALID_MODELS = {
     "openrouter/anthropic/claude-sonnet-4",
-    "openrouter/anthropic/claude-sonnet-4-5",
+    "openrouter/anthropic/claude-sonnet-4.5",
     "openrouter/openai/gpt-5",
-    "openrouter/google/gemini-2.0-flash",
+    "openrouter/google/gemini-2.0-flash-lite-001",
 }
 DEFAULT_MODEL = "openrouter/openai/gpt-5"
 

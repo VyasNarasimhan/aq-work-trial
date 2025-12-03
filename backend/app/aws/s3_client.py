@@ -186,3 +186,195 @@ class S3Client:
             Body=json.dumps(data, indent=2, default=str),
             ContentType="application/json",
         )
+
+    # =========================================================================
+    # Terminus-specific methods
+    # Terminus stores all trials under run-1/task/task.X-of-10.../
+    # rather than separate run-{N}/ folders like harbor
+    # =========================================================================
+
+    def is_terminus_structure(self, benchmark_id: str) -> bool:
+        """Check if the benchmark results use terminus structure.
+
+        Terminus stores all trials under run-1/task/task.X-of-10.../
+        and has a results.json with all trial results.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+
+        Returns:
+            True if terminus structure detected, False otherwise.
+        """
+        s3_key = f"results/{benchmark_id}/run-1/results.json"
+        try:
+            self.client.head_object(Bucket=self.bucket, Key=s3_key)
+            return True
+        except ClientError:
+            return False
+
+    def get_terminus_results(self, benchmark_id: str) -> list[dict[str, Any]] | None:
+        """Get the main results.json from terminus benchmark.
+
+        This file contains an array of all trial results with is_resolved,
+        parser_results, trial_name, timestamps, etc.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+
+        Returns:
+            List of trial result dictionaries or None if not found.
+        """
+        s3_key = f"results/{benchmark_id}/run-1/results.json"
+        try:
+            response = self.client.get_object(Bucket=self.bucket, Key=s3_key)
+            return json.loads(response["Body"].read())
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                return None
+            raise
+
+    def get_terminus_metadata(self, benchmark_id: str) -> dict[str, Any] | None:
+        """Get the run_metadata.json from terminus benchmark.
+
+        Contains accuracy, model_name, pass_at_k, n_attempts, etc.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+
+        Returns:
+            Metadata dictionary or None if not found.
+        """
+        s3_key = f"results/{benchmark_id}/run-1/run_metadata.json"
+        try:
+            response = self.client.get_object(Bucket=self.bucket, Key=s3_key)
+            return json.loads(response["Body"].read())
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                return None
+            raise
+
+    def get_terminus_run1_status(self, benchmark_id: str) -> dict[str, Any] | None:
+        """Get the status.json from terminus run-1.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+
+        Returns:
+            Status dictionary or None if not found.
+        """
+        s3_key = f"results/{benchmark_id}/run-1/status.json"
+        try:
+            response = self.client.get_object(Bucket=self.bucket, Key=s3_key)
+            return json.loads(response["Body"].read())
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                return None
+            raise
+
+    def list_terminus_trial_names(self, benchmark_id: str) -> list[str]:
+        """List all trial directory names for a terminus benchmark.
+
+        Trials are at: results/{benchmark_id}/run-1/task/task.X-of-N.benchmark-.../
+
+        Args:
+            benchmark_id: ID of the benchmark.
+
+        Returns:
+            List of trial directory names sorted by trial number.
+        """
+        s3_prefix = f"results/{benchmark_id}/run-1/task/"
+        trials = set()
+
+        try:
+            paginator = self.client.get_paginator("list_objects_v2")
+            for page in paginator.paginate(Bucket=self.bucket, Prefix=s3_prefix):
+                for obj in page.get("Contents", []):
+                    key = obj["Key"]
+                    relative = key[len(s3_prefix):]
+                    if "/" in relative:
+                        trial_name = relative.split("/")[0]
+                        if trial_name.startswith("task."):
+                            trials.add(trial_name)
+
+            # Sort by trial number (e.g., task.1-of-10... before task.2-of-10...)
+            def get_trial_num(name: str) -> int:
+                try:
+                    return int(name.split(".")[1].split("-")[0])
+                except (IndexError, ValueError):
+                    return 999
+            return sorted(trials, key=get_trial_num)
+        except ClientError:
+            return []
+
+    def list_terminus_trial_files(self, benchmark_id: str, trial_name: str) -> list[str]:
+        """List all files in a terminus trial directory.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+            trial_name: Trial directory name (e.g., task.1-of-10.benchmark-...).
+
+        Returns:
+            List of relative file paths within the trial directory.
+        """
+        s3_prefix = f"results/{benchmark_id}/run-1/task/{trial_name}/"
+        files = []
+
+        try:
+            paginator = self.client.get_paginator("list_objects_v2")
+            for page in paginator.paginate(Bucket=self.bucket, Prefix=s3_prefix):
+                for obj in page.get("Contents", []):
+                    relative_path = obj["Key"][len(s3_prefix):]
+                    if relative_path:
+                        files.append(relative_path)
+            return files
+        except ClientError:
+            return []
+
+    def get_terminus_trial_file(self, benchmark_id: str, trial_name: str, file_path: str) -> bytes | None:
+        """Get a specific file from a terminus trial.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+            trial_name: Trial directory name.
+            file_path: Relative path within the trial directory.
+
+        Returns:
+            File contents as bytes or None if not found.
+        """
+        s3_key = f"results/{benchmark_id}/run-1/task/{trial_name}/{file_path}"
+        try:
+            response = self.client.get_object(Bucket=self.bucket, Key=s3_key)
+            return response["Body"].read()
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                return None
+            raise
+
+    def download_terminus_trial(self, benchmark_id: str, trial_name: str, local_dir: Path) -> bool:
+        """Download all files for a terminus trial to local directory.
+
+        Args:
+            benchmark_id: ID of the benchmark.
+            trial_name: Trial directory name.
+            local_dir: Local directory to download to.
+
+        Returns:
+            True if successful, False otherwise.
+        """
+        s3_prefix = f"results/{benchmark_id}/run-1/task/{trial_name}/"
+
+        try:
+            paginator = self.client.get_paginator("list_objects_v2")
+            for page in paginator.paginate(Bucket=self.bucket, Prefix=s3_prefix):
+                for obj in page.get("Contents", []):
+                    key = obj["Key"]
+                    relative_path = key[len(s3_prefix):]
+                    if not relative_path:
+                        continue
+
+                    local_path = local_dir / relative_path
+                    local_path.parent.mkdir(parents=True, exist_ok=True)
+                    self.client.download_file(self.bucket, key, str(local_path))
+            return True
+        except ClientError:
+            return False

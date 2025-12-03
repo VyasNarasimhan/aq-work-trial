@@ -893,10 +893,13 @@ def main():
         s3_task_path = get_env_var("S3_TASK_PATH")
         bucket = get_env_var("S3_BUCKET")
         aws_region = get_env_var("AWS_REGION", "us-west-2")
-        # New: total runs and concurrency instead of single run number
+        harness = get_env_var("HARNESS", "harbor")
+        # N_ATTEMPTS: actual number of trials to run (10)
+        # TOTAL_RUNS: number of run-N/ folders for S3 (10 for harbor, 1 for terminus)
+        # N_CONCURRENT_TRIALS: parallelism level (same as n_attempts)
+        n_attempts = int(get_env_var("N_ATTEMPTS", "10"))
         total_runs = int(get_env_var("TOTAL_RUNS", "10"))
         n_concurrent_trials = int(get_env_var("N_CONCURRENT_TRIALS", "10"))
-        harness = get_env_var("HARNESS", "harbor")
     except ValueError as e:
         logger.error(f"Missing environment variable: {e}")
         sys.exit(1)
@@ -905,7 +908,8 @@ def main():
     logger.info(f"S3 Task Path: {s3_task_path}")
     logger.info(f"S3 Bucket: {bucket}")
     logger.info(f"Harness: {harness}")
-    logger.info(f"Total Runs: {total_runs}")
+    logger.info(f"N Attempts (trials): {n_attempts}")
+    logger.info(f"Total Runs (S3 folders): {total_runs}")
     logger.info(f"Concurrent Trials: {n_concurrent_trials}")
 
     # Initialize S3 client
@@ -954,89 +958,123 @@ def main():
             logger.warning("Terminus harness requested but task.toml found. Switching to Harbor.")
             harness = "harbor"
 
-        async def run_with_watcher():
-            """Run job with concurrent trial watcher for incremental uploads."""
-            # Create the watcher task
-            watcher_task = asyncio.create_task(
-                watch_and_upload_trials(
-                    s3_client,
-                    bucket,
-                    benchmark_id,
-                    job_dir,
-                    total_runs,
-                    uploaded_trials,
-                    poll_interval=5.0,
-                )
-            )
+        if harness == "terminus":
+            # Terminus: Run job and upload entire output directory to run-1/
+            logger.info(f"Starting Terminus job with {n_attempts} trials, {n_concurrent_trials} concurrent")
 
-            try:
-                # Run the appropriate harness
-                if harness == "terminus":
-                    result = await run_terminus_job(
-                        task_path,
-                        job_name,
-                        jobs_dir,
-                        n_attempts=total_runs,
-                        n_concurrent_trials=n_concurrent_trials,
+            async def run_terminus():
+                return await run_terminus_job(
+                    task_path,
+                    job_name,
+                    jobs_dir,
+                    n_attempts=n_attempts,
+                    n_concurrent_trials=n_concurrent_trials,
+                )
+
+            result = asyncio.run(run_terminus())
+            logger.info(f"Terminus job completed. Uploading results to run-1/...")
+
+            # Upload entire output directory to S3 under run-1/
+            s3_prefix = f"results/{benchmark_id}/run-1/"
+            file_count = 0
+
+            if job_dir.exists():
+                for file_path in job_dir.rglob("*"):
+                    if file_path.is_file():
+                        relative_path = file_path.relative_to(job_dir)
+                        s3_key = f"{s3_prefix}{relative_path}"
+                        logger.debug(f"  Uploading: {file_path} -> s3://{bucket}/{s3_key}")
+                        try:
+                            s3_client.upload_file(str(file_path), bucket, s3_key)
+                            file_count += 1
+                        except Exception as e:
+                            logger.error(f"Failed to upload {file_path}: {e}")
+
+            logger.info(f"Uploaded {file_count} files to S3")
+
+            # Create status.json for run-1
+            status = {
+                "run_id": str(uuid.uuid4()),
+                "benchmark_id": benchmark_id,
+                "run_number": 1,
+                "status": "completed",
+                "started_at": started_at,
+                "finished_at": datetime.now().isoformat(),
+                "passed": True,  # Will be determined by results.json parsing
+                "error": None,
+            }
+            upload_status_to_s3(s3_client, bucket, benchmark_id, 1, status)
+            overall_status = "completed"
+            logger.info(f"Terminus results uploaded to run-1/")
+
+        else:
+            # Harbor: Run with trial watcher for incremental uploads to run-N/
+            async def run_with_watcher():
+                """Run job with concurrent trial watcher for incremental uploads."""
+                watcher_task = asyncio.create_task(
+                    watch_and_upload_trials(
+                        s3_client,
+                        bucket,
+                        benchmark_id,
+                        job_dir,
+                        n_attempts,
+                        uploaded_trials,
+                        poll_interval=5.0,
                     )
-                else:
+                )
+
+                try:
                     result = await run_harbor_job(
                         task_path,
                         job_name,
                         jobs_dir,
-                        n_attempts=total_runs,
+                        n_attempts=n_attempts,
                         n_concurrent_trials=n_concurrent_trials,
                     )
-                return result
-            finally:
-                # Cancel the watcher when job completes
-                watcher_task.cancel()
-                try:
-                    await watcher_task
-                except asyncio.CancelledError:
-                    pass
-
-        # Run the Harbor job with concurrent trial watcher
-        logger.info(f"Starting Harbor job with {total_runs} attempts, {n_concurrent_trials} concurrent")
-        logger.info("Trial watcher will upload results incrementally as they complete")
-        result = asyncio.run(run_with_watcher())
-
-        logger.info(f"Harbor job completed. Checking for any remaining uploads...")
-
-        # Upload any trials that weren't caught by the watcher
-        if job_dir.exists():
-            trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()])
-            for run_number, trial_dir in enumerate(trial_dirs, start=1):
-                if trial_dir.name not in uploaded_trials:
-                    logger.info(f"Uploading remaining trial {run_number}: {trial_dir.name}")
+                    return result
+                finally:
+                    watcher_task.cancel()
                     try:
-                        upload_single_trial(s3_client, bucket, benchmark_id, trial_dir, run_number)
-                        uploaded_trials.add(trial_dir.name)
-                    except Exception as e:
-                        logger.error(f"Failed to upload trial {run_number}: {e}")
+                        await watcher_task
+                    except asyncio.CancelledError:
+                        pass
 
-        # Create failed status for any missing trials
-        trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()]) if job_dir.exists() else []
-        for run_number in range(len(trial_dirs) + 1, total_runs + 1):
-            logger.warning(f"Missing trial for run-{run_number}, creating failed status")
-            status = {
-                "run_id": str(uuid.uuid4()),
-                "benchmark_id": benchmark_id,
-                "run_number": run_number,
-                "status": "failed",
-                "started_at": None,
-                "finished_at": datetime.now().isoformat(),
-                "passed": False,
-                "error": "Trial did not complete",
-            }
-            upload_status_to_s3(s3_client, bucket, benchmark_id, run_number, status)
+            logger.info(f"Starting Harbor job with {n_attempts} trials, {n_concurrent_trials} concurrent")
+            logger.info("Trial watcher will upload results incrementally as they complete")
+            result = asyncio.run(run_with_watcher())
 
-        # Calculate overall pass rate
-        passed_count = len([t for t in uploaded_trials])  # All uploaded trials are completed
-        total_count = total_runs
-        overall_status = "completed"
+            logger.info(f"Harbor job completed. Checking for any remaining uploads...")
 
-        logger.info(f"All trials processed. Uploaded: {len(uploaded_trials)}/{total_runs}")
+            # Upload any trials that weren't caught by the watcher
+            if job_dir.exists():
+                trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()])
+                for run_number, trial_dir in enumerate(trial_dirs, start=1):
+                    if trial_dir.name not in uploaded_trials:
+                        logger.info(f"Uploading remaining trial {run_number}: {trial_dir.name}")
+                        try:
+                            upload_single_trial(s3_client, bucket, benchmark_id, trial_dir, run_number)
+                            uploaded_trials.add(trial_dir.name)
+                        except Exception as e:
+                            logger.error(f"Failed to upload trial {run_number}: {e}")
+
+            # Create failed status for any missing trials
+            trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()]) if job_dir.exists() else []
+            for run_number in range(len(trial_dirs) + 1, n_attempts + 1):
+                logger.warning(f"Missing trial for run-{run_number}, creating failed status")
+                status = {
+                    "run_id": str(uuid.uuid4()),
+                    "benchmark_id": benchmark_id,
+                    "run_number": run_number,
+                    "status": "failed",
+                    "started_at": None,
+                    "finished_at": datetime.now().isoformat(),
+                    "passed": False,
+                    "error": "Trial did not complete",
+                }
+                upload_status_to_s3(s3_client, bucket, benchmark_id, run_number, status)
+
+            overall_status = "completed"
+            logger.info(f"All trials processed. Uploaded: {len(uploaded_trials)}/{n_attempts}")
 
     except Exception as e:
         logger.error(f"Error running job: {e}")
