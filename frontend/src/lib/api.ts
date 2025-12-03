@@ -7,8 +7,7 @@ import type {
   HarnessType,
   ModelType,
 } from "@/types";
-
-const API_BASE = "/api";
+import { API_BASE } from "./config";
 
 // Standalone exports for direct imports
 export async function getRunLogs(benchmarkId: string, runId: string): Promise<RunLogs> {

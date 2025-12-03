@@ -234,7 +234,7 @@ export function AttemptCard({ run, benchmarkId }: Props) {
         {/* View Container Logs link */}
         <div className="mt-4 pt-4 border-t border-gray-100">
           <Link
-            href={`/benchmarks/${benchmarkId}/runs/${run.id}`}
+            href={`/benchmarks?id=${benchmarkId}&runId=${run.id}`}
             className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
           >
             View Container Logs

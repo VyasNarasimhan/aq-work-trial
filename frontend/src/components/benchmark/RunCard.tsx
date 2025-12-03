@@ -14,7 +14,7 @@ export function RunCard({ run, benchmarkId }: Props) {
 
   return (
     <Link
-      href={`/benchmarks/${benchmarkId}/runs/${run.id}`}
+      href={`/benchmarks?id=${benchmarkId}&runId=${run.id}`}
       className={`
         block p-4 rounded-lg border-2 transition-all
         hover:shadow-md hover:scale-105

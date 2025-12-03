@@ -38,7 +38,7 @@ export function DropZone() {
         HARNESS,
         MODEL
       );
-      router.push(`/benchmarks/${id}`);
+      router.push(`/benchmarks?id=${id}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
       setUploading(false);
