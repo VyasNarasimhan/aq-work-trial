@@ -3,25 +3,16 @@
 import { useCallback, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { HarnessSelector } from "./HarnessSelector";
-import { ModelSelector } from "./ModelSelector";
-import type { HarnessType, ModelType } from "@/types";
-import { DEFAULT_MODEL } from "@/types";
+
+// Hardcoded values - terminus and model selection disabled for now
+const HARNESS = "harbor";
+const MODEL = "openrouter/openai/gpt-5";
 
 export function DropZone() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<string>("");
-
-  // Two-step flow state
-  const [uploadResult, setUploadResult] = useState<{
-    upload_id: string;
-    task_name: string;
-    detected_format: "harbor" | "terminus" | "unknown";
-  } | null>(null);
-  const [selectedHarness, setSelectedHarness] = useState<HarnessType>("harbor");
-  const [selectedModel, setSelectedModel] = useState<ModelType>(DEFAULT_MODEL);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -38,56 +29,22 @@ export function DropZone() {
 
     try {
       const result = await api.uploadFile(file);
-      setUploadResult({
-        upload_id: result.upload_id,
-        task_name: result.task_name,
-        detected_format: result.detected_format || "unknown",
-      });
 
-      // Auto-select harness based on detected format
-      if (result.detected_format === "harbor") {
-        setSelectedHarness("harbor");
-      } else if (result.detected_format === "terminus") {
-        setSelectedHarness("terminus");
-      }
+      // Immediately start benchmark after upload
+      setUploadProgress(`Starting benchmark for "${result.task_name}"...`);
 
-      setUploading(false);
-      setUploadProgress("");
+      const { id } = await api.createBenchmark(
+        result.upload_id,
+        HARNESS,
+        MODEL
+      );
+      router.push(`/benchmarks/${id}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
       setUploading(false);
       setUploadProgress("");
     }
-  }, []);
-
-  const handleSubmit = useCallback(async () => {
-    if (!uploadResult) return;
-
-    setUploading(true);
-    setUploadProgress(
-      `Starting ${selectedHarness} benchmark for "${uploadResult.task_name}"...`
-    );
-
-    try {
-      const { id } = await api.createBenchmark(
-        uploadResult.upload_id,
-        selectedHarness,
-        selectedModel
-      );
-      router.push(`/benchmarks/${id}`);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to create benchmark");
-      setUploading(false);
-      setUploadProgress("");
-    }
-  }, [uploadResult, selectedHarness, selectedModel, router]);
-
-  const handleCancel = () => {
-    setUploadResult(null);
-    setSelectedHarness("harbor");
-    setSelectedModel(DEFAULT_MODEL);
-    setError(null);
-  };
+  }, [router]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -116,59 +73,6 @@ export function DropZone() {
     fileInputRef.current?.click();
   };
 
-  // If file is uploaded, show harness selection
-  if (uploadResult) {
-    return (
-      <div className="border-2 border-gray-200 rounded-xl p-8">
-        <div className="text-center mb-6">
-          <div className="text-5xl mb-4">📦</div>
-          <p className="text-gray-700 font-medium text-lg">
-            Task: {uploadResult.task_name}
-          </p>
-        </div>
-
-        <HarnessSelector
-          value={selectedHarness}
-          onChange={setSelectedHarness}
-          detectedFormat={uploadResult.detected_format}
-          disabled={uploading}
-        />
-
-        <div className="mt-6">
-          <ModelSelector
-            value={selectedModel}
-            onChange={setSelectedModel}
-            disabled={uploading}
-          />
-        </div>
-
-        {error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
-        )}
-
-        <div className="mt-6 flex gap-4">
-          <button
-            onClick={handleCancel}
-            disabled={uploading}
-            className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={uploading}
-            className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            {uploading ? uploadProgress : "Start 10 Runs"}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Original drop zone UI for file selection
   return (
     <div
       onDragOver={(e) => {

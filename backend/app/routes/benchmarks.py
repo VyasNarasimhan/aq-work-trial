@@ -9,13 +9,9 @@ logger = logging.getLogger(__name__)
 
 bp = Blueprint("benchmarks", __name__, url_prefix="/api/benchmarks")
 
-VALID_HARNESSES = {"harbor", "terminus"}
-VALID_MODELS = {
-    "openrouter/anthropic/claude-sonnet-4",
-    "openrouter/anthropic/claude-sonnet-4.5",
-    "openrouter/openai/gpt-5",
-    "openrouter/google/gemini-2.0-flash-lite-001",
-}
+# Terminus and model selection disabled for now
+VALID_HARNESSES = {"harbor"}
+DEFAULT_HARNESS = "harbor"
 DEFAULT_MODEL = "openrouter/openai/gpt-5"
 
 
@@ -24,17 +20,12 @@ def create_benchmark():
     """Start a new benchmark from an uploaded zip."""
     data = request.json or {}
     upload_id = data.get("upload_id")
-    harness = data.get("harness", "harbor")  # Default to harbor for backward compatibility
-    model = data.get("model", DEFAULT_MODEL)  # Default to GPT-5
+    # Harness and model selection disabled - use defaults
+    harness = DEFAULT_HARNESS
+    model = DEFAULT_MODEL
 
     if not upload_id:
         return jsonify({"error": "upload_id required"}), 400
-
-    if harness not in VALID_HARNESSES:
-        return jsonify({"error": f"Invalid harness. Must be one of: {VALID_HARNESSES}"}), 400
-
-    if model not in VALID_MODELS:
-        return jsonify({"error": f"Invalid model. Must be one of: {VALID_MODELS}"}), 400
 
     logger.info(f"Creating benchmark with harness={harness}, model={model}")
 
