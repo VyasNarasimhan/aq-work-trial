@@ -506,6 +506,8 @@ class BenchmarkManager:
 
     def get_benchmark(self, benchmark_id: str) -> dict | None:
         """Get benchmark status."""
+        # Reload from disk to get fresh data (handles multi-process scenarios)
+        self._load_benchmarks()
         benchmark = self.benchmarks.get(benchmark_id)
         if not benchmark:
             return None
@@ -527,10 +529,31 @@ class BenchmarkManager:
 
     def list_benchmarks(self) -> list[dict]:
         """List all benchmarks."""
-        return [self.get_benchmark(bid) for bid in self.benchmarks.keys()]
+        # Reload from disk to get fresh data (handles multi-process scenarios)
+        self._load_benchmarks()
+        # Use _format_benchmark directly to avoid double-loading in get_benchmark
+        return [self._format_benchmark(b) for b in self.benchmarks.values() if b]
+
+    def _format_benchmark(self, benchmark: dict) -> dict:
+        """Format benchmark for API response."""
+        return {
+            "id": benchmark["id"],
+            "task_name": benchmark["task_name"],
+            "harness": benchmark.get("harness", "harbor"),
+            "model": benchmark.get("model", "openrouter/openai/gpt-5"),
+            "status": benchmark["status"],
+            "total_runs": benchmark["total_runs"],
+            "completed_runs": benchmark["completed_runs"],
+            "passed_runs": benchmark["passed_runs"],
+            "started_at": benchmark["started_at"],
+            "finished_at": benchmark["finished_at"],
+            "error": benchmark.get("error"),
+        }
 
     def get_runs(self, benchmark_id: str) -> list[dict] | None:
         """Get all runs for a benchmark."""
+        # Reload from disk to get fresh data
+        self._load_benchmarks()
         benchmark = self.benchmarks.get(benchmark_id)
         if not benchmark:
             return None
