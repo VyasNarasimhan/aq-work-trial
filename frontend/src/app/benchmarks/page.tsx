@@ -53,19 +53,36 @@ function BenchmarksList() {
   const [benchmarks, setBenchmarks] = useState<Benchmark[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchBenchmarks = async () => {
+    try {
+      const data = await api.listBenchmarks();
+      const sorted = [...data].sort((a, b) => {
+        if (!a.started_at) return 1;
+        if (!b.started_at) return -1;
+        return new Date(b.started_at).getTime() - new Date(a.started_at).getTime();
+      });
+      setBenchmarks(sorted);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial fetch
   useEffect(() => {
-    api
-      .listBenchmarks()
-      .then((data) => {
-        const sorted = [...data].sort((a, b) => {
-          if (!a.started_at) return 1;
-          if (!b.started_at) return -1;
-          return new Date(b.started_at).getTime() - new Date(a.started_at).getTime();
-        });
-        setBenchmarks(sorted);
-      })
-      .finally(() => setLoading(false));
+    fetchBenchmarks();
   }, []);
+
+  // Poll when there are running benchmarks
+  const hasRunning = benchmarks.some(
+    (b) => b.status === "running" || b.status === "pending"
+  );
+
+  useEffect(() => {
+    if (!hasRunning) return;
+
+    const interval = setInterval(fetchBenchmarks, 5000);
+    return () => clearInterval(interval);
+  }, [hasRunning]);
 
   if (loading) {
     return (
@@ -162,8 +179,18 @@ function BenchmarksList() {
 // Benchmark Detail Component
 function BenchmarkDetail({ id }: { id: string }) {
   const { benchmark, error, loading, refetch: refetchBenchmark } = useBenchmark(id);
-  const isRunning = benchmark?.status === "running" || benchmark?.status === "pending";
-  const { runs, refetch: refetchRuns } = useRuns(id, isRunning ? 3000 : 0);
+  const backendSaysRunning = benchmark?.status === "running" || benchmark?.status === "pending";
+
+  // Poll runs while backend says running (will determine actual status from runs)
+  const { runs, refetch: refetchRuns } = useRuns(id, backendSaysRunning ? 3000 : 0);
+
+  // Calculate actual running status from runs data
+  const completedRunsCount = runs.filter((r) => r.status === "completed").length;
+  const totalRuns = benchmark?.total_runs || 10;
+  const allRunsCompleted = runs.length > 0 && completedRunsCount >= totalRuns;
+
+  // Consider running if backend says so AND not all runs are completed
+  const isRunning = backendSaysRunning && !allRunsCompleted;
 
   const handleRefresh = () => {
     refetchBenchmark();
@@ -226,7 +253,7 @@ function BenchmarkDetail({ id }: { id: string }) {
           </p>
         </div>
 
-        {isRunning && <ProgressView benchmark={benchmark} />}
+        {isRunning && <ProgressView benchmark={benchmark} runs={runs} />}
 
         {benchmark.status === "failed" && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
@@ -241,7 +268,7 @@ function BenchmarkDetail({ id }: { id: string }) {
           onRefresh={handleRefresh}
         />
 
-        {benchmark.status === "completed" && (
+        {(benchmark.status === "completed" || allRunsCompleted) && (
           <div className="mt-8 text-center text-gray-500 text-sm">
             Benchmark completed{" "}
             {benchmark.finished_at

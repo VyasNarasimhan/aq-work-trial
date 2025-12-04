@@ -308,6 +308,15 @@ class BenchmarkManager:
             benchmark["completed_runs"] = completed_count
             benchmark["passed_runs"] = passed_count
 
+            # Check if all runs are completed based on S3 data
+            total_runs = benchmark.get("total_runs", 10)
+            if completed_count >= total_runs:
+                # All runs completed - mark benchmark as done
+                benchmark["status"] = "completed"
+                benchmark["finished_at"] = datetime.now().isoformat()
+                self._save_benchmarks()
+                break
+
             if aws_status in ["SUBMITTED", "PENDING", "RUNNABLE", "STARTING", "RUNNING"]:
                 # Job still running
                 self._save_benchmarks()

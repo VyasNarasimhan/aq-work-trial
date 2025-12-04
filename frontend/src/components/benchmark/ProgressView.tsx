@@ -1,13 +1,23 @@
 "use client";
 
-import type { Benchmark } from "@/types";
+import type { Benchmark, Run } from "@/types";
 
 interface Props {
   benchmark: Benchmark;
+  runs?: Run[];
 }
 
-export function ProgressView({ benchmark }: Props) {
-  const progress = (benchmark.completed_runs / benchmark.total_runs) * 100;
+export function ProgressView({ benchmark, runs }: Props) {
+  // Calculate progress from runs if available, otherwise use benchmark data
+  const completedRuns = runs
+    ? runs.filter((r) => r.status === "completed").length
+    : benchmark.completed_runs;
+  const passedRuns = runs
+    ? runs.filter((r) => r.status === "completed" && r.passed).length
+    : benchmark.passed_runs;
+  const totalRuns = benchmark.total_runs;
+
+  const progress = totalRuns > 0 ? (completedRuns / totalRuns) * 100 : 0;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 mb-6">
@@ -17,7 +27,7 @@ export function ProgressView({ benchmark }: Props) {
             Running Benchmark
           </h2>
           <p className="text-gray-500 text-sm">
-            {benchmark.completed_runs} of {benchmark.total_runs} runs completed
+            {completedRuns} of {totalRuns} runs completed
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -36,14 +46,12 @@ export function ProgressView({ benchmark }: Props) {
       <div className="mt-4 flex gap-6 text-sm">
         <div>
           <span className="text-gray-500">Passed:</span>{" "}
-          <span className="text-green-600 font-medium">
-            {benchmark.passed_runs}
-          </span>
+          <span className="text-green-600 font-medium">{passedRuns}</span>
         </div>
         <div>
           <span className="text-gray-500">Failed:</span>{" "}
           <span className="text-red-600 font-medium">
-            {benchmark.completed_runs - benchmark.passed_runs}
+            {completedRuns - passedRuns}
           </span>
         </div>
       </div>
