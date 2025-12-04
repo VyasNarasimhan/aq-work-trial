@@ -1,0 +1,22 @@
+{
+    "state_analysis": "All requirements have been successfully completed: 1) Database 'production_db' created with 'users' and 'transactions' tables populated (30 users, 100 transactions), 2) clean_users.csv created with valid users, 3) valid_transactions.json created with valid transactions, 4) db_stats.txt generated with database statistics, 5) top_users.csv created with top 10 users by transaction amount, 6) backup_verification.txt created with backup metadata, and 7) recovery_complete.txt marker created. All files are properly formatted and newline-terminated.",
+    "explanation": "Performing a final verification to confirm all files are correct and the task is complete.",
+    "commands": [
+        {
+            "keystrokes": "wc -l /backup/clean_users.csv /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "python3 -c \"import json; data=json.load(open('/backup/valid_transactions.json')); print(f'Valid transactions: {len(data)}'); print(f'Sample: {data[0]}')\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Task Complete - All Requirements Met ===' && echo 'Database: production_db created and populated' && echo 'Users table: 30 rows' && echo 'Transactions table: 100 rows' && echo 'All output files generated and properly formatted'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": true
+}

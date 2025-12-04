@@ -1,0 +1,40 @@
+Average per User: 1770.32
+root@4c8136e5fef9:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@4c8136e5fef9:/backup# cat /backup/backup_verification.txt; tmux wait -S done
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+root@4c8136e5fef9:/backup# ls -la /backup/*.csv /backup/*.json /backup/*.txt; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 17:46 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 17:46 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 17:46 /backup/db_stats.txt
+-rw-r--r-- 1 root root   219 Dec  4 17:46 /backup/top_users.csv
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  4270 Dec  4 17:46 /backup/transactions_import.csv
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+-rw-r--r-- 1 root root 14573 Dec  4 17:46 /backup/valid_transactions.json
+root@4c8136e5fef9:/backup# tail -c 1 /backup/clean_users.csv | od -An -tx1; tmux wait -S done
+ 0a
+root@4c8136e5fef9:/backup# tail -c 1 /backup/valid_transactions.json | od -An -tx1; tmux wait -S done
+ 0a
+root@4c8136e5fef9:/backup# tail -c 1 /backup/db_stats.txt | od -An -tx1; tmux wait -S done
+ 0a
+root@4c8136e5fef9:/backup# tail -c 1 /backup/top_users.csv | od -An -tx1; tmux wait -S done
+ 0a
+root@4c8136e5fef9:/backup# tail -c 1 /backup/backup_verification.txt | od -An -tx1; tmux wait -S done
+ 0a
+root@4c8136e5fef9:/backup#

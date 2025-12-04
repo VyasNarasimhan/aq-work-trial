@@ -1,0 +1,40 @@
+ 0a
+=== /backup/recovery_complete.txt ===
+ 0a
+root@76c15cab1a93:/backup# echo 'All files verified!'; tmux wait -S done
+All files verified!
+root@76c15cab1a93:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+11 /backup/top_users.csv
+root@76c15cab1a93:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@76c15cab1a93:/backup# echo '=== Verifying database can be queried ==='; tmux wait -S done
+=== Verifying database can be queried ===
+root@76c15cab1a93:/backup# psql -U postgres -d production_db -c "SELECT username, email, status FROM users LIMIT 3;"; tmux wait -S done
+   username    |           email           |  status
+---------------+---------------------------+-----------
+ alice_smith   | alice_smith@example.com   | inactive
+ bob_jones     | bob_jones@example.com     | active
+ charlie_brown | charlie_brown@example.com | suspended
+(3 rows)
+
+root@76c15cab1a93:/backup# psql -U postgres -d production_db -c "SELECT transaction_id, user_id, amount FROM transactions LIMIT 3;"; tmux wait -S done
+ transaction_id | user_id | amount
+----------------+---------+--------
+              1 |      16 |  46.00
+              2 |       6 | 646.05
+              3 |      29 | 186.76
+(3 rows)
+
+root@76c15cab1a93:/backup# echo '=== All tasks completed successfully! ==='; tmux wait -S done
+=== All tasks completed successfully! ===
+root@76c15cab1a93:/backup#

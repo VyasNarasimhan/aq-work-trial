@@ -1,0 +1,40 @@
+>
+> # Clean transactions JSON
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+> for txn in transactions:
+>     # Check for null transaction_id
+>     if txn.get('transaction_id') is None:
+>         continue
+>     # Check for null or negative amounts
+>     if txn.get('amount') is None or txn['amount'] <= 0:
+>         continue
+>     # Check for missing timestamp
+>     if not txn.get('timestamp'):
+>         continue
+>     # Check for valid user_id (1-30)
+>     if txn.get('user_id') is None or txn['user_id'] < 1 or txn['user_id'] > 30:
+>         continue
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+>
+> print(f'Valid transactions: {len(valid_transactions)} valid records')
+> EOF
+root@2b0e848428bd:/backup# python3 /tmp/clean_data.py; tmux wait -S done
+Cleaned users: 30 valid rows
+Traceback (most recent call last):
+  File "/tmp/clean_data.py", line 41, in <module>
+    if txn.get('amount') is None or txn['amount'] <= 0:
+                                    ^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'str' and 'int'
+root@2b0e848428bd:/backup# wc -l /backup/clean_users.csv /backup/valid_transactions.json; tmux wait -S done
+  31 /backup/clean_users.csv
+wc: /backup/valid_transactions.json: No such file or directory
+  31 total
+root@2b0e848428bd:/backup#

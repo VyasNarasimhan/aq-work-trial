@@ -601,6 +601,233 @@ async def run_terminus_job(
     }
 
 
+async def watch_and_upload_terminus_trials(
+    s3_client,
+    bucket: str,
+    benchmark_id: str,
+    output_dir: Path,
+    n_attempts: int,
+    uploaded_trials: set,
+    poll_interval: float = 5.0,
+) -> None:
+    """Watch for completed Terminus trials and upload them incrementally to S3.
+
+    Terminus structure: runs/{timestamp}/{task_id}/{trial_name}/
+    A trial is complete when its results.json exists in the trial directory.
+    """
+    logger.info(f"Starting Terminus trial watcher for {output_dir}")
+
+    while True:
+        await asyncio.sleep(poll_interval)
+
+        # Find the timestamped output directory
+        result_dir = None
+        if output_dir.exists():
+            for item in sorted(output_dir.iterdir(), reverse=True):
+                if item.is_dir() and "__" in item.name:
+                    result_dir = item
+                    break
+
+        if not result_dir or not result_dir.exists():
+            continue
+
+        # Check for completed trials (each task_id folder)
+        for task_dir in result_dir.iterdir():
+            if not task_dir.is_dir():
+                continue
+
+            task_id = task_dir.name
+
+            # Each task_id has one trial folder inside
+            for trial_dir in task_dir.iterdir():
+                if not trial_dir.is_dir():
+                    continue
+
+                trial_name = trial_dir.name
+                trial_key = f"{task_id}/{trial_name}"
+
+                if trial_key in uploaded_trials:
+                    continue
+
+                # Check if trial is complete (has results.json)
+                trial_results = trial_dir / "results.json"
+                if not trial_results.exists():
+                    continue
+
+                logger.info(f"Found completed Terminus trial: {trial_key}")
+
+                # Upload all files for this trial
+                s3_prefix = f"results/{benchmark_id}/run-1/{trial_key}/"
+                file_count = 0
+
+                for file_path in trial_dir.rglob("*"):
+                    if file_path.is_file():
+                        relative_path = file_path.relative_to(trial_dir)
+                        s3_key = f"{s3_prefix}{relative_path}"
+                        try:
+                            s3_client.upload_file(str(file_path), bucket, s3_key)
+                            file_count += 1
+                        except Exception as e:
+                            logger.error(f"Failed to upload {file_path}: {e}")
+
+                logger.info(f"Uploaded {file_count} files for trial {trial_key}")
+                uploaded_trials.add(trial_key)
+
+        # Also upload the main results.json if it exists and has been updated
+        main_results = result_dir / "results.json"
+        if main_results.exists():
+            try:
+                s3_key = f"results/{benchmark_id}/run-1/results.json"
+                s3_client.upload_file(str(main_results), bucket, s3_key)
+            except Exception as e:
+                logger.debug(f"Failed to upload main results.json: {e}")
+
+        # Check if all trials are done
+        if len(uploaded_trials) >= n_attempts:
+            logger.info(f"All {n_attempts} Terminus trials uploaded")
+            break
+
+
+async def run_terminus_cli_job(
+    task_path: Path,
+    job_name: str,
+    jobs_dir: Path,
+    n_attempts: int = 10,
+    n_concurrent_trials: int = 10,
+) -> dict:
+    """Run a Terminus (Terminal-Bench) job using the tb CLI.
+
+    This function:
+    1. Creates a dataset directory with n_attempts copies of the task
+    2. Runs `tb run` with --n-attempts 1 --n-concurrent n_concurrent_trials
+    3. Returns the results directory
+
+    Args:
+        task_path: Path to the single task directory (contains task.yaml).
+        job_name: Name for the job (used as run_id).
+        jobs_dir: Directory to store job outputs.
+        n_attempts: Number of task copies to create (default 10 for 10 trials).
+        n_concurrent_trials: Number of concurrent trials to run.
+    """
+    import shutil
+
+    logger.info("=" * 60)
+    logger.info(f"Running Terminus CLI job: {job_name}")
+    logger.info(f"  Task path: {task_path}")
+    logger.info(f"  Jobs dir: {jobs_dir}")
+    logger.info(f"  n_attempts (task copies): {n_attempts}")
+    logger.info(f"  n_concurrent_trials: {n_concurrent_trials}")
+    logger.info("=" * 60)
+
+    # Get configuration from environment
+    model_name = os.environ.get("MODEL_NAME", "openrouter/openai/gpt-5")
+
+    # Create dataset directory with n_attempts copies of the task
+    dataset_dir = jobs_dir / "dataset"
+    dataset_dir.mkdir(parents=True, exist_ok=True)
+
+    task_base_name = task_path.name
+    logger.info(f"Creating {n_attempts} copies of task '{task_base_name}' in {dataset_dir}")
+
+    for i in range(1, n_attempts + 1):
+        dest_name = f"{task_base_name}-{i}"
+        dest_path = dataset_dir / dest_name
+        logger.info(f"  Copying task to: {dest_path}")
+        shutil.copytree(task_path, dest_path)
+
+    # List dataset directory contents
+    logger.info(f"Dataset directory contents:")
+    for item in dataset_dir.iterdir():
+        if item.is_dir():
+            logger.info(f"  {item.name}/")
+
+    # Create output directory
+    output_dir = jobs_dir / "runs"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Log system resources
+    import psutil
+    cpu_count = psutil.cpu_count()
+    memory = psutil.virtual_memory()
+    logger.info("=" * 60)
+    logger.info("SYSTEM RESOURCES:")
+    logger.info(f"  CPU cores: {cpu_count}")
+    logger.info(f"  Total memory: {memory.total / (1024**3):.1f} GB")
+    logger.info(f"  Available memory: {memory.available / (1024**3):.1f} GB")
+    logger.info(f"  Memory usage: {memory.percent}%")
+    logger.info("=" * 60)
+
+    # Build tb run command
+    # tb run --agent terminus --model $MODEL --dataset-path ./dataset --n-attempts 1 --n-concurrent 10
+    cmd = [
+        "tb", "run",
+        "--agent", "terminus",
+        "--model", model_name,
+        "--dataset-path", str(dataset_dir),
+        "--output-path", str(output_dir),
+        "--n-attempts", "1",  # 1 attempt per task (we have n_attempts copies)
+        "--n-concurrent", str(n_concurrent_trials),
+    ]
+
+    logger.info(f"Running command: {' '.join(cmd)}")
+    start_time = datetime.now()
+
+    try:
+        # Run tb command using async subprocess to allow watcher to run concurrently
+        process = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
+        )
+
+        # Stream output in real-time (async)
+        while True:
+            line = await process.stdout.readline()
+            if not line:
+                break
+            logger.info(f"[tb] {line.decode().rstrip()}")
+
+        # Wait for completion
+        return_code = await process.wait()
+
+        elapsed = (datetime.now() - start_time).total_seconds()
+        logger.info(f"tb run completed in {elapsed:.1f} seconds with return code {return_code}")
+
+        if return_code != 0:
+            raise RuntimeError(f"tb run failed with return code {return_code}")
+
+    except Exception as e:
+        logger.error(f"Terminus CLI job failed with exception: {e}")
+        logger.exception("Full traceback:")
+        raise
+
+    # Find the output directory (runs/{timestamp}/)
+    # tb creates a timestamped directory like 2025-12-04__09-54-08
+    result_dir = None
+    if output_dir.exists():
+        for item in sorted(output_dir.iterdir(), reverse=True):
+            if item.is_dir() and "__" in item.name:
+                result_dir = item
+                break
+
+    if result_dir:
+        logger.info(f"Found result directory: {result_dir}")
+        logger.info(f"Result directory contents:")
+        for item in result_dir.rglob("*"):
+            if item.is_file():
+                logger.info(f"  {item.relative_to(result_dir)} ({item.stat().st_size} bytes)")
+    else:
+        logger.warning(f"No result directory found in {output_dir}")
+        result_dir = output_dir
+
+    return {
+        "job_name": job_name,
+        "job_dir": str(result_dir),
+        "output_dir": str(output_dir),  # Return output_dir for watcher
+        "completed": True,
+    }
+
+
 def parse_test_output(stdout_content: str) -> tuple[bool, int, int, list[dict]]:
     """Parse test output (pytest or Go) to extract test results.
 
@@ -982,38 +1209,69 @@ def main():
         signal.alarm(JOB_TIMEOUT_MINUTES * 60)
 
         if harness == "terminus":
-            # Terminus: Run job and upload entire output directory to run-1/
-            logger.info(f"Starting Terminus job with {n_attempts} trials, {n_concurrent_trials} concurrent")
+            # Terminus: Run job with concurrent watcher for incremental uploads
+            logger.info(f"Starting Terminus CLI job with {n_attempts} trials, {n_concurrent_trials} concurrent")
 
-            async def run_terminus():
-                return await run_terminus_job(
-                    task_path,
-                    job_name,
-                    jobs_dir,
-                    n_attempts=n_attempts,
-                    n_concurrent_trials=n_concurrent_trials,
+            # Create output directory for watcher to monitor
+            output_dir = jobs_dir / "runs"
+            output_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(output_dir)
+            # output_dir = Path(f"/tmp/{job_name}/jobs/runs")
+
+            async def run_terminus_with_watcher():
+                """Run Terminus job with concurrent trial watcher for incremental uploads."""
+                watcher_task = asyncio.create_task(
+                    watch_and_upload_terminus_trials(
+                        s3_client,
+                        bucket,
+                        benchmark_id,
+                        output_dir,
+                        n_attempts,
+                        uploaded_trials,
+                        poll_interval=5.0,
+                    )
                 )
 
-            result = asyncio.run(run_terminus())
-            logger.info(f"Terminus job completed. Uploading results to run-1/...")
+                try:
+                    result = await run_terminus_cli_job(
+                        task_path,
+                        job_name,
+                        jobs_dir,
+                        n_attempts=n_attempts,
+                        n_concurrent_trials=n_concurrent_trials,
+                    )
+                    return result
+                finally:
+                    watcher_task.cancel()
+                    try:
+                        await watcher_task
+                    except asyncio.CancelledError:
+                        pass
 
-            # Upload entire output directory to S3 under run-1/
+            result = asyncio.run(run_terminus_with_watcher())
+            terminus_result_dir = Path(result["job_dir"])
+            logger.info(f"Terminus job completed. Result dir: {terminus_result_dir}")
+
+            # Final upload of any remaining files (including main results.json)
+            logger.info(f"Final upload of remaining files to run-1/...")
             s3_prefix = f"results/{benchmark_id}/run-1/"
             file_count = 0
 
-            if job_dir.exists():
-                for file_path in job_dir.rglob("*"):
+            if terminus_result_dir.exists():
+                for file_path in terminus_result_dir.rglob("*"):
                     if file_path.is_file():
-                        relative_path = file_path.relative_to(job_dir)
+                        relative_path = file_path.relative_to(terminus_result_dir)
                         s3_key = f"{s3_prefix}{relative_path}"
-                        logger.debug(f"  Uploading: {file_path} -> s3://{bucket}/{s3_key}")
                         try:
                             s3_client.upload_file(str(file_path), bucket, s3_key)
                             file_count += 1
                         except Exception as e:
                             logger.error(f"Failed to upload {file_path}: {e}")
+            else:
+                logger.warning(f"Terminus result directory does not exist: {terminus_result_dir}")
 
-            logger.info(f"Uploaded {file_count} files to S3")
+            logger.info(f"Final upload: {file_count} files to S3")
+            logger.info(f"Trials uploaded incrementally: {len(uploaded_trials)}")
 
             # Create status.json for run-1
             status = {

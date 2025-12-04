@@ -1,0 +1,40 @@
+root@bbbc5313bf43:/backup# cat > /backup/generate_stats.py << 'EOF'
+> import subprocess
+>
+> def run_query(query):
+>     result = subprocess.run(
+>         ['su', '-', 'postgres', '-c', f"psql -d production_db -t -A -c \"{query}\""],
+>         capture_output=True, text=True
+>     )
+>     return result.stdout.strip()
+>
+> # Get statistics
+> total_users = run_query('SELECT COUNT(*) FROM users;')
+> active_users = run_query("SELECT COUNT(*) FROM users WHERE status = 'active';")
+> total_transactions = run_query('SELECT COUNT(*) FROM transactions;')
+> total_amount = run_query('SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;')
+> avg_per_user = run_query('SELECT ROUND((SUM(amount) / COUNT(DISTINCT user_id))::numeric, 2) FROM transactions;')
+>
+> # Write report
+> with open('/backup/db_stats.txt', 'w') as f:
+>     f.write('DATABASE STATISTICS\n')
+>     f.write('==================\n')
+>     f.write(f'Total Users: {total_users}\n')
+>     f.write(f'Active Users: {active_users}\n')
+>     f.write(f'Total Transactions: {total_transactions}\n')
+>     f.write(f'Total Amount: {total_amount}\n')
+>     f.write(f'Average per User: {avg_per_user}\n')
+>
+> print('Database statistics report generated')
+> EOF
+root@bbbc5313bf43:/backup# python3 /backup/generate_stats.py; tmux wait -S done
+Database statistics report generated
+root@bbbc5313bf43:/backup# cat /backup/db_stats.txt; tmux wait -S done
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+root@bbbc5313bf43:/backup#

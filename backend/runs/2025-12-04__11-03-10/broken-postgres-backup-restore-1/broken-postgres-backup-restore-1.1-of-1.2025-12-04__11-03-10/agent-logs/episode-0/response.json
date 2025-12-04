@@ -1,0 +1,37 @@
+{
+    "state_analysis": "I'm in a fresh terminal at /backup directory. I need to start by examining the available backup files and then proceed with database restoration, data cleaning, and report generation. First, I'll check what files are present and start PostgreSQL service.",
+    "explanation": "I'll first list the backup files to see what we're working with, then start the PostgreSQL service, and begin examining the backup files to understand their structure.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "service postgresql start\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        },
+        {
+            "keystrokes": "cat /backup/backup_metadata.log\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "head -20 /backup/database.sql\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "head -20 /backup/users_export.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "head -20 /backup/transactions_backup.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

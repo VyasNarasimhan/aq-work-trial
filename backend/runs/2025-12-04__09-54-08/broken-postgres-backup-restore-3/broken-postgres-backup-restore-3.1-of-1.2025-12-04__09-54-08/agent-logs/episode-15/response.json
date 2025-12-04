@@ -1,0 +1,32 @@
+{
+    "state_analysis": "Perfect! The top_users.csv file now has the correct format with 11 lines (1 header + 10 data rows). Let me do a final verification of all required files and their contents to ensure everything is complete.",
+    "explanation": "I'll perform a final check on all required output files to verify they meet all specifications before marking the task complete.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/*.csv /backup/*.txt /backup/*.json | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|recovery_complete)'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Verifying clean_users.csv ===' && head -3 /backup/clean_users.csv && tail -2 /backup/clean_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Verifying valid_transactions.json ===' && python3 -c \"import json; d=json.load(open('/backup/valid_transactions.json')); print(f'Valid JSON: {len(d)} transactions'); print('First:', d[0]); print('Last:', d[-1])\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Database verification ===' && su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as users FROM users; SELECT COUNT(*) as transactions FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== All required files ===' && ls -1 /backup/ | grep -E '(clean_users.csv|valid_transactions.json|db_stats.txt|top_users.csv|backup_verification.txt|recovery_complete.txt)$'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

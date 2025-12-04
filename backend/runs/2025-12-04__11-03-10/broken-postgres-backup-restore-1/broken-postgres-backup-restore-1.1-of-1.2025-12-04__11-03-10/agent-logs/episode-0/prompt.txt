@@ -1,0 +1,257 @@
+You are an AI assistant tasked with solving command-line tasks in a Linux environment. You will be given a task instruction and the output from previously executed commands. Your goal is to solve the task by providing batches of shell commands.
+
+For each response:
+1. Analyze the current state based on any terminal output provided
+2. Determine the next set of commands needed to make progress
+3. Decide if you need to see the output of these commands before proceeding
+
+Instruction:
+## Background
+
+A production PostgreSQL database backup system has failed, and you've been tasked with recovering the database from backup files. The backup files are partially corrupted and need to be cleaned before importing.
+
+## Your Task
+
+The backup files are located in `/backup/`. Your goal is to restore the database, clean corrupted data, and generate required reports.
+
+## Available Files
+
+You have access to the following files in `/backup/`:
+
+- `database.sql` - SQL dump file with database schema
+- `users_export.csv` - User data export with columns: user_id, username, email, created_at, status (may have malformed rows)
+- `transactions_backup.json` - Transaction records (may contain null values, invalid amounts, or corrupted entries)
+- `backup_metadata.log` - Backup process log file containing information about the backup
+
+## Requirements
+
+You must complete the following tasks and produce outputs in `/backup/`:
+
+### 1. Database Restoration
+
+- Create a database named `production_db` that is accessible
+- The database must contain tables named `users` and `transactions`
+- Both tables must be created and ready to accept data
+
+### 2. Data Cleaning and Import (`clean_users.csv`)
+
+- Clean the `users_export.csv` file by removing invalid rows
+- Remove rows with: missing user_ids, invalid email formats (must contain @), empty usernames, or invalid status values
+- Valid status values are: "active", "inactive", "suspended"
+- Import the cleaned data into a table named `users` in the `production_db` database
+- Output the cleaned data to `/backup/clean_users.csv`
+- Format: CSV with header line, newline-terminated
+- Columns: user_id,username,email,created_at,status
+
+### 3. Transaction Recovery (`valid_transactions.json`)
+
+- Process `transactions_backup.json` to extract only valid transactions
+- Remove transactions with: null transaction_id, null or negative amounts, missing timestamps, or invalid user references
+- Valid user_id values must be in the range 1-30 (matching the valid users in the database)
+- Transaction amounts must be positive numbers
+- Import valid transactions into a table named `transactions` in the `production_db` database
+- Output valid transactions to `/backup/valid_transactions.json`
+- Format: Valid JSON array, newline-terminated
+- Each transaction must have: transaction_id, user_id, amount, timestamp, description
+
+### 4. Database Statistics Report (`db_stats.txt`)
+
+- Query the restored database to generate statistics
+- Calculate and report the following metrics:
+  - Total number of users in the database
+  - Number of active users (status = 'active')
+  - Total number of transactions
+  - Sum of all transaction amounts (2 decimal places)
+  - Average transaction amount per user (2 decimal places)
+- Output format: Plain text with clear labels, newline-terminated
+- Example structure:
+  ```
+  DATABASE STATISTICS
+  ==================
+  Total Users: <count>
+  Active Users: <count>
+  Total Transactions: <count>
+  Total Amount: <amount>
+  Average per User: <amount>
+  ```
+
+### 5. Top Users Report (`top_users.csv`)
+
+- Identify the top 10 users by total transaction amount
+- Query the database to join users and transactions tables
+- Calculate total amount per user and sort descending
+- Output format: CSV file with header, newline-terminated
+- Columns: username,total_amount
+- Sort by total_amount descending, then by username ascending (for ties)
+- Include exactly 10 rows (excluding header)
+- Amounts must have 2 decimal places (e.g., 1234.56)
+
+### 6. Backup Verification (`backup_verification.txt`)
+
+- Analyze the `backup_metadata.log` file to extract backup information
+- Report the following details exactly as found in the log:
+  - Original backup timestamp (found on line with "Backup timestamp:")
+  - Number of tables backed up (found on line with "Total tables backed up:")
+  - Total rows in original backup (found on line with "Total rows backed up:")
+  - Data integrity status (found on line with "Integrity check:")
+- Output format: Plain text with clear labels, newline-terminated
+- Example structure:
+  ```
+  BACKUP VERIFICATION
+  ===================
+  Backup Date: 2025-09-28 03:00:00
+  Tables Backed Up: 2
+  Total Rows: 130
+  Integrity Check: PASSED
+  ```
+
+### 7. Recovery Completion Marker
+
+- After successfully completing all tasks, create a file at `/backup/recovery_complete.txt`
+- Content: Single line with text "RECOVERY_SUCCESSFUL" followed by newline
+- This file indicates that all restoration and analysis tasks are complete
+
+## Tools Available
+
+- `postgresql` (service commands: `service postgresql start/stop/status`)
+- `psql` - PostgreSQL command-line client
+- `python3` - Data processing and analysis
+- `jq` - JSON processing
+- Standard Unix tools: `grep`, `awk`, `sed`, `cut`, `sort`, etc.
+
+## Tips
+
+- CSV files may have rows with missing fields (represented by consecutive commas)
+- Use Python's csv and json modules for robust data cleaning
+- PostgreSQL tools like psql can be used for database operations
+- Remember to handle edge cases: NULL values, empty strings, and malformed data
+- All numeric outputs should be properly formatted with specified decimal places
+- All output files must be newline-terminated
+
+## Validation
+
+All outputs will be validated for:
+- Correct file locations and names in `/backup`
+- Proper file formatting (newline termination, valid CSV/JSON structure)
+- Successful database restoration and data import
+- Accurate data cleaning and filtering
+- Correct calculations and query results
+- Complete recovery process with verification
+
+Your response must be a JSON object that matches this schema:
+
+{
+  "$defs": {
+    "Command": {
+      "additionalProperties": false,
+      "properties": {
+        "keystrokes": {
+          "description": "Keystrokes to execute in the terminal. Use tmux-style escape sequences for modifier keys (e.g. C-c for ctrl-c). Modifier keys must be sent as their own commands otherwise the characters will be interpreted literally.",
+          "title": "Keystrokes",
+          "type": "string"
+        },
+        "is_blocking": {
+          "description": "Whether to wait for and return the terminal output after executing these keystrokes. This will append '; tmux wait -S done' to your command.DO NOT block on modifier keys or inside interactive programs (e.g. vim or less). Only block when the command is executed in the command line, is not interactive, and you expect the output to be returned with no intervention. When in doubt, wait instead of blocking.",
+          "title": "Is Blocking",
+          "type": "boolean"
+        },
+        "timeout_sec": {
+          "description": "The number of expected seconds to wait for the command to complete.",
+          "title": "Timeout Sec",
+          "type": "number"
+        }
+      },
+      "required": [
+        "keystrokes",
+        "is_blocking",
+        "timeout_sec"
+      ],
+      "title": "Command",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "state_analysis": {
+      "description": "Description of the current state of the terminal",
+      "title": "State Analysis",
+      "type": "string"
+    },
+    "explanation": {
+      "description": "Brief explanation of what these commands will do",
+      "title": "Explanation",
+      "type": "string"
+    },
+    "commands": {
+      "description": "List of shell interactions to execute in the Docker container",
+      "items": {
+        "$ref": "#/$defs/Command"
+      },
+      "title": "Commands",
+      "type": "array"
+    },
+    "is_task_complete": {
+      "description": "Whether the task is complete following the execution of these commands. Make sure to check that the command you last executed worked before saying you're done.",
+      "title": "Is Task Complete",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "state_analysis",
+    "explanation",
+    "commands",
+    "is_task_complete"
+  ],
+  "title": "CommandBatchResponse",
+  "type": "object"
+}
+
+Don't include markdown formatting.
+
+Note that you operate directly on the terminal from inside a tmux session. Use tmux keystrokes like `C-x` or `Escape` to interactively navigate the terminal. If you would like to execute a command that you have written you will need to append a newline character to the end of your command.
+
+For example, if you write "ls -la" you will need to append a newline character to the end of your command like this: `ls -la\n`.
+
+One thing to be very careful about is handling interactive sessions like less, vim, or git diff. In these cases, you should not wait for the output of the command. Instead, you should send the keystrokes to the terminal as if you were typing them.
+
+The current terminal state is:
+root@76c15cab1a93:/backup#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

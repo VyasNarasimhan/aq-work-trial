@@ -1,0 +1,40 @@
+ count
+-------
+    30
+(1 row)
+
+root@2b0e848428bd:/backup# cat > /tmp/import_transactions.py << 'EOF'
+> import json
+> import csv
+>
+> # Read transactions from JSON
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> # Write to CSV for import
+> with open('/tmp/transactions.csv', 'w', newline='') as f:
+>     writer = csv.writer(f)
+>     writer.writerow(['transaction_id', 'user_id', 'amount', 'timestamp', 'description'])
+>     for txn in transactions:
+>         writer.writerow([
+>             txn['transaction_id'],
+>             txn['user_id'],
+>             txn['amount'],
+>             txn['timestamp'],
+>             txn.get('description', '')
+>         ])
+>
+> print(f'Wrote {len(transactions)} transactions to CSV')
+> EOF
+root@2b0e848428bd:/backup# python3 /tmp/import_transactions.py; tmux wait -S done
+Wrote 100 transactions to CSV
+root@2b0e848428bd:/backup# su - postgres -c "psql -d production_db -c \"COPY transactions(transaction_id, user_id, amount, timestamp, description) FROM '/tmp/tr
+ansactions.csv' WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+COPY 100
+root@2b0e848428bd:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+   100
+(1 row)
+
+root@2b0e848428bd:/backup#

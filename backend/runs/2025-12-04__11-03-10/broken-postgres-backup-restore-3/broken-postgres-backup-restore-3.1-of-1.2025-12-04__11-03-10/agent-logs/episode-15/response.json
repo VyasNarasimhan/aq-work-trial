@@ -1,0 +1,42 @@
+{
+    "state_analysis": "Perfect! All requirements have been met:\n1. Database 'production_db' created with 'users' and 'transactions' tables\n2. 30 users imported from cleaned CSV\n3. 100 valid transactions imported from cleaned JSON\n4. clean_users.csv - 30 valid users with proper format (now LF line endings)\n5. valid_transactions.json - 100 valid transactions in JSON format\n6. db_stats.txt - database statistics with proper formatting\n7. top_users.csv - top 10 users by transaction amount\n8. backup_verification.txt - backup metadata extracted correctly\n9. recovery_complete.txt - completion marker created\n\nAll files are newline-terminated and properly formatted.",
+    "explanation": "Performing a final comprehensive check to validate all data quality requirements are met, including checking sample data from the cleaned files and verifying the database queries work correctly.",
+    "commands": [
+        {
+            "keystrokes": "echo '=== Sample of clean_users.csv (first 3 data rows) ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "head -4 /backup/clean_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Verify top_users amounts have 2 decimal places ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "tail -3 /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Verify JSON is valid ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "python3 -c \"import json; data=json.load(open('/backup/valid_transactions.json')); print(f'Valid JSON with {len(data)} transactions'); print('First transaction:', data[0])\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== All tasks completed successfully! ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        }
+    ],
+    "is_task_complete": false
+}

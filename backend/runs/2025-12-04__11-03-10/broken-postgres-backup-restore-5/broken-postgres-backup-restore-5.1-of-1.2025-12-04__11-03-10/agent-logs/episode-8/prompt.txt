@@ -1,0 +1,40 @@
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -f /backup/import_transactions.sql"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -c 'CREATE DATABASE production_db;'"; tmux wait -S done
+CREATE DATABASE
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -f /backup/database.sql"; tmux wait -S done
+CREATE TABLE
+CREATE TABLE
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -c '\\dt'"; tmux wait -S done
+            List of relations
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -c \"COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv'
+WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+COPY 30
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -f /backup/import_transactions.sql" 2>&1 | head -20; tmux wait -S done
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+root@bc0c6c5ec4c0:/backup#

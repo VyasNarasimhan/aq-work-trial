@@ -1,0 +1,40 @@
+(1 row)
+
+root@76c15cab1a93:/backup# psql -U postgres -d production_db -c 'SELECT COUNT(*) FROM transactions;'; tmux wait -S done
+ count
+-------
+   100
+(1 row)
+
+root@76c15cab1a93:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+31 /backup/clean_users.csv
+root@76c15cab1a93:/backup# head -3 /backup/clean_users.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+root@76c15cab1a93:/backup# tail -1 /backup/clean_users.csv | od -c | head -2; tmux wait -S done
+0000000   3   0   ,   d   o   n   n   a   _   n   o   b   l   e   ,   d
+0000020   o   n   n   a   _   n   o   b   l   e   @   e   x   a   m   p
+root@76c15cab1a93:/backup# wc -l /backup/valid_transactions.json; tmux wait -S done
+702 /backup/valid_transactions.json
+root@76c15cab1a93:/backup# tail -3 /backup/valid_transactions.json; tmux wait -S done
+    "description": "Subscription"
+  }
+]
+root@76c15cab1a93:/backup# for file in /backup/clean_users.csv /backup/valid_transactions.json /backup/db_stats.txt /backup/top_users.csv /backup/backup_verific
+ation.txt /backup/recovery_complete.txt; do echo "=== $file ==="  && tail -c 1 "$file" | od -An -tx1; done; tmux wait -S done
+=== /backup/clean_users.csv ===
+ 0a
+=== /backup/valid_transactions.json ===
+ 0a
+=== /backup/db_stats.txt ===
+ 0a
+=== /backup/top_users.csv ===
+ 0a
+=== /backup/backup_verification.txt ===
+ 0a
+=== /backup/recovery_complete.txt ===
+ 0a
+root@76c15cab1a93:/backup# echo 'All files verified!'; tmux wait -S done
+All files verified!
+root@76c15cab1a93:/backup#

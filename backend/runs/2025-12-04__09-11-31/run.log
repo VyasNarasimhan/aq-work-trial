@@ -1,0 +1,63 @@
+Processing tasks in duration order (longest first):
++-----+--------------------------------+------------+------------+
+|   # | Task Name                      | Duration   | Source     |
++=====+================================+============+============+
+|   1 | broken-postgres-backup-restore | 40m 0s     | historical |
++-----+--------------------------------+------------+------------+
+Total tasks: 1
+Starting harness run
+Run ID: 2025-12-04__09-11-31
+Running task: broken-postgres-backup-restore
+Running docker compose command: docker compose -p broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31 -f /Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml build
+Docker compose command failed with exit code 130
+Command: docker compose -p broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31 -f /Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml build
+STDOUT: #1 [internal] load local bake definitions
+#1 reading from stdin 688B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 3.33kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for ghcr.io/laude-institute/t-bench/ubuntu-24-04:20250624
+#3 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 188B done
+#5 DONE 0.0s
+
+#6 [1/9] FROM ghcr.io/laude-institute/t-bench/ubuntu-24-04:20250624@sha256:d34916434f1304da8b1fc7aeb547d1bee53770a4c4fe0ff4637eaca293d648d5
+#6 resolve ghcr.io/laude-institute/t-bench/ubuntu-24-04:20250624@sha256:d34916434f1304da8b1fc7aeb547d1bee53770a4c4fe0ff4637eaca293d648d5
+
+STDERR: 
+
+Running docker compose command: docker compose -p broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31 -f /Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml down
+Running docker compose command: docker compose -p broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31 -f /Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml down --rmi all --volumes
+Harness execution failed for ../terminus-example/broken-postgres-backup-restore: Command '['docker', 'compose', '-p', 'broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31', '-f', '/Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml', 'build']' returned non-zero exit status 130.
+Traceback (most recent call last):
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/harness/harness.py", line 1011, in _execute_single_trial
+    trial_results = self._run_trial(trial_handler)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/harness/harness.py", line 717, in _run_trial
+    with spin_up_terminal(
+         ^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.12/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/terminal/terminal.py", line 176, in spin_up_terminal
+    terminal.start()
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/terminal/terminal.py", line 102, in start
+    self.container = self._compose_manager.start()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/terminal/docker_compose_manager.py", line 126, in start
+    self._run_docker_compose_command(["build"])
+  File "/Users/vyas/code/aq/backend/.venv/lib/python3.12/site-packages/terminal_bench/terminal/docker_compose_manager.py", line 101, in _run_docker_compose_command
+    result = subprocess.run(
+             ^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.12/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'compose', '-p', 'broken-postgres-backup-restore-1-of-1-2025-12-04__09-11-31', '-f', '/Users/vyas/code/aq-work-trial/terminus-example/broken-postgres-backup-restore/docker-compose.yaml', 'build']' returned non-zero exit status 130.

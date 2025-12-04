@@ -1,0 +1,40 @@
+frank_white,2067.84
+wade_wilson,1681.20
+victor_von,1544.74
+alice_smith,1425.00
+jack_ryan,1186.63
+leo_king,875.23
+steve_rogers,671.88
+diana_prince,596.38
+charlie_brown,554.60
+iris_west,366.30
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+    21
+(1 row)
+
+root@bc0c6c5ec4c0:/backup# tail -20 /backup/import_transactions.sql; tmux wait -S done
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (81, 30, 846.9, '2025-06-23 01:25:56', 'Refund');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (82, 30, 704.56, '2025-04-30 01:25:56', 'Payment');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (83, 14, 383.59, '2025-05-30 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (84, 7, 871.13, '2025-04-15 01:25:56', 'Refund');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (85, 20, 991.49, '2025-05-19 01:25:56', 'Withdrawal');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (86, 30, 460.58, '2025-06-30 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (87, 23, 997.75, '2025-06-30 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (88, 27, 791.22, '2025-07-04 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (89, 26, 437.89, '2025-07-29 01:25:56', 'Refund');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (90, 26, 399.33, '2025-06-29 01:25:56', 'Purchase');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (91, 15, 946.07, '2025-06-26 01:25:56', 'Deposit');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (92, 30, 242.29, '2025-08-11 01:25:56', 'Deposit');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (93, 8, 304.08, '2025-05-03 01:25:56', 'Purchase');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (94, 29, 823.02, '2025-07-30 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (95, 21, 658.52, '2025-04-07 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (96, 14, 392.55, '2025-07-09 01:25:56', 'Withdrawal');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (97, 20, 195.0, '2025-08-26 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (98, 13, 544.03, '2025-08-12 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (99, 26, 591.71, '2025-08-12 01:25:56', 'Purchase');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (100, 2, 372.72, '2025-07-05 01:25:56', 'Subscription');
+root@bc0c6c5ec4c0:/backup# wc -l /backup/import_transactions.sql; tmux wait -S done
+100 /backup/import_transactions.sql
+root@bc0c6c5ec4c0:/backup#

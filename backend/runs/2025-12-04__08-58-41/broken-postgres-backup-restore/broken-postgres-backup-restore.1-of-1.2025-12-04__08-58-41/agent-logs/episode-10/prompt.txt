@@ -1,0 +1,40 @@
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write('username,total_amount\n')
+>     f.write(result.stdout)
+>
+> print('Generated top_users.csv')
+>
+> # Generate backup_verification.txt
+> with open('/backup/backup_metadata.log', 'r') as f:
+>     log_lines = f.readlines()
+>
+> backup_date = ''
+> tables_backed_up = ''
+> total_rows = ''
+> integrity_check = ''
+>
+> for line in log_lines:
+>     if 'Backup timestamp:' in line:
+>         backup_date = line.split('Backup timestamp:')[1].strip()
+>     elif 'Total tables backed up:' in line:
+>         tables_backed_up = line.split('Total tables backed up:')[1].strip()
+>     elif 'Total rows backed up:' in line:
+>         total_rows = line.split('Total rows backed up:')[1].strip()
+>     elif 'Integrity check:' in line:
+>         integrity_check = line.split('Integrity check:')[1].strip()
+>
+> with open('/backup/backup_verification.txt', 'w') as f:
+>     f.write('BACKUP VERIFICATION\n')
+>     f.write('===================\n')
+>     f.write(f'Backup Date: {backup_date}\n')
+>     f.write(f'Tables Backed Up: {tables_backed_up}\n')
+>     f.write(f'Total Rows: {total_rows}\n')
+>     f.write(f'Integrity Check: {integrity_check}\n')
+>
+> print('Generated backup_verification.txt')
+> EOF
+root@2932292ad2c5:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Generated db_stats.txt
+Generated top_users.csv
+Generated backup_verification.txt
+root@2932292ad2c5:/backup#

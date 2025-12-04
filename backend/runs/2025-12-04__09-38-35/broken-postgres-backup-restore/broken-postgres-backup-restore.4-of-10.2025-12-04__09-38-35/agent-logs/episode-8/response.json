@@ -1,0 +1,17 @@
+{
+    "state_analysis": "Excellent! Database restoration complete with 30 users and 100 transactions imported. Now I need to generate the required reports: db_stats.txt, top_users.csv, backup_verification.txt, and recovery_complete.txt.",
+    "explanation": "I'll create scripts to generate the database statistics report, top users report, and backup verification report, then create the recovery completion marker.",
+    "commands": [
+        {
+            "keystrokes": "cat > /backup/generate_reports.py << 'EOF'\nimport subprocess\nimport json\n\ndef run_query(query):\n    result = subprocess.run(\n        ['su', '-', 'postgres', '-c', f'psql -d production_db -t -A -c \"{query}\"'],\n        capture_output=True,\n        text=True\n    )\n    return result.stdout.strip()\n\n# Generate db_stats.txt\ntotal_users = run_query('SELECT COUNT(*) FROM users;')\nactive_users = run_query(\"SELECT COUNT(*) FROM users WHERE status = 'active';\")\ntotal_transactions = run_query('SELECT COUNT(*) FROM transactions;')\ntotal_amount = run_query('SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;')\navg_per_user = run_query('SELECT ROUND((SUM(amount) / COUNT(DISTINCT user_id))::numeric, 2) FROM transactions;')\n\nwith open('/backup/db_stats.txt', 'w') as f:\n    f.write('DATABASE STATISTICS\\n')\n    f.write('==================\\n')\n    f.write(f'Total Users: {total_users}\\n')\n    f.write(f'Active Users: {active_users}\\n')\n    f.write(f'Total Transactions: {total_transactions}\\n')\n    f.write(f'Total Amount: {total_amount}\\n')\n    f.write(f'Average per User: {avg_per_user}\\n')\n\nprint('Generated db_stats.txt')\n\n# Generate top_users.csv\ntop_users_query = '''\nSELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount\nFROM users u\nJOIN transactions t ON u.user_id = t.user_id\nGROUP BY u.username\nORDER BY total_amount DESC, u.username ASC\nLIMIT 10;\n'''\n\nresult = subprocess.run(\n    ['su', '-', 'postgres', '-c', f'psql -d production_db -c \"COPY ({top_users_query.strip()}) TO STDOUT WITH CSV HEADER;\"'],\n    capture_output=True,\n    text=True\n)\n\nwith open('/backup/top_users.csv', 'w') as f:\n    f.write(result.stdout)\n\nprint('Generated top_users.csv')\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "python3 /backup/generate_reports.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        }
+    ],
+    "is_task_complete": false
+}

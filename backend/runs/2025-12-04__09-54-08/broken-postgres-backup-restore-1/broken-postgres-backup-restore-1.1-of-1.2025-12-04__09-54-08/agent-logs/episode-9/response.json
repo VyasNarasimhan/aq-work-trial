@@ -1,0 +1,27 @@
+{
+    "state_analysis": "All reports are generated correctly: db_stats.txt shows statistics, top_users.csv has 11 lines (header + 10 users), backup_verification.txt contains the correct metadata, clean_users.csv has 31 lines (header + 30 users), and valid_transactions.json is properly formatted. Now I need to create the recovery_complete.txt marker file to indicate completion.",
+    "explanation": "I'll create the recovery_complete.txt file with the required content and verify all required files are present in /backup directory.",
+    "commands": [
+        {
+            "keystrokes": "echo 'RECOVERY_SUCCESSFUL' > /backup/recovery_complete.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "ls -la /backup/*.txt /backup/*.csv /backup/*.json 2>/dev/null | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|recovery_complete)'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "cat /backup/recovery_complete.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users; SELECT COUNT(*) as txn_count FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

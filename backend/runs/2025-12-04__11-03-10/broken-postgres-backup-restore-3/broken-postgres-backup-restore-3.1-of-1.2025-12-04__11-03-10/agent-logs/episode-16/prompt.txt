@@ -1,0 +1,40 @@
+
+root@2b0e848428bd:/backup# echo 'Row counts:' && su - postgres -c "psql -d production_db -c 'SELECT (SELECT COUNT(*) FROM users) as users, (SELECT COUNT(*) FROM
+ transactions) as transactions;'"; tmux wait -S done
+Row counts:
+ users | transactions
+-------+--------------
+    30 |          100
+(1 row)
+
+root@2b0e848428bd:/backup# echo 'All required files:' && ls -1 /backup/*.csv /backup/*.json /backup/*.txt | grep -E '(clean_users|valid_transactions|db_stats|to
+p_users|backup_verification|recovery_complete)'; tmux wait -S done
+All required files:
+/backup/backup_verification.txt
+/backup/clean_users.csv
+/backup/db_stats.txt
+/backup/recovery_complete.txt
+/backup/top_users.csv
+/backup/valid_transactions.json
+root@2b0e848428bd:/backup# echo '=== Sample of clean_users.csv (first 3 data rows) ==='; tmux wait -S done
+=== Sample of clean_users.csv (first 3 data rows) ===
+root@2b0e848428bd:/backup# head -4 /backup/clean_users.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+root@2b0e848428bd:/backup# echo '=== Verify top_users amounts have 2 decimal places ==='; tmux wait -S done
+=== Verify top_users amounts have 2 decimal places ===
+root@2b0e848428bd:/backup# tail -3 /backup/top_users.csv; tmux wait -S done
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@2b0e848428bd:/backup# echo '=== Verify JSON is valid ==='; tmux wait -S done
+=== Verify JSON is valid ===
+root@2b0e848428bd:/backup# python3 -c "import json; data=json.load(open('/backup/valid_transactions.json')); print(f'Valid JSON with {len(data)} transactions');
+ print('First transaction:', data[0])"; tmux wait -S done
+Valid JSON with 100 transactions
+First transaction: {'transaction_id': 1, 'user_id': 16, 'amount': 46.0, 'timestamp': '2025-07-16 01:25:56', 'description': 'Subscription'}
+root@2b0e848428bd:/backup# echo '=== All tasks completed successfully! ==='; tmux wait -S done
+=== All tasks completed successfully! ===
+root@2b0e848428bd:/backup#

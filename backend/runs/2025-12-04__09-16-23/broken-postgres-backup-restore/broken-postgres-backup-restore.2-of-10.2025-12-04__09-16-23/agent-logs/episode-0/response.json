@@ -1,0 +1,32 @@
+{
+    "state_analysis": "I'm starting in the /backup directory. I need to first examine the available backup files, then start PostgreSQL, create the database, clean the data files, import them, and generate the required reports.",
+    "explanation": "First, I'll list the contents of the /backup directory to see what files are available, then examine their structure to understand the data format and issues.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/database.sql\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/users_export.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/transactions_backup.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "cat /backup/backup_metadata.log\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

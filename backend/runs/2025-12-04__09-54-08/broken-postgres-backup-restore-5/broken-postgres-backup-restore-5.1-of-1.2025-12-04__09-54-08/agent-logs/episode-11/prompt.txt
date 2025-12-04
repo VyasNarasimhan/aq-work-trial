@@ -1,0 +1,40 @@
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+root@fd149cd359fd:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+11 /backup/top_users.csv
+root@fd149cd359fd:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@fd149cd359fd:/backup# cat /backup/db_stats.txt; tmux wait -S done
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+root@fd149cd359fd:/backup# ls -la /backup/*.txt /backup/*.csv /backup/*.json | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification)'
+; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 17:55 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 17:55 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 17:55 /backup/db_stats.txt
+-rw-r--r-- 1 root root   219 Dec  4 17:55 /backup/top_users.csv
+-rw-r--r-- 1 root root 14573 Dec  4 17:55 /backup/valid_transactions.json
+root@fd149cd359fd:/backup# echo 'RECOVERY_SUCCESSFUL' > /backup/recovery_complete.txt; tmux wait -S done
+root@fd149cd359fd:/backup# cat /backup/recovery_complete.txt; tmux wait -S done
+RECOVERY_SUCCESSFUL
+root@fd149cd359fd:/backup#

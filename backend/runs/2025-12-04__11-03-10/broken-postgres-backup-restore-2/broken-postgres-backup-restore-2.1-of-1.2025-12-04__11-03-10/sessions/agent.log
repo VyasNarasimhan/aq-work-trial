@@ -1,0 +1,762 @@
+[?2004hroot@e12900196bff:/backup# asciinema rec --stdin /logs/agent.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@e12900196bff:/backup# clear
+[?2004l[H[J[3J[?2004hroot@e12900196bff:/backup# ls -la /backup/; tmux wait -S done
+[?2004ltotal 40
+drwxr-xr-x 1 root root  4096 Dec  4 16:59 [0m[01;34m.[0m
+drwxr-xr-x 1 root root  4096 Dec  4 19:03 [01;34m..[0m
+-rw-r--r-- 1 root root   945 Dec  4 16:54 backup_metadata.log
+-rw-r--r-- 1 root root   718 Dec  4 16:54 database.sql
+-rw-r--r-- 1 root root   703 Dec  4 16:54 postgresql.conf
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 users_export.csv
+[?2004hroot@e12900196bff:/backup# service postgresql start; tmux wait -S done
+[?2004l * Starting PostgreSQL 16 database server       [160G [154G[ OK ]
+[?2004hroot@e12900196bff:/backup# cat database.sql; tmux wait -S done
+[?2004l-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table  
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Note: The data will be imported from CSV and JSON files
+-- This dump only contains the schema
+[?2004hroot@e12900196bff:/backup# head -20 users_export.csv; tmux wait -S done
+[?2004luser_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
+11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
+12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
+13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
+14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
+15,olivia_pope,olivia_pope@example.com,2025-06-01 01:25:46,active
+16,peter_parker,peter_parker@example.com,2025-01-02 01:25:46,inactive
+17,quinn_baker,quinn_baker@example.com,2025-01-22 01:25:46,suspended
+18,rachel_green,rachel_green@example.com,2025-04-01 01:25:46,inactive
+19,steve_rogers,steve_rogers@example.com,2025-06-28 01:25:46,active
+[?2004hroot@e12900196bff:/backup# head -30 transactions_backup.json; tmux wait -S done
+[?2004l[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 4,
+    "user_id": 10,
+    "amount": 757.37,
+    "timestamp": "2025-09-03 01:25:56",
+    "description": "Deposit"
+  },
+  {
+[?2004hroot@e12900196bff:/backup# cat database.sql; tmux wait -S done
+[?2004l-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table  
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Note: The data will be imported from CSV and JSON files
+-- This dump only contains the schema
+[?2004hroot@e12900196bff:/backup# cat backup_metadata.log; tmux wait -S done
+[?2004l[2025-09-28 03:00:00] INFO: Starting database backup process
+[2025-09-28 03:00:01] INFO: Backup initiated by: admin
+[2025-09-28 03:00:01] INFO: Backup type: Full
+[2025-09-28 03:00:02] INFO: Connecting to database: production_db
+[2025-09-28 03:00:03] INFO: Connection successful
+[2025-09-28 03:00:05] INFO: Backing up table: users
+[2025-09-28 03:00:06] INFO: Table 'users' backed up successfully - 30 rows
+[2025-09-28 03:00:07] INFO: Backing up table: transactions
+[2025-09-28 03:00:09] INFO: Table 'transactions' backed up successfully - 100 rows
+[2025-09-28 03:00:10] INFO: Total tables backed up: 2
+[2025-09-28 03:00:10] INFO: Total rows backed up: 130
+[2025-09-28 03:00:11] INFO: Running integrity check
+[2025-09-28 03:00:12] INFO: Integrity check: PASSED
+[2025-09-28 03:00:13] INFO: Backup completed successfully
+[2025-09-28 03:00:13] INFO: Backup file: /backup/database.sql
+[2025-09-28 03:00:13] INFO: Backup timestamp: 2025-09-28 03:00:00
+[?2004hroot@e12900196bff:/backup# wc -l users_export.csv transactions_backup.json; tmux wait -S done
+[?2004l   37 users_export.csv
+  743 transactions_backup.json
+  780 total
+[?2004hroot@e12900196bff:/backup# psql -U postgres -c "CREATE DATABASE production_db;"; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@e12900196bff:/backup# psql -U postgres -d production_db -f database.sql; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@e12900196bff:/backup# psql -U postgres -d production_db -c "\dt"; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -c 'CREATE DATABASE production_db;'"; tmux wait -S done
+[?2004lCREATE DATABASE
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -d production_db -f /backup/database.sql"; tmux wait -S done
+[?2004lCREATE TABLE
+CREATE TABLE
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -d production_db -c '\dt'"; tmux wait -S done
+[?2004l            List of relations
+ Schema |     Name     | Type  |  Owner   
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+[?2004hroot@e12900196bff:/backup# cat > clean_and_import.py << 'EOF'
+[?2004l[?2004h> import csv
+[?2004l[?2004h> import json
+[?2004l[?2004h> import re
+[?2004l[?2004h> import subprocess
+[?2004l[?2004h> 
+[?2004l[?2004h> # Clean users CSV
+[?2004l[?2004h> print("Cleaning users CSV...")
+[?2004l[?2004h> valid_users = []
+[?2004l[?2004h> valid_statuses = {'active', 'inactive', 'suspended'}
+[?2004l[?2004h> email_pattern = re.compile(r'^[^@]+@[^@]+$')
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/users_export.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.DictReader(f)
+[?2004l[?2004h>     for row in reader:
+[?2004l[?2004h>         # Check for missing user_id
+[?2004l[?2004h>         if not row.get('user_id') or not row['user_id'].strip():
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for empty username
+[?2004l[?2004h>         if not row.get('username') or not row['username'].strip():
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for invalid email (must contain @)
+[?2004l[?2004h>         if not row.get('email') or not email_pattern.match(row['email'].strip()):
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for invalid status
+[?2004l[?2004h>         if not row.get('status') or row['status'].strip() not in valid_statuses:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         valid_users.append(row)
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Valid users: {len(valid_users)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write clean users CSV
+[?2004l[?2004h> with open('/backup/clean_users.csv', 'w', newline='') as f:
+[?2004l[?2004h>     if valid_users:
+[?2004l[?2004h>         fieldnames = ['user_id', 'username', 'email', 'created_at', 'status']
+[?2004l[?2004h>         writer = csv.DictWriter(f, fieldnames=fieldnames)
+[?2004l[?2004h>         writer.writeheader()
+[?2004l[?2004h>         writer.writerows(valid_users)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Clean users CSV written.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Clean transactions JSON
+[?2004l[?2004h> print("Cleaning transactions JSON...")
+[?2004l[?2004h> with open('/backup/transactions_backup.json', 'r') as f:
+[?2004l[?2004h>     transactions = json.load(f)
+[?2004l[?2004h> 
+[?2004l[?2004h> valid_user_ids = {int(u['user_id']) for u in valid_users}
+[?2004l[?2004h> valid_transactions = []
+[?2004l[?2004h> 
+[?2004l[?2004h> for txn in transactions:
+[?2004l[?2004h>     # Check for null transaction_id
+[?2004l[?2004h>     if txn.get('transaction_id') is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for null or negative amount
+[?2004l[?2004h>     if txn.get('amount') is None or txn['amount'] <= 0:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for missing timestamp
+[?2004l[?2004h>     if not txn.get('timestamp'):
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for invalid user_id (must be 1-30 and in valid users)
+[?2004l[?2004h>     user_id = txn.get('user_id')
+[?2004l[?2004h>     if user_id is None or user_id < 1 or user_id > 30:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     valid_transactions.append(txn)
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Valid transactions: {len(valid_transactions)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write valid transactions JSON
+[?2004l[?2004h> with open('/backup/valid_transactions.json', 'w') as f:
+[?2004l[?2004h>     json.dump(valid_transactions, f, indent=2)
+[?2004l[?2004h>     f.write('\n')
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Valid transactions JSON written.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Import users into database
+[?2004l[?2004h> print("Importing users into database...")
+[?2004l[?2004h> with open('/tmp/import_users.sql', 'w') as f:
+[?2004l[?2004h>     f.write("COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> result = subprocess.run(
+[?2004l[?2004h>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_users.sql"],
+[?2004l[?2004h>     capture_output=True, text=True
+[?2004l[?2004h> )
+[?2004l[?2004h> print(result.stdout)
+[?2004l[?2004h> if result.stderr:
+[?2004l[?2004h>     print(result.stderr)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Import transactions into database
+[?2004l[?2004h> print("Importing transactions into database...")
+[?2004l[?2004h> with open('/tmp/import_transactions.sql', 'w') as f:
+[?2004l[?2004h>     for txn in valid_transactions:
+[?2004l[?2004h>         f.write(f"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES ({txn['transaction_id']}, {txn['user_id']}, {txn['amount']}, '{txn['timestamp']}', '{txn['description']}');\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> result = subprocess.run(
+[?2004l[?2004h>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_transactions.sql"],
+[?2004l[?2004h>     capture_output=True, text=True
+[?2004l[?2004h> )
+[?2004l[?2004h> print(result.stdout)
+[?2004l[?2004h> if result.stderr:
+[?2004l[?2004h>     print(result.stderr)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Data import complete.")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@e12900196bff:/backup# python3 clean_and_import.py; tmux wait -S done
+[?2004lCleaning users CSV...
+Valid users: 30
+Clean users CSV written.
+Cleaning transactions JSON...
+Traceback (most recent call last):
+  File "/backup/clean_and_import.py", line 59, in <module>
+    if txn.get('amount') is None or txn['amount'] <= 0:
+                                    ^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'str' and 'int'
+[?2004hroot@e12900196bff:/backup# cat > clean_and_import.py << 'EOF'
+[?2004l[?2004h> import csv
+[?2004l[?2004h> import json
+[?2004l[?2004h> import re
+[?2004l[?2004h> import subprocess
+[?2004l[?2004h> 
+[?2004l[?2004h> # Clean users CSV
+[?2004l[?2004h> print("Cleaning users CSV...")
+[?2004l[?2004h> valid_users = []
+[?2004l[?2004h> valid_statuses = {'active', 'inactive', 'suspended'}
+[?2004l[?2004h> email_pattern = re.compile(r'^[^@]+@[^@]+$')
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/users_export.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.DictReader(f)
+[?2004l[?2004h>     for row in reader:
+[?2004l[?2004h>         # Check for missing user_id
+[?2004l[?2004h>         if not row.get('user_id') or not row['user_id'].strip():
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for empty username
+[?2004l[?2004h>         if not row.get('username') or not row['username'].strip():
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for invalid email (must contain @)
+[?2004l[?2004h>         if not row.get('email') or not email_pattern.match(row['email'].strip()):
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check for invalid status
+[?2004l[?2004h>         if not row.get('status') or row['status'].strip() not in valid_statuses:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         valid_users.append(row)
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Valid users: {len(valid_users)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write clean users CSV
+[?2004l[?2004h> with open('/backup/clean_users.csv', 'w', newline='') as f:
+[?2004l[?2004h>     if valid_users:
+[?2004l[?2004h>         fieldnames = ['user_id', 'username', 'email', 'created_at', 'status']
+[?2004l[?2004h>         writer = csv.DictWriter(f, fieldnames=fieldnames)
+[?2004l[?2004h>         writer.writeheader()
+[?2004l[?2004h>         writer.writerows(valid_users)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Clean users CSV written.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Clean transactions JSON
+[?2004l[?2004h> print("Cleaning transactions JSON...")
+[?2004l[?2004h> with open('/backup/transactions_backup.json', 'r') as f:
+[?2004l[?2004h>     transactions = json.load(f)
+[?2004l[?2004h> 
+[?2004l[?2004h> valid_user_ids = {int(u['user_id']) for u in valid_users}
+[?2004l[?2004h> valid_transactions = []
+[?2004l[?2004h> 
+[?2004l[?2004h> for txn in transactions:
+[?2004l[?2004h>     # Check for null transaction_id
+[?2004l[?2004h>     if txn.get('transaction_id') is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for null or negative amount
+[?2004l[?2004h>     amount = txn.get('amount')
+[?2004l[?2004h>     if amount is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     try:
+[?2004l[?2004h>         amount_val = float(amount)
+[?2004l[?2004h>         if amount_val <= 0:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>     except (ValueError, TypeError):
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for missing timestamp
+[?2004l[?2004h>     if not txn.get('timestamp'):
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check for invalid user_id (must be 1-30 and in valid users)
+[?2004l[?2004h>     user_id = txn.get('user_id')
+[?2004l[?2004h>     if user_id is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     try:
+[?2004l[?2004h>         user_id_val = int(user_id)
+[?2004l[?2004h>         if user_id_val < 1 or user_id_val > 30:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>     except (ValueError, TypeError):
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     valid_transactions.append(txn)
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Valid transactions: {len(valid_transactions)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write valid transactions JSON
+[?2004l[?2004h> with open('/backup/valid_transactions.json', 'w') as f:
+[?2004l[?2004h>     json.dump(valid_transactions, f, indent=2)
+[?2004l[?2004h>     f.write('\n')
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Valid transactions JSON written.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Import users into database
+[?2004l[?2004h> print("Importing users into database...")
+[?2004l[?2004h> with open('/tmp/import_users.sql', 'w') as f:
+[?2004l[?2004h>     f.write("COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> result = subprocess.run(
+[?2004l[?2004h>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_users.sql"],
+[?2004l[?2004h>     capture_output=True, text=True
+[?2004l[?2004h> )
+[?2004l[?2004h> print(result.stdout)
+[?2004l[?2004h> if result.stderr:
+[?2004l[?2004h>     print(result.stderr)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Import transactions into database
+[?2004l[?2004h> print("Importing transactions into database...")
+[?2004l[?2004h> with open('/tmp/import_transactions.sql', 'w') as f:
+[?2004l[?2004h>     for txn in valid_transactions:
+[?2004l[?2004h>         desc = txn['description'].replace("'", "''")
+[?2004l[?2004h>         f.write(f"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES ({txn['transaction_id']}, {txn['user_id']}, {txn['amount']}, '{txn['timestamp']}', '{desc}');\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> result = subprocess.run(
+[?2004l[?2004h>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_transactions.sql"],
+[?2004l[?2004h>     capture_output=True, text=True
+[?2004l[?2004h> )
+[?2004l[?2004h> print(result.stdout)
+[?2004l[?2004h> if result.stderr:
+[?2004l[?2004h>     print(result.stderr)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Data import complete.")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@e12900196bff:/backup# python3 clean_and_import.py; tmux wait -S done
+[?2004lCleaning users CSV...
+Valid users: 30
+Clean users CSV written.
+Cleaning transactions JSON...
+Valid transactions: 100
+Valid transactions JSON written.
+Importing users into database...
+COPY 30
+
+Importing transactions into database...
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+
+Data import complete.
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+[?2004l count 
+-------
+    30
+(1 row)
+
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+[?2004l count 
+-------
+   100
+(1 row)
+
+[?2004hroot@e12900196bff:/backup# cat > generate_reports.py << 'EOF'
+[?2004l[?2004h> import subprocess
+[?2004l[?2004h> import re
+[?2004l[?2004h> 
+[?2004l[?2004h> def run_query(query):
+[?2004l[?2004h>     result = subprocess.run(
+[?2004l[?2004h>         ['su', '-', 'postgres', '-c', f"psql -d production_db -t -A -c \"{query}\""],
+[?2004l[?2004h>         capture_output=True, text=True
+[?2004l[?2004h>     )
+[?2004l[?2004h>     return result.stdout.strip()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Generate database statistics report
+[?2004l[?2004h> print("Generating database statistics report...")
+[?2004l[?2004h> total_users = run_query("SELECT COUNT(*) FROM users;")
+[?2004l[?2004h> active_users = run_query("SELECT COUNT(*) FROM users WHERE status = 'active';")
+[?2004l[?2004h> total_transactions = run_query("SELECT COUNT(*) FROM transactions;")
+[?2004l[?2004h> total_amount = run_query("SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;")
+[?2004l[?2004h> avg_per_user = run_query("SELECT ROUND(AVG(total)::numeric, 2) FROM (SELECT user_id, SUM(amount) as total FROM transactions GROUP BY user_id) as user_totals;")
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/db_stats.txt', 'w') as f:
+[?2004l[?2004h>     f.write("DATABASE STATISTICS\n")
+[?2004l[?2004h>     f.write("==================\n")
+[?2004l[?2004h>     f.write(f"Total Users: {total_users}\n")
+[?2004l[?2004h>     f.write(f"Active Users: {active_users}\n")
+[?2004l[?2004h>     f.write(f"Total Transactions: {total_transactions}\n")
+[?2004l[?2004h>     f.write(f"Total Amount: {total_amount}\n")
+[?2004l[?2004h>     f.write(f"Average per User: {avg_per_user}\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Database statistics report generated.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Generate top users report
+[?2004l[?2004h> print("Generating top users report...")
+[?2004l[?2004h> query = """
+[?2004l[?2004h> SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount
+[?2004l[?2004h> FROM users u
+[?2004l[?2004h> JOIN transactions t ON u.user_id = t.user_id
+[?2004l[?2004h> GROUP BY u.username
+[?2004l[?2004h> ORDER BY total_amount DESC, u.username ASC
+[?2004l[?2004h> LIMIT 10;
+[?2004l[?2004h> """
+[?2004l[?2004h> 
+[?2004l[?2004h> result = subprocess.run(
+[?2004l[?2004h>     ['su', '-', 'postgres', '-c', f'psql -d production_db -t -A -F"," -c "{query}"'],
+[?2004l[?2004h>     capture_output=True, text=True
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/top_users.csv', 'w') as f:
+[?2004l[?2004h>     f.write("username,total_amount\n")
+[?2004l[?2004h>     f.write(result.stdout)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Top users report generated.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Generate backup verification report
+[?2004l[?2004h> print("Generating backup verification report...")
+[?2004l[?2004h> with open('/backup/backup_metadata.log', 'r') as f:
+[?2004l[?2004h>     log_content = f.read()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Extract information from log
+[?2004l[?2004h> backup_date = None
+[?2004l[?2004h> tables_backed_up = None
+[?2004l[?2004h> total_rows = None
+[?2004l[?2004h> integrity_check = None
+[?2004l[?2004h> 
+[?2004l[?2004h> for line in log_content.split('\n'):
+[?2004l[?2004h>     if 'Backup timestamp:' in line:
+[?2004l[?2004h>         backup_date = line.split('Backup timestamp:')[1].strip()
+[?2004l[?2004h>     elif 'Total tables backed up:' in line:
+[?2004l[?2004h>         tables_backed_up = line.split('Total tables backed up:')[1].strip()
+[?2004l[?2004h>     elif 'Total rows backed up:' in line:
+[?2004l[?2004h>         total_rows = line.split('Total rows backed up:')[1].strip()
+[?2004l[?2004h>     elif 'Integrity check:' in line:
+[?2004l[?2004h>         integrity_check = line.split('Integrity check:')[1].strip()
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/backup_verification.txt', 'w') as f:
+[?2004l[?2004h>     f.write("BACKUP VERIFICATION\n")
+[?2004l[?2004h>     f.write("===================\n")
+[?2004l[?2004h>     f.write(f"Backup Date: {backup_date}\n")
+[?2004l[?2004h>     f.write(f"Tables Backed Up: {tables_backed_up}\n")
+[?2004l[?2004h>     f.write(f"Total Rows: {total_rows}\n")
+[?2004l[?2004h>     f.write(f"Integrity Check: {integrity_check}\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Backup verification report generated.")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create recovery completion marker
+[?2004l[?2004h> print("Creating recovery completion marker...")
+[?2004l[?2004h> with open('/backup/recovery_complete.txt', 'w') as f:
+[?2004l[?2004h>     f.write("RECOVERY_SUCCESSFUL\n")
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Recovery completion marker created.")
+[?2004l[?2004h> print("All reports generated successfully!")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@e12900196bff:/backup# python3 generate_reports.py; tmux wait -S done
+[?2004lGenerating database statistics report...
+Database statistics report generated.
+Generating top users report...
+Top users report generated.
+Generating backup verification report...
+Backup verification report generated.
+Creating recovery completion marker...
+Recovery completion marker created.
+All reports generated successfully!
+[?2004hroot@e12900196bff:/backup# ls -la /backup/*.csv /backup/*.json /backup/*.txt 2>/dev/null; tmux wait -S done
+[?2004l-rw-r--r-- 1 root root   133 Dec  4 19:04 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 19:04 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 19:04 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 19:04 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   219 Dec  4 19:04 /backup/top_users.csv
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+-rw-r--r-- 1 root root 14573 Dec  4 19:04 /backup/valid_transactions.json
+[?2004hroot@e12900196bff:/backup# echo "=== clean_users.csv ==="  && head -5 /backup/clean_users.csv; tmux wait -S done
+[?2004l=== clean_users.csv ===
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+[?2004hroot@e12900196bff:/backup# echo "=== db_stats.txt ===" && cat /backup/db_stats.txt; tmux wait -S done
+[?2004l=== db_stats.txt ===
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+[?2004hroot@e12900196bff:/backup# echo "=== top_users.csv ===" && cat /backup/top_users.csv; tmux wait -S done
+[?2004l=== top_users.csv ===
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+[?2004hroot@e12900196bff:/backup# echo "=== backup_verification.txt ===" && cat /backup/backup_verification.txt; tmux wait -S done
+[?2004l=== backup_verification.txt ===
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+[?2004hroot@e12900196bff:/backup# echo "=== recovery_complete.txt ===" && cat /backup/recovery_complete.txt; tmux wait -S done
+[?2004l=== recovery_complete.txt ===
+RECOVERY_SUCCESSFUL
+[?2004hroot@e12900196bff:/backup# echo "=== valid_transactions.json (first 20 lines) ===" && head -20 /backup/valid_transactions.json; tmux wait -S done
+[?2004l=== valid_transactions.json (first 20 lines) ===
+[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+[?2004hroot@e12900196bff:/backup# tail -5 /backup/valid_transactions.json; tmux wait -S done
+[?2004l    "amount": 372.72,
+    "timestamp": "2025-07-05 01:25:56",
+    "description": "Subscription"
+  }
+]
+[?2004hroot@e12900196bff:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users; SELECT COUNT(*) as txn_count FROM transactions;'"; tmux wait -S done
+[?2004l user_count 
+------------
+         30
+(1 row)
+
+ txn_count 
+-----------
+       100
+(1 row)
+
+[?2004hroot@e12900196bff:/backup# wc -l /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /backup/backup_verification.txt /backup/recovery_complete.txt /backup/valid_transactions.json; tmux wait -S done
+[?2004l   31 /backup/clean_users.csv
+   11 /backup/top_users.csv
+    7 /backup/db_stats.txt
+    6 /backup/backup_verification.txt
+    1 /backup/recovery_complete.txt
+  702 /backup/valid_transactions.json
+  758 total
+[?2004hroot@e12900196bff:/backup# echo "=== Verifying all files end with newline ===" && for f in /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /backup/backup_verification.txt /backup/recovery_complete.txt /backup/valid_transactions.json; do echo -n "$f: "; tail -c 1 "$f" | od -An -tx1; done; tmux wait -S done
+[?2004l=== Verifying all files end with newline ===
+/backup/clean_users.csv:  0a
+/backup/top_users.csv:  0a
+/backup/db_stats.txt:  0a
+/backup/backup_verification.txt:  0a
+/backup/recovery_complete.txt:  0a
+/backup/valid_transactions.json:  0a
+[?2004hroot@e12900196bff:/backup# echo "=== Verifying top_users.csv has exactly 10 data rows ===" && tail -n +2 /backup/top_users.csv | wc -l; tmux wait -S done
+[?2004l=== Verifying top_users.csv has exactly 10 data rows ===
+10
+[?2004hroot@e12900196bff:/backup# echo "=== Verifying clean_users.csv has 30 data rows ===" && tail -n +2 /backup/clean_users.csv | wc -l; tmux wait -S done
+[?2004l=== Verifying clean_users.csv has 30 data rows ===
+30
+[?2004hroot@e12900196bff:/backup# echo "=== Final validation: All required files present ===" && ls -1 /backup/clean_users.csv /backup/valid_transactions.json /backup/db_stats.txt /backup/top_users.csv /backup/backup_verification.txt /backup/recovery_complete.txt; tmux wait -S done
+[?2004l=== Final validation: All required files present ===
+/backup/backup_verification.txt
+/backup/clean_users.csv
+/backup/db_stats.txt
+/backup/recovery_complete.txt
+/backup/top_users.csv
+/backup/valid_transactions.json
+[?2004hroot@e12900196bff:/backup# echo "=== TASK COMPLETION SUMMARY ===" && echo "Database: production_db with users and transactions tables" && echo "Users imported: 30" && echo "Transactions imported: 100" && echo "All required files generated and validated"; tmux wait -S done
+[?2004l=== TASK COMPLETION SUMMARY ===
+Database: production_db with users and transactions tables
+Users imported: 30
+Transactions imported: 100
+All required files generated and validated
+[?2004hroot@e12900196bff:/backup# [?2004l
+exit
+[0;32masciinema: recording finished[0m
+[0;32masciinema: asciicast saved to /logs/agent.cast[0m
+[?2004hroot@e12900196bff:/backup# 

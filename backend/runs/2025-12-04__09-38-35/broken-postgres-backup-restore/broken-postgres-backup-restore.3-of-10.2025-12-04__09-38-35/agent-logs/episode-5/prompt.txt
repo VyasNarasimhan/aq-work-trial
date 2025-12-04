@@ -1,0 +1,40 @@
+>         user_id = int(t['user_id'])
+>         if user_id < 1 or user_id > 30:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     # Check amount is not null and is positive
+>     if t.get('amount') is None:
+>         continue
+>     try:
+>         amount = float(t['amount'])
+>         if amount <= 0:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     # Check timestamp exists
+>     if not t.get('timestamp'):
+>         continue
+>
+>     valid_transactions.append(t)
+>
+> print(f"Valid transactions: {len(valid_transactions)}")
+>
+> # Write valid transactions JSON
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+>
+> print("Valid transactions saved to valid_transactions.json")
+> EOF
+root@4c8136e5fef9:/backup# python3 /backup/clean_data.py; tmux wait -S done
+Cleaning users data...
+Valid users: 30
+Clean users saved to clean_users.csv
+
+Cleaning transactions data...
+Valid transactions: 100
+Valid transactions saved to valid_transactions.json
+root@4c8136e5fef9:/backup#

@@ -1,0 +1,40 @@
+>     # Check amount is not null and is positive
+>     amount = txn.get('amount')
+>     if amount is None:
+>         continue
+>
+>     try:
+>         amount_float = float(amount)
+>         if amount_float <= 0:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     # Check timestamp exists
+>     if not txn.get('timestamp'):
+>         continue
+>
+>     # Check user_id is valid (1-30)
+>     user_id = txn.get('user_id')
+>     if user_id is None:
+>         continue
+>
+>     try:
+>         user_id_int = int(user_id)
+>         if user_id_int < 1 or user_id_int > 30:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+>
+> print(f"Found {len(valid_transactions)} valid transactions")
+> EOF
+root@9d5ed6174de7:/backup# python3 /tmp/clean_transactions.py; tmux wait -S done
+Found 100 valid transactions
+root@9d5ed6174de7:/backup#

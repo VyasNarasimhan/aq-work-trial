@@ -1,0 +1,40 @@
+> print(f"Cleaned users: {len(valid_users)}")
+>
+> # Get valid user_ids for transaction validation
+> valid_user_ids = set(int(u['user_id']) for u in valid_users)
+>
+> # Clean transactions JSON
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+> for txn in transactions:
+>     # Check for null or missing transaction_id
+>     if txn.get('transaction_id') is None:
+>         continue
+>     # Check for null or negative amounts
+>     if txn.get('amount') is None or float(txn['amount']) <= 0:
+>         continue
+>     # Check for missing timestamp
+>     if not txn.get('timestamp'):
+>         continue
+>     # Check for valid user_id (1-30 range)
+>     if txn.get('user_id') is None or txn['user_id'] < 1 or txn['user_id'] > 30:
+>         continue
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f)
+>     f.write('\n')
+>
+> print(f"Valid transactions: {len(valid_transactions)}")
+> EOF
+root@fa3327fd3fc4:/backup# python3 /tmp/clean_data.py; tmux wait -S done
+Cleaned users: 30
+Traceback (most recent call last):
+  File "/tmp/clean_data.py", line 46, in <module>
+    if txn.get('amount') is None or float(txn['amount']) <= 0:
+                                    ^^^^^^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: 'invalid'
+root@fa3327fd3fc4:/backup#

@@ -1,0 +1,27 @@
+{
+    "state_analysis": "Excellent! All reports have been generated successfully. Now I need to verify that all the required output files are present and have the correct content and formatting.",
+    "explanation": "I'll verify all the generated files exist and check their content to ensure they meet the requirements before marking the task as complete.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/*.csv /backup/*.json /backup/*.txt 2>/dev/null\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo \"=== clean_users.csv ===\"  && head -5 /backup/clean_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo \"=== db_stats.txt ===\" && cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo \"=== top_users.csv ===\" && cat /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

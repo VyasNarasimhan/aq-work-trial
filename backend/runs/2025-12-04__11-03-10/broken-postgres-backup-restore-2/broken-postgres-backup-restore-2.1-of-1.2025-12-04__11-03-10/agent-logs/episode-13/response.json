@@ -1,0 +1,22 @@
+{
+    "state_analysis": "Perfect! All required files have been generated with correct formatting. Let me verify the database is properly set up and all data is correctly imported by running a few final validation queries.",
+    "explanation": "I'll run final validation queries to ensure the database tables are properly populated and the data integrity is maintained before confirming task completion.",
+    "commands": [
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users; SELECT COUNT(*) as txn_count FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "wc -l /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /backup/backup_verification.txt /backup/recovery_complete.txt /backup/valid_transactions.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo \"=== Verifying all files end with newline ===\" && for f in /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /backup/backup_verification.txt /backup/recovery_complete.txt /backup/valid_transactions.json; do echo -n \"$f: \"; tail -c 1 \"$f\" | od -An -tx1; done\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

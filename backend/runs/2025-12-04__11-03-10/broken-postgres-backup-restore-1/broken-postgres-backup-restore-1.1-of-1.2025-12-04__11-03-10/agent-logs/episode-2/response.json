@@ -1,0 +1,12 @@
+{
+    "state_analysis": "The Python script has been created successfully. Now I need to run it to perform all the database restoration, data cleaning, and report generation tasks.",
+    "explanation": "I'll execute the Python script to complete all the required tasks: create the database, clean and import data, and generate all required reports.",
+    "commands": [
+        {
+            "keystrokes": "python3 /backup/restore_database.py\n",
+            "is_blocking": true,
+            "timeout_sec": 30
+        }
+    ],
+    "is_task_complete": false
+}

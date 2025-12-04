@@ -1,0 +1,40 @@
+>     ['su', '-', 'postgres', '-c', f"psql -d production_db -t -A -F',' -c \"{top_users_query}\""],
+>     capture_output=True, text=True
+> )
+>
+> # Write top users CSV
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write('username,total_amount\n')
+>     for line in result.stdout.strip().split('\n'):
+>         if line:
+>             parts = line.split(',')
+>             username = parts[0]
+>             amount = float(parts[1])
+>             f.write(f'{username},{amount:.2f}\n')
+>
+> print('Generated top_users.csv')
+> EOF
+root@5dedd0e6de41:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Generated db_stats.txt
+Generated top_users.csv
+root@5dedd0e6de41:/backup# cat /backup/db_stats.txt; tmux wait -S done
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+root@5dedd0e6de41:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@5dedd0e6de41:/backup#

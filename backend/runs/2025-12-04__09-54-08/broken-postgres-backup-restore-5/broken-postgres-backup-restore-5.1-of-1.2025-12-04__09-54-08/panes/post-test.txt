@@ -1,0 +1,72 @@
+root@fd149cd359fd:/backup# bash /tests/run-tests.sh; tmux wait -S done
+Get:1 http://ports.ubuntu.com/ubuntu-ports noble InRelease [256 kB]
+Get:2 http://ports.ubuntu.com/ubuntu-ports noble-updates InRelease [126 kB]
+Get:3 http://ports.ubuntu.com/ubuntu-ports noble-backports InRelease [126 kB]
+Get:4 http://ports.ubuntu.com/ubuntu-ports noble-security InRelease [126 kB]
+Get:5 http://ports.ubuntu.com/ubuntu-ports noble/restricted arm64 Packages [113 kB]
+Get:6 http://ports.ubuntu.com/ubuntu-ports noble/universe arm64 Packages [19.0 MB]
+Get:7 http://ports.ubuntu.com/ubuntu-ports noble/multiverse arm64 Packages [274 kB]
+Get:8 http://ports.ubuntu.com/ubuntu-ports noble/main arm64 Packages [1776 kB]
+Get:9 http://ports.ubuntu.com/ubuntu-ports noble-updates/main arm64 Packages [2152 kB]
+Get:10 http://ports.ubuntu.com/ubuntu-ports noble-updates/restricted arm64 Packages [4006 kB]
+Get:11 http://ports.ubuntu.com/ubuntu-ports noble-updates/multiverse arm64 Packages [36.0 kB]
+Get:12 http://ports.ubuntu.com/ubuntu-ports noble-updates/universe arm64 Packages [1877 kB]
+Get:13 http://ports.ubuntu.com/ubuntu-ports noble-backports/universe arm64 Packages [34.2 kB]
+Get:14 http://ports.ubuntu.com/ubuntu-ports noble-backports/main arm64 Packages [49.4 kB]
+Get:15 http://ports.ubuntu.com/ubuntu-ports noble-security/universe arm64 Packages [1174 kB]
+Get:16 http://ports.ubuntu.com/ubuntu-ports noble-security/multiverse arm64 Packages [36.4 kB]
+Get:17 http://ports.ubuntu.com/ubuntu-ports noble-security/main arm64 Packages [1806 kB]
+Get:18 http://ports.ubuntu.com/ubuntu-ports noble-security/restricted arm64 Packages [3863 kB]
+Fetched 36.9 MB in 4s (8247 kB/s)
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+curl is already the newest version (8.5.0-2ubuntu10.6).
+0 upgraded, 0 newly installed, 0 to remove and 30 not upgraded.
+downloading uv 0.7.13 aarch64-unknown-linux-gnu
+no checksums to verify
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Initialized project `backup`
+Using CPython 3.12.3 interpreter at: /usr/bin/python3.12
+Creating virtual environment at: .venv
+Resolved 7 packages in 100ms
+Prepared 5 packages in 107ms
+Installed 5 packages in 5ms
+ + iniconfig==2.3.0
+ + packaging==25.0
+ + pluggy==1.6.0
+ + pygments==2.19.2
+ + pytest==8.4.1
+Resolved 8 packages in 111ms
+Prepared 1 package in 95ms
+Installed 1 package in 1ms
+ + psycopg2-binary==2.9.9
+ * Starting PostgreSQL 16 database server                                                                                                                [ OK ]
+ * Reloading PostgreSQL 16 database server                                                                                                               [ OK ]
+===================================================================== test session starts ======================================================================
+platform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0
+rootdir: /tests
+collected 7 items
+
+../tests/test_outputs.py .......                                                                                                                         [100%]
+
+============================================================================ PASSES ============================================================================
+=================================================================== short test summary info ====================================================================
+PASSED ../tests/test_outputs.py::TestDatabaseRestoration::test_database_exists_and_accessible
+PASSED ../tests/test_outputs.py::TestDataCleaning::test_clean_users_csv_format_and_content
+PASSED ../tests/test_outputs.py::TestDataCleaning::test_valid_transactions_json_format_and_content
+PASSED ../tests/test_outputs.py::TestDatabaseReports::test_database_statistics_report
+PASSED ../tests/test_outputs.py::TestDatabaseReports::test_top_users_report
+PASSED ../tests/test_outputs.py::TestBackupVerification::test_backup_verification_report
+PASSED ../tests/test_outputs.py::TestRecoveryCompletion::test_recovery_complete_marker
+====================================================================== 7 passed in 0.05s =======================================================================
+root@fd149cd359fd:/backup#

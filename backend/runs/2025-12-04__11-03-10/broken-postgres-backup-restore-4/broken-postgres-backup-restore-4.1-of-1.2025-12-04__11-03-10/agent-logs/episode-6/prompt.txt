@@ -1,0 +1,40 @@
+> # Read and clean users data
+> valid_statuses = {'active', 'inactive', 'suspended'}
+> email_pattern = re.compile(r'.+@.+')
+>
+> with open('/backup/users_export.csv', 'r') as infile:
+>     reader = csv.DictReader(infile)
+>
+>     clean_rows = []
+>     for row in reader:
+>         # Check if user_id exists and is not empty
+>         if not row.get('user_id') or not row['user_id'].strip():
+>             continue
+>
+>         # Check if username exists and is not empty
+>         if not row.get('username') or not row['username'].strip():
+>             continue
+>
+>         # Check if email is valid (contains @)
+>         if not row.get('email') or not email_pattern.match(row['email']):
+>             continue
+>
+>         # Check if status is valid
+>         if not row.get('status') or row['status'].strip() not in valid_statuses:
+>             continue
+>
+>         clean_rows.append(row)
+>
+> # Write cleaned data
+> with open('/backup/clean_users.csv', 'w', newline='') as outfile:
+>     if clean_rows:
+>         fieldnames = ['user_id', 'username', 'email', 'created_at', 'status']
+>         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+>         writer.writeheader()
+>         writer.writerows(clean_rows)
+>
+> print(f"Cleaned {len(clean_rows)} valid user records")
+> EOF
+root@9d5ed6174de7:/backup# python3 /tmp/clean_users.py; tmux wait -S done
+Cleaned 30 valid user records
+root@9d5ed6174de7:/backup#

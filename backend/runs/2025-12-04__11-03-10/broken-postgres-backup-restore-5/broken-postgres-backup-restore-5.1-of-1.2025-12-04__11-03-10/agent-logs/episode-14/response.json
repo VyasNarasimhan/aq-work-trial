@@ -1,0 +1,22 @@
+{
+    "state_analysis": "Perfect! The database statistics and top users reports have been regenerated with the complete data. The backup_metadata.log shows all the information needed for the backup verification report: timestamp (2025-09-28 03:00:00), tables backed up (2), total rows (130), and integrity check (PASSED).",
+    "explanation": "Create the backup verification report using the information from the metadata log, then create the recovery completion marker file to indicate all tasks are complete.",
+    "commands": [
+        {
+            "keystrokes": "python3 << 'EOF'\n# Generate backup verification report\nwith open('/backup/backup_verification.txt', 'w') as f:\n    f.write('BACKUP VERIFICATION\\n')\n    f.write('===================\\n')\n    f.write('Backup Date: 2025-09-28 03:00:00\\n')\n    f.write('Tables Backed Up: 2\\n')\n    f.write('Total Rows: 130\\n')\n    f.write('Integrity Check: PASSED\\n')\n\nprint('Backup verification report created')\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo 'RECOVERY_SUCCESSFUL' > /backup/recovery_complete.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "ls -la /backup/*.txt /backup/*.csv /backup/*.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

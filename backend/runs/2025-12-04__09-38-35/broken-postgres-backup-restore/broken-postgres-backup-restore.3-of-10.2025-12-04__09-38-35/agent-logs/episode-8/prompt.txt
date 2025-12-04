@@ -1,0 +1,40 @@
+>
+> with open('/backup/backup_metadata.log', 'r') as f:
+>     log_content = f.read()
+>
+> # Extract information from log
+> backup_date = ''
+> tables_backed_up = ''
+> total_rows = ''
+> integrity_check = ''
+>
+> for line in log_content.split('\n'):
+>     if 'Backup timestamp:' in line:
+>         backup_date = line.split('Backup timestamp:')[1].strip()
+>     elif 'Total tables backed up:' in line:
+>         tables_backed_up = line.split('Total tables backed up:')[1].strip()
+>     elif 'Total rows backed up:' in line:
+>         total_rows = line.split('Total rows backed up:')[1].strip()
+>     elif 'Integrity check:' in line:
+>         integrity_check = line.split('Integrity check:')[1].strip()
+>
+> with open('/backup/backup_verification.txt', 'w') as f:
+>     f.write('BACKUP VERIFICATION\n')
+>     f.write('===================\n')
+>     f.write(f'Backup Date: {backup_date}\n')
+>     f.write(f'Tables Backed Up: {tables_backed_up}\n')
+>     f.write(f'Total Rows: {total_rows}\n')
+>     f.write(f'Integrity Check: {integrity_check}\n')
+>
+> print("Backup verification report created")
+> EOF
+root@4c8136e5fef9:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Generating database statistics...
+Database statistics report created
+
+Generating top users report...
+Top users report created
+
+Generating backup verification report...
+Backup verification report created
+root@4c8136e5fef9:/backup#

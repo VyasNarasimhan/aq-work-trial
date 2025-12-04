@@ -1,0 +1,40 @@
+49, "user_id": 6, "amount": 231.22, "timestamp": "2025-06-05 01:25:56", "description": "Transfer"}, {"transaction_id": 50, "user_id": 7, "amount": 429.88, "time
+stamp": "2025-09-16 01:25:56", "description": "Refund"}, {"transaction_id": 51, "user_id": 21, "amount": 345.49, "timestamp": "2025-09-11 01:25:56", "descriptio
+n": "Deposit"}, {"transaction_id": 52, "user_id": 24, "amount": 892.01, "timestamp": "2025-06-17 01:25:56", "description": "Withdrawal"}, {"transaction_id": 53,
+ "user_id": 30, "amount": 196.84, "timestamp": "2025-06-30 01:25:56", "description": "Deposit"}, {"transaction_id": 54, "user_id": 20, "amount": 77.84, "timesta
+mp": "2025-08-15 01:25:56", "description": "Purchase"}, {"transaction_id": 55, "user_id": 30, "amount": 774.32, "timestamp": "2025-07-15 01:25:56", "description
+": "Payment"}, {"transaction_id": 56, "user_id": 26, "amount": 514.54, "timestamp": "2025-05-29 01:25:56", "description": "Transfer"}, {"transaction_id": 57, "u
+ser_id": 5, "amount": 478.52, "timestamp": "2025-04-15 01:25:56", "description": "Refund"}, {"transaction_id": 58, "user_id": 17, "amount": 412.44, "timestamp":
+ "2025-06-26 01:25:56", "description": "Transfer"}, {"transaction_id": 59, "user_id": 26, "amount": 340.49, "timestamp": "2025-09-05 01:25:56", "description": "
+Withdrawal"}, {"transaction_id": 60, "user_id": 20, "amount": 253.61, "timestamp": "2025-07-15 01:25:56", "description": "Deposit"}, {"transaction_id": 61, "use
+r_id": 2, "amount": 780.9, "timestamp": "2025-06-06 01:25:56", "description": "Purchase"}, {"transaction_id": 62, "user_id": 28, "amount": 944.77, "timestamp":
+"2025-04-10 01:25:56", "description": "Transfer"}, {"transaction_id": 63, "user_id": 6, "amount": 240.91, "timestamp": "2025-04-20 01:25:56", "description": "De
+posit"}, {"transaction_id": 64, "user_id": 29, "amount": 308.69, "timestamp": "2025-04-28 01:25:56", "description": "Refund"}, {"transaction_id": 65, "user_id":
+ 26, "amount": 18.72, "timestamp": "2025-06-30 01:25:56", "description": "Deposit"}, {"transaction_id": 66, "user_id": 1, "amount": 949.95, "timestamp": "2025-0
+9-10 01:25:56", "description": "Subscription"}, {"transaction_id": 67, "user_id": 3, "amount": 797.62, "timestamp": "2025-09-14 01:25:56", "description": "Subsc
+ription"}, {"transaction_id": 68, "user_id": 26, "amount": 667.64, "timestamp": "2025-07-03 01:25:56", "description": "Subscription"}, {"transaction_id": 69, "u
+ser_id": 3, "amount": 205.15, "timestamp": "2025-07-31 01:25:56", "description": "Purchase"}, {"transaction_id": 70, "user_id": 18, "amount": 115.81, "timestamp
+": "2025-05-14 01:25:56", "description": "Payment"}, {"transaction_id": 71, "user_id": 25, "amount": 296.04, "timestamp": "2025-06-02 01:25:56", "description":
+"Purchase"}, {"transaction_id": 72, "user_id": 9, "amount": 610.6, "timestamp": "2025-06-19 01:25:56", "description": "Refund"}, {"transaction_id": 73, "user_id
+": 18, "amount": 239.31, "timestamp": "2025-09-05 01:25:56", "description": "Payment"}, {"transaction_id": 74, "user_id": 24, "amount": 685.05, "timestamp": "20
+25-07-03 01:25:56", "description": "Deposit"}, {"transaction_id": 75, "user_id": 8, "amount": 425.5, "timestamp": "2025-07-02 01:25:56", "description": "Subscri
+ption"}, {"transaction_id": 76, "user_id": 28, "amount": 832.01, "timestamp": "2025-04-11 01:25:56", "description": "Purchase"}, {"transaction_id": 77, "user_id
+": 17, "amount": 566.98, "timestamp": "2025-09-29 01:25:56", "description": "Deposit"}, {"transaction_id": 78, "user_id": 20, "amount": 184.88, "timestamp": "20
+25-09-12 01:25:56", "description": "Payment"}, {"transaction_id": 79, "user_id": 22, "amount": 696.11, "timestamp": "2025-08-24 01:25:56", "description": "Depos
+it"}, {"transaction_id": 80, "user_id": 25, "amount": 743.48, "timestamp": "2025-06-17 01:25:56", "description": "Refund"}, {"transaction_id": 81, "user_id": 30
+, "amount": 846.9, "timestamp": "2025-06-23 01:25:56", "description": "Refund"}, {"transaction_id": 82, "user_id": 30, "amount": 704.56, "timestamp": "2025-04-3
+0 01:25:56", "description": "Payment"}, {"transaction_id": 83, "user_id": 14, "amount": 383.59, "timestamp": "2025-05-30 01:25:56", "description": "Transfer"},
+{"transaction_id": 84, "user_id": 7, "amount": 871.13, "timestamp": "2025-04-15 01:25:56", "description": "Refund"}, {"transaction_id": 85, "user_id": 20, "amou
+nt": 991.49, "timestamp": "2025-05-19 01:25:56", "description": "Withdrawal"}, {"transaction_id": 86, "user_id": 30, "amount": 460.58, "timestamp": "2025-06-30
+01:25:56", "description": "Transfer"}, {"transaction_id": 87, "user_id": 23, "amount": 997.75, "timestamp": "2025-06-30 01:25:56", "description": "Transfer"}, {
+"transaction_id": 88, "user_id": 27, "amount": 791.22, "timestamp": "2025-07-04 01:25:56", "description": "Transfer"}, {"transaction_id": 89, "user_id": 26, "am
+ount": 437.89, "timestamp": "2025-07-29 01:25:56", "description": "Refund"}, {"transaction_id": 90, "user_id": 26, "amount": 399.33, "timestamp": "2025-06-29 01
+:25:56", "description": "Purchase"}, {"transaction_id": 91, "user_id": 15, "amount": 946.07, "timestamp": "2025-06-26 01:25:56", "description": "Deposit"}, {"tr
+ansaction_id": 92, "user_id": 30, "amount": 242.29, "timestamp": "2025-08-11 01:25:56", "description": "Deposit"}, {"transaction_id": 93, "user_id": 8, "amount"
+: 304.08, "timestamp": "2025-05-03 01:25:56", "description": "Purchase"}, {"transaction_id": 94, "user_id": 29, "amount": 823.02, "timestamp": "2025-07-30 01:25
+:56", "description": "Subscription"}, {"transaction_id": 95, "user_id": 21, "amount": 658.52, "timestamp": "2025-04-07 01:25:56", "description": "Subscription"}
+, {"transaction_id": 96, "user_id": 14, "amount": 392.55, "timestamp": "2025-07-09 01:25:56", "description": "Withdrawal"}, {"transaction_id": 97, "user_id": 20
+, "amount": 195.0, "timestamp": "2025-08-26 01:25:56", "description": "Transfer"}, {"transaction_id": 98, "user_id": 13, "amount": 544.03, "timestamp": "2025-08
+-12 01:25:56", "description": "Subscription"}, {"transaction_id": 99, "user_id": 26, "amount": 591.71, "timestamp": "2025-08-12 01:25:56", "description": "Purch
+ase"}, {"transaction_id": 100, "user_id": 2, "amount": 372.72, "timestamp": "2025-07-05 01:25:56", "description": "Subscription"}]
+root@fa3327fd3fc4:/backup#

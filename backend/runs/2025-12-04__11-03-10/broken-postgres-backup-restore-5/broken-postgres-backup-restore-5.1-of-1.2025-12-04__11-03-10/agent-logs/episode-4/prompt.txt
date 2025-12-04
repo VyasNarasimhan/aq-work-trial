@@ -1,0 +1,40 @@
+    "amount": 100.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 101,
+    "user_id": 10,
+    "amount": -50.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 102,
+    "user_id": 15,
+    "amount": 200.0,
+    "timestamp": null,
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 103,
+    "user_id": 999,
+    "amount": 150.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 104,
+    "user_id": 8,
+    "amount": 0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 105,
+    "user_id": 12,
+    "amount": "invalid",
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  }
+]root@bc0c6c5ec4c0:/backup#

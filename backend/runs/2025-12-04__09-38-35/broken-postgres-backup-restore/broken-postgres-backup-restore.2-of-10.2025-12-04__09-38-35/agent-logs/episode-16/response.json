@@ -1,0 +1,22 @@
+{
+    "state_analysis": "The report generation script has been created. Now I'll run it to generate db_stats.txt and top_users.csv, then create the backup_verification.txt file by parsing the backup_metadata.log.",
+    "explanation": "I'll execute the report generation script, then create the backup verification report by extracting information from the backup_metadata.log file, and finally create the recovery_complete.txt marker.",
+    "commands": [
+        {
+            "keystrokes": "python3 /tmp/generate_reports.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        },
+        {
+            "keystrokes": "cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "cat /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

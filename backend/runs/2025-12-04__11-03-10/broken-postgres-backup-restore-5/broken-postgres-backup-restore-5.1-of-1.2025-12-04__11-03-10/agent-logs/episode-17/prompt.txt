@@ -1,0 +1,40 @@
+
+ txn_count
+-----------
+       100
+(1 row)
+
+root@bc0c6c5ec4c0:/backup# for file in /backup/backup_verification.txt /backup/recovery_complete.txt /backup/db_stats.txt /backup/top_users.csv /backup/clean_us
+ers.csv /backup/valid_transactions.json; do echo "Checking $file:"; tail -c 1 "$file" | od -An -tx1; done; tmux wait -S done
+Checking /backup/backup_verification.txt:
+ 0a
+Checking /backup/recovery_complete.txt:
+ 0a
+Checking /backup/db_stats.txt:
+ 0a
+Checking /backup/top_users.csv:
+ 0a
+Checking /backup/clean_users.csv:
+ 0a
+Checking /backup/valid_transactions.json:
+ 0a
+root@bc0c6c5ec4c0:/backup# echo '=== Final Verification ==='; tmux wait -S done
+=== Final Verification ===
+root@bc0c6c5ec4c0:/backup# echo 'Database tables:' && su - postgres -c "psql -d production_db -c '\\dt'"; tmux wait -S done
+Database tables:
+            List of relations
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+root@bc0c6c5ec4c0:/backup# echo 'Row counts:' && su - postgres -c "psql -d production_db -c 'SELECT (SELECT COUNT(*) FROM users) as users, (SELECT COUNT(*) FROM
+ transactions) as transactions;'"; tmux wait -S done
+Row counts:
+ users | transactions
+-------+--------------
+    30 |          100
+(1 row)
+
+root@bc0c6c5ec4c0:/backup#

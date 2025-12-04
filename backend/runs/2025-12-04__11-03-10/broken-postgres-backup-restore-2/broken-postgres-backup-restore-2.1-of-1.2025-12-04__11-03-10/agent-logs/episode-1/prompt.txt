@@ -1,0 +1,40 @@
+root@e12900196bff:/backup# ls -la /backup/; tmux wait -S done
+total 40
+drwxr-xr-x 1 root root  4096 Dec  4 16:59 .
+drwxr-xr-x 1 root root  4096 Dec  4 19:03 ..
+-rw-r--r-- 1 root root   945 Dec  4 16:54 backup_metadata.log
+-rw-r--r-- 1 root root   718 Dec  4 16:54 database.sql
+-rw-r--r-- 1 root root   703 Dec  4 16:54 postgresql.conf
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 users_export.csv
+root@e12900196bff:/backup# service postgresql start; tmux wait -S done
+ * Starting PostgreSQL 16 database server                                                                                                                [ OK ]
+root@e12900196bff:/backup#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

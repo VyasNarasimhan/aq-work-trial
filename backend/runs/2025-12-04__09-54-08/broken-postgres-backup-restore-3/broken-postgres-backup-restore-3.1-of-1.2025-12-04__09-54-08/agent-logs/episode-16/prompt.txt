@@ -1,0 +1,40 @@
+-rw-r--r-- 1 root root   145 Dec  4 17:56 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 17:56 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   219 Dec  4 17:56 /backup/top_users.csv
+-rw-r--r-- 1 root root 14573 Dec  4 17:55 /backup/valid_transactions.json
+root@649ce5c0dfcd:/backup# echo '=== Verifying clean_users.csv ===' && head -3 /backup/clean_users.csv && tail -2 /backup/clean_users.csv; tmux wait -S done
+=== Verifying clean_users.csv ===
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+29,clark_kent,clark_kent@example.com,2025-09-22 01:25:46,active
+30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
+root@649ce5c0dfcd:/backup# echo '=== Verifying valid_transactions.json ===' && python3 -c "import json; d=json.load(open('/backup/valid_transactions.json')); pr
+int(f'Valid JSON: {len(d)} transactions'); print('First:', d[0]); print('Last:', d[-1])"; tmux wait -S done
+=== Verifying valid_transactions.json ===
+Valid JSON: 100 transactions
+First: {'transaction_id': 1, 'user_id': 16, 'amount': 46.0, 'timestamp': '2025-07-16 01:25:56', 'description': 'Subscription'}
+Last: {'transaction_id': 100, 'user_id': 2, 'amount': 372.72, 'timestamp': '2025-07-05 01:25:56', 'description': 'Subscription'}
+root@649ce5c0dfcd:/backup# echo '=== Database verification ===' && su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) as users FROM users; SELECT COUNT
+(*) as transactions FROM transactions;'"; tmux wait -S done
+=== Database verification ===
+ users
+-------
+    30
+(1 row)
+
+ transactions
+--------------
+          100
+(1 row)
+
+root@649ce5c0dfcd:/backup# echo '=== All required files ===' && ls -1 /backup/ | grep -E '(clean_users.csv|valid_transactions.json|db_stats.txt|top_users.csv|ba
+ckup_verification.txt|recovery_complete.txt)$'; tmux wait -S done
+=== All required files ===
+backup_verification.txt
+clean_users.csv
+db_stats.txt
+recovery_complete.txt
+top_users.csv
+valid_transactions.json
+root@649ce5c0dfcd:/backup#

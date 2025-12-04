@@ -1,0 +1,40 @@
+All reports generated successfully!
+root@e12900196bff:/backup# ls -la /backup/*.csv /backup/*.json /backup/*.txt 2>/dev/null; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 19:04 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 19:04 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 19:04 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 19:04 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   219 Dec  4 19:04 /backup/top_users.csv
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+-rw-r--r-- 1 root root 14573 Dec  4 19:04 /backup/valid_transactions.json
+root@e12900196bff:/backup# echo "=== clean_users.csv ==="  && head -5 /backup/clean_users.csv; tmux wait -S done
+=== clean_users.csv ===
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+root@e12900196bff:/backup# echo "=== db_stats.txt ===" && cat /backup/db_stats.txt; tmux wait -S done
+=== db_stats.txt ===
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+root@e12900196bff:/backup# echo "=== top_users.csv ===" && cat /backup/top_users.csv; tmux wait -S done
+=== top_users.csv ===
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@e12900196bff:/backup#

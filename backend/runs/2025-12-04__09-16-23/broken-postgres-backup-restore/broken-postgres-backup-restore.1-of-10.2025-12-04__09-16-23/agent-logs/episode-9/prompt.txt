@@ -1,0 +1,40 @@
+0000000   a   r   l   i   e   _   b   r   o   w   n   ,   2   5   2   5
+0000020   .   3   2  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/backup_verification.txt | od -c; tmux wait -S done
+0000000   g   r   i   t   y       C   h   e   c   k   :       P   A   S
+0000020   S   E   D  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/recovery_complete.txt | od -c; tmux wait -S done
+0000000   R   E   C   O   V   E   R   Y   _   S   U   C   C   E   S   S
+0000020   F   U   L  \n
+0000024
+root@fa3327fd3fc4:/backup# wc -l /backup/clean_users.csv /backup/top_users.csv; tmux wait -S done
+  31 /backup/clean_users.csv
+  11 /backup/top_users.csv
+  42 total
+root@fa3327fd3fc4:/backup# head -3 /backup/clean_users.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+root@fa3327fd3fc4:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+    30
+(1 row)
+
+root@fa3327fd3fc4:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+   100
+(1 row)
+
+root@fa3327fd3fc4:/backup# python3 -c "import json; data=open('/backup/valid_transactions.json').read(); parsed=json.loads(data); print(f'Valid JSON with {len(p
+arsed)} transactions')"; tmux wait -S done
+Valid JSON with 100 transactions
+root@fa3327fd3fc4:/backup# dos2unix /backup/clean_users.csv 2>/dev/null || sed -i 's/\r$//' /backup/clean_users.csv; tmux wait -S done
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/clean_users.csv | od -c; tmux wait -S done
+0000000   -   2   2       0   1   :   2   5   :   4   6   ,   a   c   t
+0000020   i   v   e  \n
+0000024
+root@fa3327fd3fc4:/backup#

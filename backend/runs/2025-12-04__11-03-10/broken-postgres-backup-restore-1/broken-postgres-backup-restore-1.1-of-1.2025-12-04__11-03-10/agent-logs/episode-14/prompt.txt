@@ -1,0 +1,40 @@
+>
+>     print('Cleaning users data...')
+>     users = clean_users()
+>
+>     print('Cleaning transactions data...')
+>     transactions = clean_transactions()
+>
+>     print('Importing data...')
+>     import_data(users, transactions)
+>
+>     print('Generating statistics...')
+>     generate_stats()
+>
+>     print('Generating top users report...')
+>     generate_top_users()
+>
+>     print('Generating backup verification...')
+>     generate_verification()
+>
+>     print('Creating recovery completion marker...')
+>     with open('/backup/recovery_complete.txt', 'w') as f:
+>         f.write('RECOVERY_SUCCESSFUL\n')
+>
+>     print('Recovery complete!')
+> EOF
+root@76c15cab1a93:/backup# python3 /backup/restore_database.py; tmux wait -S done
+Creating database...
+DROP DATABASE
+CREATE DATABASE
+CREATE TABLE
+CREATE TABLE
+Cleaning users data...
+Cleaning transactions data...
+Importing data...
+Generating statistics...
+Generating top users report...
+Generating backup verification...
+Creating recovery completion marker...
+Recovery complete!
+root@76c15cab1a93:/backup#

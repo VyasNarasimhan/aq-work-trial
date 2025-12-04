@@ -1,0 +1,22 @@
+{
+    "state_analysis": "PostgreSQL service started successfully. I can see the backup files: database.sql (schema), users_export.csv (30 users with some potentially invalid data), transactions_backup.json (100 transactions), and backup_metadata.log (contains backup info). Now I need to create the database, restore the schema, clean the data, and import it.",
+    "explanation": "I'll create the production_db database, restore the schema from database.sql, then create Python scripts to clean the CSV and JSON files, and finally import the cleaned data.",
+    "commands": [
+        {
+            "keystrokes": "psql -U postgres -c 'CREATE DATABASE production_db;'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "psql -U postgres -d production_db -f /backup/database.sql\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        },
+        {
+            "keystrokes": "psql -U postgres -d production_db -c '\\dt'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

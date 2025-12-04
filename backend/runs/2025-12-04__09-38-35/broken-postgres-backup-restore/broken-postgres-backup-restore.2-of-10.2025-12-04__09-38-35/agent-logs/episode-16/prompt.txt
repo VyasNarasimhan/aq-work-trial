@@ -1,0 +1,40 @@
+> # Generate db_stats.txt
+> total_users = run_query('SELECT COUNT(*) FROM users;')
+> active_users = run_query("SELECT COUNT(*) FROM users WHERE status = 'active';")
+> total_transactions = run_query('SELECT COUNT(*) FROM transactions;')
+> total_amount = run_query('SELECT ROUND(SUM(amount), 2) FROM transactions;')
+> avg_per_user = run_query('SELECT ROUND(SUM(amount) / COUNT(DISTINCT user_id), 2) FROM transactions;')
+>
+> with open('/backup/db_stats.txt', 'w') as f:
+>     f.write('DATABASE STATISTICS\n')
+>     f.write('==================\n')
+>     f.write(f'Total Users: {total_users}\n')
+>     f.write(f'Active Users: {active_users}\n')
+>     f.write(f'Total Transactions: {total_transactions}\n')
+>     f.write(f'Total Amount: {total_amount}\n')
+>     f.write(f'Average per User: {avg_per_user}\n')
+>
+> print('Generated db_stats.txt')
+>
+> # Generate top_users.csv
+> top_users_query = '''
+> SELECT u.username, ROUND(SUM(t.amount), 2) as total_amount
+> FROM users u
+> JOIN transactions t ON u.user_id = t.user_id
+> GROUP BY u.username
+> ORDER BY total_amount DESC, u.username ASC
+> LIMIT 10;
+> '''
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', f"psql -d production_db -t -A -F',' -c \"{top_users_query}\""],
+>     capture_output=True, text=True
+> )
+>
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write('username,total_amount\n')
+>     f.write(result.stdout)
+>
+> print('Generated top_users.csv')
+> EOF
+root@4fba2045470e:/backup#

@@ -1,0 +1,27 @@
+{
+    "state_analysis": "All three reports have been generated successfully. Now I need to verify the contents of these reports to ensure they're correct, and then create the recovery completion marker file.",
+    "explanation": "Verifying the generated reports to ensure they have the correct format and content, then creating the recovery_complete.txt file.",
+    "commands": [
+        {
+            "keystrokes": "cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "cat /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "cat /backup/backup_verification.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "ls -la /backup/*.csv /backup/*.json /backup/*.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

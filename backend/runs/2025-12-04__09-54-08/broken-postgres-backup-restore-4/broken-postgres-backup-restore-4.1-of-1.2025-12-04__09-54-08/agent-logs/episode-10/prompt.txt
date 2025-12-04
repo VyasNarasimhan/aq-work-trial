@@ -1,0 +1,40 @@
+>     f.write('DATABASE STATISTICS\n')
+>     f.write('==================\n')
+>     f.write(f'Total Users: {total_users}\n')
+>     f.write(f'Active Users: {active_users}\n')
+>     f.write(f'Total Transactions: {total_transactions}\n')
+>     f.write(f'Total Amount: {total_amount:.2f}\n')
+>     f.write(f'Average per User: {avg_per_user:.2f}\n')
+>
+> print('Generated db_stats.txt')
+>
+> # Generate top users report
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c',
+>      "psql -d production_db -t -A -F',' -c 'SELECT u.username, SUM(t.amount) as total_amount FROM users u JOIN transactions t ON u.user_id = t.user_id GROUP B
+Y u.username ORDER BY total_amount DESC, u.username ASC LIMIT 10;'"],
+>     capture_output=True, text=True
+> )
+>
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write('username,total_amount\n')
+>     for line in result.stdout.strip().split('\n'):
+>         if line:
+>             parts = line.split(',')
+>             username = parts[0]
+>             amount = float(parts[1])
+>             f.write(f'{username},{amount:.2f}\n')
+>
+> print('Generated top_users.csv')
+> EOF
+root@5dedd0e6de41:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Traceback (most recent call last):
+  File "/backup/generate_reports.py", line 13, in <module>
+    active_users = lines[1]
+                   ~~~~~^^^
+IndexError: list index out of range
+root@5dedd0e6de41:/backup# cat /backup/db_stats.txt; tmux wait -S done
+cat: /backup/db_stats.txt: No such file or directory
+root@5dedd0e6de41:/backup# cat /backup/top_users.csv; tmux wait -S done
+cat: /backup/top_users.csv: No such file or directory
+root@5dedd0e6de41:/backup#

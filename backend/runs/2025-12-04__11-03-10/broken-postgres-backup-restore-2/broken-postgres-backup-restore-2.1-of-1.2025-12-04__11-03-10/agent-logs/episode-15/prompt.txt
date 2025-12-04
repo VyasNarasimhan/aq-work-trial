@@ -1,0 +1,40 @@
+ txn_count
+-----------
+       100
+(1 row)
+
+root@e12900196bff:/backup# wc -l /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /backup/backup_verification.txt /backup/recovery_complete.tx
+t /backup/valid_transactions.json; tmux wait -S done
+   31 /backup/clean_users.csv
+   11 /backup/top_users.csv
+    7 /backup/db_stats.txt
+    6 /backup/backup_verification.txt
+    1 /backup/recovery_complete.txt
+  702 /backup/valid_transactions.json
+  758 total
+root@e12900196bff:/backup# echo "=== Verifying all files end with newline ===" && for f in /backup/clean_users.csv /backup/top_users.csv /backup/db_stats.txt /b
+ackup/backup_verification.txt /backup/recovery_complete.txt /backup/valid_transactions.json; do echo -n "$f: "; tail -c 1 "$f" | od -An -tx1; done; tmux wait -S
+ done
+=== Verifying all files end with newline ===
+/backup/clean_users.csv:  0a
+/backup/top_users.csv:  0a
+/backup/db_stats.txt:  0a
+/backup/backup_verification.txt:  0a
+/backup/recovery_complete.txt:  0a
+/backup/valid_transactions.json:  0a
+root@e12900196bff:/backup# echo "=== Verifying top_users.csv has exactly 10 data rows ===" && tail -n +2 /backup/top_users.csv | wc -l; tmux wait -S done
+=== Verifying top_users.csv has exactly 10 data rows ===
+10
+root@e12900196bff:/backup# echo "=== Verifying clean_users.csv has 30 data rows ===" && tail -n +2 /backup/clean_users.csv | wc -l; tmux wait -S done
+=== Verifying clean_users.csv has 30 data rows ===
+30
+root@e12900196bff:/backup# echo "=== Final validation: All required files present ===" && ls -1 /backup/clean_users.csv /backup/valid_transactions.json /backup/
+db_stats.txt /backup/top_users.csv /backup/backup_verification.txt /backup/recovery_complete.txt; tmux wait -S done
+=== Final validation: All required files present ===
+/backup/backup_verification.txt
+/backup/clean_users.csv
+/backup/db_stats.txt
+/backup/recovery_complete.txt
+/backup/top_users.csv
+/backup/valid_transactions.json
+root@e12900196bff:/backup#

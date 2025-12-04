@@ -1,0 +1,40 @@
+> print("Importing users into database...")
+> with open('/tmp/import_users.sql', 'w') as f:
+>     f.write("COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\n")
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_users.sql"],
+>     capture_output=True, text=True
+> )
+> print(result.stdout)
+> if result.stderr:
+>     print(result.stderr)
+>
+> # Import transactions into database
+> print("Importing transactions into database...")
+> with open('/tmp/import_transactions.sql', 'w') as f:
+>     for txn in valid_transactions:
+>         f.write(f"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES ({txn['transaction_id']}, {txn['user_id']}, {txn['
+amount']}, '{txn['timestamp']}', '{txn['description']}');\n")
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', "psql -d production_db -f /tmp/import_transactions.sql"],
+>     capture_output=True, text=True
+> )
+> print(result.stdout)
+> if result.stderr:
+>     print(result.stderr)
+>
+> print("Data import complete.")
+> EOF
+root@e12900196bff:/backup# python3 clean_and_import.py; tmux wait -S done
+Cleaning users CSV...
+Valid users: 30
+Clean users CSV written.
+Cleaning transactions JSON...
+Traceback (most recent call last):
+  File "/backup/clean_and_import.py", line 59, in <module>
+    if txn.get('amount') is None or txn['amount'] <= 0:
+                                    ^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'str' and 'int'
+root@e12900196bff:/backup#

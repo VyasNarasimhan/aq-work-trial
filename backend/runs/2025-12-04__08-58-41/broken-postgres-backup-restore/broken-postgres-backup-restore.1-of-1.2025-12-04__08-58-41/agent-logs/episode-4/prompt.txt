@@ -1,0 +1,40 @@
+>
+> # Clean transactions JSON
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+> for txn in transactions:
+>     # Check for null or missing transaction_id
+>     if txn.get('transaction_id') is None:
+>         continue
+>     # Check for null, missing, or negative amount
+>     try:
+>         amount = float(txn.get('amount', -1))
+>         if amount <= 0:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>     # Check for missing timestamp
+>     if not txn.get('timestamp'):
+>         continue
+>     # Check for valid user_id (1-30)
+>     try:
+>         user_id = int(txn.get('user_id', 0))
+>         if user_id < 1 or user_id > 30:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions JSON
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f)
+>     f.write('\n')
+>
+> print(f"Valid transactions: {len(valid_transactions)} valid entries")
+> EOF
+root@2932292ad2c5:/backup# python3 /backup/clean_data.py; tmux wait -S done
+Cleaned users: 30 valid rows
+Valid transactions: 100 valid entries
+root@2932292ad2c5:/backup#

@@ -1,0 +1,27 @@
+{
+    "state_analysis": "Perfect! All files are now properly formatted with LF line endings. The database has 30 users and 100 transactions imported correctly. The clean_users.csv has 31 lines (1 header + 30 data rows), top_users.csv has 11 lines (1 header + 10 data rows), and valid_transactions.json contains 100 valid transactions. All required files are present and properly formatted.",
+    "explanation": "Let me do a final verification to ensure all requirements are met: check that the database is accessible, verify the content of all output files one more time, and confirm the task is complete.",
+    "commands": [
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c '\\dt'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT * FROM users LIMIT 3;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT * FROM transactions LIMIT 3;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "echo '=== Final Verification ===' && ls -1 /backup/*.csv /backup/*.json /backup/*.txt 2>/dev/null | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|recovery_complete)' && echo '=== All required files present ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

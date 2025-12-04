@@ -1,0 +1,40 @@
+  {
+    "transaction_id": 105,
+    "user_id": 12,
+    "amount": "invalid",
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  }
+]root@dc6ca25e21c7:/backup# cat /backup/database.sql; tmux wait -S done
+-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Note: The data will be imported from CSV and JSON files
+-- This dump only contains the schema
+root@dc6ca25e21c7:/backup# psql -U postgres -c "CREATE DATABASE production_db;"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@dc6ca25e21c7:/backup# psql -U postgres -d production_db -f /backup/database.sql; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@dc6ca25e21c7:/backup# psql -U postgres -d production_db -c "\dt"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@dc6ca25e21c7:/backup#

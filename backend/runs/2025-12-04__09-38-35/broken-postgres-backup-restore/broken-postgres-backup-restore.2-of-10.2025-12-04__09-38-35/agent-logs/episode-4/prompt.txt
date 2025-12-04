@@ -1,0 +1,40 @@
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+root@4fba2045470e:/backup# su - postgres -c "psql -d production_db -c '\d users'"; tmux wait -S done
+                           Table "public.users"
+   Column   |            Type             | Collation | Nullable | Default
+------------+-----------------------------+-----------+----------+---------
+ user_id    | integer                     |           | not null |
+ username   | character varying(100)      |           | not null |
+ email      | character varying(255)      |           | not null |
+ created_at | timestamp without time zone |           |          |
+ status     | character varying(20)       |           |          |
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (user_id)
+Referenced by:
+    TABLE "transactions" CONSTRAINT "transactions_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(user_id)
+
+root@4fba2045470e:/backup# su - postgres -c "psql -d production_db -c '\d transactions'"; tmux wait -S done
+                          Table "public.transactions"
+     Column     |            Type             | Collation | Nullable | Default
+----------------+-----------------------------+-----------+----------+---------
+ transaction_id | integer                     |           | not null |
+ user_id        | integer                     |           |          |
+ amount         | numeric(10,2)               |           |          |
+ timestamp      | timestamp without time zone |           |          |
+ description    | text                        |           |          |
+Indexes:
+    "transactions_pkey" PRIMARY KEY, btree (transaction_id)
+Foreign-key constraints:
+    "transactions_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(user_id)
+
+root@4fba2045470e:/backup# wc -l /backup/users_export.csv; tmux wait -S done
+37 /backup/users_export.csv
+root@4fba2045470e:/backup# python3 -c "import json; data=open('/backup/transactions_backup.json').read(); print(f'Total transactions: {len(json.loads(data))}')"
+; tmux wait -S done
+Total transactions: 106
+root@4fba2045470e:/backup#

@@ -1,0 +1,12 @@
+{
+    "state_analysis": "Perfect! The data has been imported successfully: 30 users and 100 transactions. Active users count is 13. Now I need to generate the required reports: db_stats.txt, top_users.csv, backup_verification.txt, and the recovery_complete.txt marker.",
+    "explanation": "I'll create scripts to generate all required reports. First, I'll generate the database statistics report with total users, active users, total transactions, sum and average amounts. Then the top users report, backup verification, and finally the completion marker.",
+    "commands": [
+        {
+            "keystrokes": "cat > /tmp/generate_reports.py << 'EOF'\nimport subprocess\nimport json\n\n# Function to run psql query\ndef run_query(query):\n    result = subprocess.run(\n        ['su', '-', 'postgres', '-c', f\"psql -d production_db -t -A -c '{query}'\"],\n        capture_output=True, text=True\n    )\n    return result.stdout.strip()\n\n# Generate db_stats.txt\ntotal_users = run_query('SELECT COUNT(*) FROM users;')\nactive_users = run_query(\"SELECT COUNT(*) FROM users WHERE status = 'active';\")\ntotal_transactions = run_query('SELECT COUNT(*) FROM transactions;')\ntotal_amount = run_query('SELECT ROUND(SUM(amount), 2) FROM transactions;')\navg_per_user = run_query('SELECT ROUND(SUM(amount) / COUNT(DISTINCT user_id), 2) FROM transactions;')\n\nwith open('/backup/db_stats.txt', 'w') as f:\n    f.write('DATABASE STATISTICS\\n')\n    f.write('==================\\n')\n    f.write(f'Total Users: {total_users}\\n')\n    f.write(f'Active Users: {active_users}\\n')\n    f.write(f'Total Transactions: {total_transactions}\\n')\n    f.write(f'Total Amount: {total_amount}\\n')\n    f.write(f'Average per User: {avg_per_user}\\n')\n\nprint('Generated db_stats.txt')\n\n# Generate top_users.csv\ntop_users_query = '''\nSELECT u.username, ROUND(SUM(t.amount), 2) as total_amount\nFROM users u\nJOIN transactions t ON u.user_id = t.user_id\nGROUP BY u.username\nORDER BY total_amount DESC, u.username ASC\nLIMIT 10;\n'''\n\nresult = subprocess.run(\n    ['su', '-', 'postgres', '-c', f\"psql -d production_db -t -A -F',' -c \\\"{top_users_query}\\\"\"],\n    capture_output=True, text=True\n)\n\nwith open('/backup/top_users.csv', 'w') as f:\n    f.write('username,total_amount\\n')\n    f.write(result.stdout)\n\nprint('Generated top_users.csv')\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

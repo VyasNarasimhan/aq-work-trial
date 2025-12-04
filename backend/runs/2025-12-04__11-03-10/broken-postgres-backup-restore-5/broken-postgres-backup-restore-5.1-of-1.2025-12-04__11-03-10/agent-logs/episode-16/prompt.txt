@@ -1,0 +1,40 @@
+-rw-r--r-- 1 root root   145 Dec  4 19:05 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 19:05 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   219 Dec  4 19:05 /backup/top_users.csv
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+-rw-r--r-- 1 root root 14573 Dec  4 19:03 /backup/valid_transactions.json
+root@bc0c6c5ec4c0:/backup# cat /backup/backup_verification.txt; tmux wait -S done
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+root@bc0c6c5ec4c0:/backup# cat /backup/recovery_complete.txt; tmux wait -S done
+RECOVERY_SUCCESSFUL
+root@bc0c6c5ec4c0:/backup# tail -5 /backup/clean_users.csv; tmux wait -S done
+26,zara_ahmed,zara_ahmed@example.com,2025-09-19 01:25:46,active
+27,alan_turing,alan_turing@example.com,2025-03-17 01:25:46,inactive
+28,betty_white,betty_white@example.com,2024-10-09 01:25:46,active
+29,clark_kent,clark_kent@example.com,2025-09-22 01:25:46,active
+30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
+root@bc0c6c5ec4c0:/backup# tail -5 /backup/valid_transactions.json; tmux wait -S done
+    "amount": 372.72,
+    "timestamp": "2025-07-05 01:25:56",
+    "description": "Subscription"
+  }
+]
+root@bc0c6c5ec4c0:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users; SELECT COUNT(*) as txn_count FROM transactions;
+'"; tmux wait -S done
+ user_count
+------------
+         30
+(1 row)
+
+ txn_count
+-----------
+       100
+(1 row)
+
+root@bc0c6c5ec4c0:/backup#

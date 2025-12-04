@@ -1,0 +1,40 @@
+> # Valid status values
+> valid_statuses = {'active', 'inactive', 'suspended'}
+>
+> # Email validation regex
+> email_pattern = re.compile(r'.+@.+')
+>
+> clean_rows = []
+>
+> with open('/backup/users_export.csv', 'r') as f:
+>     reader = csv.DictReader(f)
+>     header = reader.fieldnames
+>
+>     for row in reader:
+>         # Check if user_id exists and is not empty
+>         if not row.get('user_id') or not row['user_id'].strip():
+>             continue
+>
+>         # Check if username exists and is not empty
+>         if not row.get('username') or not row['username'].strip():
+>             continue
+>
+>         # Check if email exists and contains @
+>         if not row.get('email') or not email_pattern.match(row['email']):
+>             continue
+>
+>         # Check if status is valid
+>         if not row.get('status') or row['status'].strip() not in valid_statuses:
+>             continue
+>
+>         clean_rows.append(row)
+>
+> # Write cleaned data
+> with open('/backup/clean_users.csv', 'w', newline='') as f:
+>     writer = csv.DictWriter(f, fieldnames=header)
+>     writer.writeheader()
+>     writer.writerows(clean_rows)
+>
+> print(f'Cleaned {len(clean_rows)} valid users out of original data')
+> EOF
+root@4fba2045470e:/backup#

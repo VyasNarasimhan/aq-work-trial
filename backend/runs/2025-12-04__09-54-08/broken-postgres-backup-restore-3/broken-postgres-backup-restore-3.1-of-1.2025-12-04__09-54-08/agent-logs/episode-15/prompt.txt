@@ -1,0 +1,40 @@
+root@649ce5c0dfcd:/backup# wc -l /backup/*.csv /backup/*.txt /backup/*.json; tmux wait -S done
+   31 /backup/clean_users.csv
+   12 /backup/top_users.csv
+   37 /backup/users_export.csv
+    6 /backup/backup_verification.txt
+    7 /backup/db_stats.txt
+    1 /backup/recovery_complete.txt
+  743 /backup/transactions_backup.json
+  702 /backup/valid_transactions.json
+ 1539 total
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -t -A -F, -c \"SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount FROM users
+ u JOIN transactions t ON u.user_id = t.user_id GROUP BY u.username ORDER BY total_amount DESC, u.username ASC LIMIT 10;\"" > /tmp/top_users_data.csv; tmux wait
+ -S done
+root@649ce5c0dfcd:/backup# cat /tmp/top_users_data.csv; tmux wait -S done
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@649ce5c0dfcd:/backup# echo 'username,total_amount' > /backup/top_users.csv && cat /tmp/top_users_data.csv >> /backup/top_users.csv; tmux wait -S done
+root@649ce5c0dfcd:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@649ce5c0dfcd:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+11 /backup/top_users.csv
+root@649ce5c0dfcd:/backup#

@@ -1,0 +1,32 @@
+{
+    "state_analysis": "Data cleaning is complete. 30 valid users and 100 valid transactions have been extracted and saved to clean_users.csv and valid_transactions.json. Now I need to import this cleaned data into the PostgreSQL database.",
+    "explanation": "I'll import the cleaned user data and transaction data into the database using COPY commands and then verify the imports were successful.",
+    "commands": [
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c \\\"COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\\\"\"\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) FROM users;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "cat > /backup/import_transactions.py << 'EOF'\nimport json\nimport psycopg2\n\n# Load valid transactions\nwith open('/backup/valid_transactions.json', 'r') as f:\n    transactions = json.load(f)\n\n# Connect to database\nconn = psycopg2.connect(\n    dbname='production_db',\n    user='postgres',\n    host='/var/run/postgresql'\n)\ncur = conn.cursor()\n\n# Insert transactions\nfor txn in transactions:\n    cur.execute(\n        \"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)\",\n        (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn.get('description', ''))\n    )\n\nconn.commit()\nprint(f\"Imported {len(transactions)} transactions\")\n\ncur.close()\nconn.close()\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "python3 /backup/import_transactions.py\n",
+            "is_blocking": true,
+            "timeout_sec": 15
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

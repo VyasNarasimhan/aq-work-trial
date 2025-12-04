@@ -1,0 +1,37 @@
+{
+    "state_analysis": "Perfect! All verification checks pass successfully. The database restoration is complete with 30 users and 100 transactions properly imported. All required output files are present, properly formatted, and newline-terminated. Let me do one final comprehensive check to ensure everything meets the requirements.",
+    "explanation": "Performing a final comprehensive verification to confirm all requirements are met: database tables exist and are populated, all output files are present with correct content and formatting, and the recovery process is complete.",
+    "commands": [
+        {
+            "keystrokes": "echo '=== COMPREHENSIVE FINAL CHECK ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2.0
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c '\\dt'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "echo '--- Database Statistics ---' && cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "echo '--- Backup Verification ---' && cat /backup/backup_verification.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "echo '--- All Required Files Present ---' && ls -1 /backup/ | grep -E '^(clean_users\\.csv|valid_transactions\\.json|db_stats\\.txt|top_users\\.csv|backup_verification\\.txt|recovery_complete\\.txt)$'\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "echo '--- Task Summary ---' && echo 'Database: production_db created \u2713' && echo 'Tables: users (30 rows) and transactions (100 rows) \u2713' && echo 'Clean data files: clean_users.csv and valid_transactions.json \u2713' && echo 'Reports: db_stats.txt, top_users.csv, backup_verification.txt \u2713' && echo 'Recovery marker: recovery_complete.txt \u2713' && echo 'All files newline-terminated \u2713'\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": true
+}

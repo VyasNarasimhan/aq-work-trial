@@ -1,0 +1,69 @@
+['asciinema rec --stdin /logs/agent.cast', 'Enter']
+['clear', 'Enter']
+'ls -la /backup/\n'
+'head -20 /backup/database.sql\n'
+'head -20 /backup/users_export.csv\n'
+'head -20 /backup/transactions_backup.json\n'
+'cat /backup/backup_metadata.log\n'
+'service postgresql start\n'
+'cat /backup/database.sql\n'
+'psql -U postgres -c "CREATE DATABASE production_db;"\n'
+'psql -U postgres -d production_db -f /backup/database.sql\n'
+'psql -U postgres -d production_db -c "\\dt"\n'
+'su - postgres -c "psql -c \'CREATE DATABASE production_db;\'"\n'
+'su - postgres -c "psql -d production_db -f /backup/database.sql"\n'
+'su - postgres -c "psql -d production_db -c \'\\dt\'"\n'
+'wc -l /backup/users_export.csv\n'
+'cat /backup/users_export.csv\n'
+'python3 -c "import json; data = json.load(open(\'/backup/transactions_backup.json\')); print(f\'Total transactions: {len(data)}\'); print(\'First 5:\'); [print(t) for t in data[:5]]; print(\'\\nLast 5:\'); [print(t) for t in data[-5:]]"\n'
+"cat > /backup/clean_users.py << 'EOF'\nimport csv\nimport re\n\n# Valid status values\nvalid_statuses = {'active', 'inactive', 'suspended'}\n\n# Read and clean users\nwith open('/backup/users_export.csv', 'r') as infile:\n    reader = csv.DictReader(infile)\n    clean_rows = []\n    \n    for row in reader:\n        # Check for missing user_id\n        if not row.get('user_id') or row['user_id'].strip() == '':\n            continue\n        \n        # Check for empty username\n        if not row.get('username') or row['username'].strip() == '':\n            continue\n        \n        # Check for invalid email (must contain @)\n        email = row.get('email', '')\n        if not email or '@' not in email:\n            continue\n        \n        # Check for invalid status\n        status = row.get('status', '')\n        if status not in valid_statuses:\n            continue\n        \n        clean_rows.append(row)\n\n# Write cleaned data\nwith open('/backup/clean_users.csv', 'w', newline='') as outfile:\n    fieldnames = ['user_id', 'username', 'email', 'created_at', 'status']\n    writer = csv.DictWriter(outfile, fieldnames=fieldnames)\n    writer.writeheader()\n    writer.writerows(clean_rows)\n\nprint(f'Cleaned users: {len(clean_rows)} valid rows')\nEOF\n"
+'python3 /backup/clean_users.py\n'
+'head -5 /backup/clean_users.csv\n'
+'su - postgres -c "psql -d production_db -c \\"COPY users FROM \'/backup/clean_users.csv\' WITH (FORMAT csv, HEADER true);\\""\n'
+'su - postgres -c "psql -d production_db -c \'SELECT COUNT(*) FROM users;\'"\n'
+"cat > /backup/clean_transactions.py << 'EOF'\nimport json\n\n# Read transactions\nwith open('/backup/transactions_backup.json', 'r') as f:\n    transactions = json.load(f)\n\nvalid_transactions = []\n\nfor txn in transactions:\n    # Check for null transaction_id\n    if txn.get('transaction_id') is None:\n        continue\n    \n    # Check for null or invalid user_id (must be 1-30)\n    user_id = txn.get('user_id')\n    if user_id is None or not isinstance(user_id, int) or user_id < 1 or user_id > 30:\n        continue\n    \n    # Check for null, negative, or invalid amount\n    amount = txn.get('amount')\n    if amount is None:\n        continue\n    \n    # Handle string amounts or non-numeric\n    try:\n        amount_val = float(amount)\n        if amount_val <= 0:\n            continue\n    except (ValueError, TypeError):\n        continue\n    \n    # Check for missing timestamp\n    if txn.get('timestamp') is None or txn.get('timestamp') == '':\n        continue\n    \n    valid_transactions.append(txn)\n\n# Write valid transactions\nwith open('/backup/valid_transactions.json', 'w') as f:\n    json.dump(valid_transactions, f, indent=2)\n    f.write('\\n')\n\nprint(f'Valid transactions: {len(valid_transactions)} out of {len(transactions)}')\nEOF\n"
+'python3 /backup/clean_transactions.py\n'
+'cat > /backup/import_transactions.py << \'EOF\'\nimport json\nimport psycopg2\n\n# Read valid transactions\nwith open(\'/backup/valid_transactions.json\', \'r\') as f:\n    transactions = json.load(f)\n\n# Connect to database\nconn = psycopg2.connect(\n    dbname=\'production_db\',\n    user=\'postgres\',\n    host=\'/var/run/postgresql\'\n)\ncur = conn.cursor()\n\n# Insert transactions\nfor txn in transactions:\n    cur.execute(\n        "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",\n        (txn[\'transaction_id\'], txn[\'user_id\'], txn[\'amount\'], txn[\'timestamp\'], txn[\'description\'])\n    )\n\nconn.commit()\nprint(f\'Imported {len(transactions)} transactions\')\n\ncur.close()\nconn.close()\nEOF\n'
+'python3 /backup/import_transactions.py\n'
+'su - postgres -c "psql -d production_db -c \'SELECT COUNT(*) FROM transactions;\'"\n'
+"cat > /backup/json_to_csv.py << 'EOF'\nimport json\nimport csv\n\n# Read valid transactions\nwith open('/backup/valid_transactions.json', 'r') as f:\n    transactions = json.load(f)\n\n# Write to CSV\nwith open('/backup/transactions_import.csv', 'w', newline='') as f:\n    fieldnames = ['transaction_id', 'user_id', 'amount', 'timestamp', 'description']\n    writer = csv.DictWriter(f, fieldnames=fieldnames)\n    writer.writeheader()\n    writer.writerows(transactions)\n\nprint(f'Converted {len(transactions)} transactions to CSV')\nEOF\n"
+'python3 /backup/json_to_csv.py\n'
+'su - postgres -c "psql -d production_db -c \\"COPY transactions FROM \'/backup/transactions_import.csv\' WITH (FORMAT csv, HEADER true);\\""\n'
+'su - postgres -c "psql -d production_db -c \'SELECT COUNT(*) FROM transactions;\'"\n'
+'cat > /backup/generate_stats.py << \'EOF\'\nimport subprocess\n\ndef run_query(query):\n    result = subprocess.run(\n        [\'su\', \'-\', \'postgres\', \'-c\', f"psql -d production_db -t -A -c \\"{query}\\""],\n        capture_output=True, text=True\n    )\n    return result.stdout.strip()\n\n# Get statistics\ntotal_users = run_query(\'SELECT COUNT(*) FROM users;\')\nactive_users = run_query("SELECT COUNT(*) FROM users WHERE status = \'active\';")\ntotal_transactions = run_query(\'SELECT COUNT(*) FROM transactions;\')\ntotal_amount = run_query(\'SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;\')\navg_per_user = run_query(\'SELECT ROUND((SUM(amount) / COUNT(DISTINCT user_id))::numeric, 2) FROM transactions;\')\n\n# Write report\nwith open(\'/backup/db_stats.txt\', \'w\') as f:\n    f.write(\'DATABASE STATISTICS\\n\')\n    f.write(\'==================\\n\')\n    f.write(f\'Total Users: {total_users}\\n\')\n    f.write(f\'Active Users: {active_users}\\n\')\n    f.write(f\'Total Transactions: {total_transactions}\\n\')\n    f.write(f\'Total Amount: {total_amount}\\n\')\n    f.write(f\'Average per User: {avg_per_user}\\n\')\n\nprint(\'Database statistics report generated\')\nEOF\n'
+'python3 /backup/generate_stats.py\n'
+'cat /backup/db_stats.txt\n'
+'cat > /backup/generate_top_users.py << \'EOF\'\nimport subprocess\nimport csv\n\n# Query for top 10 users by transaction amount\nquery = """\nSELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount\nFROM users u\nJOIN transactions t ON u.user_id = t.user_id\nGROUP BY u.username\nORDER BY total_amount DESC, u.username ASC\nLIMIT 10;\n"""\n\nresult = subprocess.run(\n    [\'su\', \'-\', \'postgres\', \'-c\', f\'psql -d production_db -t -A -F"," -c "{query}"\'],\n    capture_output=True, text=True\n)\n\nlines = result.stdout.strip().split(\'\\n\')\n\n# Write to CSV\nwith open(\'/backup/top_users.csv\', \'w\', newline=\'\') as f:\n    writer = csv.writer(f)\n    writer.writerow([\'username\', \'total_amount\'])\n    for line in lines:\n        if line:\n            writer.writerow(line.split(\',\'))\n\nprint(f\'Top users report generated with {len(lines)} users\')\nEOF\n'
+'python3 /backup/generate_top_users.py\n'
+'cat /backup/top_users.csv\n'
+"cat > /backup/generate_verification.py << 'EOF'\nimport re\n\n# Read the log file\nwith open('/backup/backup_metadata.log', 'r') as f:\n    log_content = f.read()\n\n# Extract information\nbackup_date = None\ntables_backed_up = None\ntotal_rows = None\nintegrity_check = None\n\nfor line in log_content.split('\\n'):\n    if 'Backup timestamp:' in line:\n        backup_date = line.split('Backup timestamp:')[1].strip()\n    elif 'Total tables backed up:' in line:\n        tables_backed_up = line.split('Total tables backed up:')[1].strip()\n    elif 'Total rows backed up:' in line:\n        total_rows = line.split('Total rows backed up:')[1].strip()\n    elif 'Integrity check:' in line:\n        integrity_check = line.split('Integrity check:')[1].strip()\n\n# Write report\nwith open('/backup/backup_verification.txt', 'w') as f:\n    f.write('BACKUP VERIFICATION\\n')\n    f.write('===================\\n')\n    f.write(f'Backup Date: {backup_date}\\n')\n    f.write(f'Tables Backed Up: {tables_backed_up}\\n')\n    f.write(f'Total Rows: {total_rows}\\n')\n    f.write(f'Integrity Check: {integrity_check}\\n')\n\nprint('Backup verification report generated')\nEOF\n"
+'python3 /backup/generate_verification.py\n'
+'cat /backup/backup_verification.txt\n'
+"echo 'RECOVERY_SUCCESSFUL' > /backup/recovery_complete.txt\n"
+"ls -la /backup/*.txt /backup/*.csv /backup/*.json | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|recovery_complete)'\n"
+"echo '=== Verifying file formats ==='\n"
+'tail -c 1 /backup/clean_users.csv | od -An -tx1\n'
+'tail -c 1 /backup/valid_transactions.json | od -An -tx1\n'
+'tail -c 1 /backup/db_stats.txt | od -An -tx1\n'
+'tail -c 1 /backup/top_users.csv | od -An -tx1\n'
+'tail -c 1 /backup/backup_verification.txt | od -An -tx1\n'
+'tail -c 1 /backup/recovery_complete.txt | od -An -tx1\n'
+"echo '=== Final Verification ==='\n"
+'su - postgres -c "psql -d production_db -c \'SELECT COUNT(*) as user_count FROM users;\'"\n'
+'su - postgres -c "psql -d production_db -c \'SELECT COUNT(*) as transaction_count FROM transactions;\'"\n'
+'wc -l /backup/clean_users.csv /backup/top_users.csv\n'
+'head -3 /backup/clean_users.csv\n'
+'head -3 /backup/top_users.csv\n'
+'python3 -c "import json; data=json.load(open(\'/backup/valid_transactions.json\')); print(f\'Valid transactions in JSON: {len(data)}\'); print(f\'Sample: {data[0]}\')"\n'
+'cat /backup/recovery_complete.txt\n'
+"echo '=== COMPREHENSIVE FINAL CHECK ==='\n"
+'su - postgres -c "psql -d production_db -c \'\\dt\'"\n'
+"echo '--- Database Statistics ---' && cat /backup/db_stats.txt\n"
+"echo '--- Backup Verification ---' && cat /backup/backup_verification.txt\n"
+"echo '--- All Required Files Present ---' && ls -1 /backup/ | grep -E '^(clean_users\\.csv|valid_transactions\\.json|db_stats\\.txt|top_users\\.csv|backup_verification\\.txt|recovery_complete\\.txt)$'\n"
+"echo '--- Task Summary ---' && echo 'Database: production_db created ✓' && echo 'Tables: users (30 rows) and transactions (100 rows) ✓' && echo 'Clean data files: clean_users.csv and valid_transactions.json ✓' && echo 'Reports: db_stats.txt, top_users.csv, backup_verification.txt ✓' && echo 'Recovery marker: recovery_complete.txt ✓' && echo 'All files newline-terminated ✓'\n"
+['asciinema rec --stdin /logs/tests.cast', 'Enter']
+['clear', 'Enter']
+['bash ', '/tests/run-tests.sh', 'Enter']
+['C-d']
+['C-d']

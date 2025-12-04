@@ -1,0 +1,47 @@
+{
+    "state_analysis": "Excellent! All required output files are present and properly newline-terminated (0a = newline). Let me verify the data integrity by checking the database contents and ensuring all requirements are met.",
+    "explanation": "Running final verification checks to ensure the database is properly populated, all data is correctly imported, and all reports contain accurate information.",
+    "commands": [
+        {
+            "keystrokes": "echo '=== Final Verification ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2.0
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as transaction_count FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "wc -l /backup/clean_users.csv /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -3 /backup/clean_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -3 /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "python3 -c \"import json; data=json.load(open('/backup/valid_transactions.json')); print(f'Valid transactions in JSON: {len(data)}'); print(f'Sample: {data[0]}')\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "cat /backup/recovery_complete.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

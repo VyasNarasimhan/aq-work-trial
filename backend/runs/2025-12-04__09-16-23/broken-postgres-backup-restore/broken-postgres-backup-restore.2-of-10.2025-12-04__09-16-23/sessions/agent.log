@@ -1,0 +1,1127 @@
+[?2004hroot@dc6ca25e21c7:/backup# asciinema rec --stdin /logs/agent.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@dc6ca25e21c7:/backup# clear
+[?2004l[H[J[3J[?2004hroot@dc6ca25e21c7:/backup# ls -la /backup/; tmux wait -S done
+[?2004ltotal 40
+drwxr-xr-x 1 root root  4096 Dec  4 16:59 [0m[01;34m.[0m
+drwxr-xr-x 1 root root  4096 Dec  4 17:19 [01;34m..[0m
+-rw-r--r-- 1 root root   945 Dec  4 16:54 backup_metadata.log
+-rw-r--r-- 1 root root   718 Dec  4 16:54 database.sql
+-rw-r--r-- 1 root root   703 Dec  4 16:54 postgresql.conf
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 users_export.csv
+[?2004hroot@dc6ca25e21c7:/backup# head -20 /backup/database.sql; tmux wait -S done
+[?2004l-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table  
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+[?2004hroot@dc6ca25e21c7:/backup# head -20 /backup/users_export.csv; tmux wait -S done
+[?2004luser_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
+11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
+12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
+13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
+14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
+15,olivia_pope,olivia_pope@example.com,2025-06-01 01:25:46,active
+16,peter_parker,peter_parker@example.com,2025-01-02 01:25:46,inactive
+17,quinn_baker,quinn_baker@example.com,2025-01-22 01:25:46,suspended
+18,rachel_green,rachel_green@example.com,2025-04-01 01:25:46,inactive
+19,steve_rogers,steve_rogers@example.com,2025-06-28 01:25:46,active
+[?2004hroot@dc6ca25e21c7:/backup# head -20 /backup/transactions_backup.json; tmux wait -S done
+[?2004l[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+[?2004hroot@dc6ca25e21c7:/backup# cat /backup/backup_metadata.log; tmux wait -S done
+[?2004l[2025-09-28 03:00:00] INFO: Starting database backup process
+[2025-09-28 03:00:01] INFO: Backup initiated by: admin
+[2025-09-28 03:00:01] INFO: Backup type: Full
+[2025-09-28 03:00:02] INFO: Connecting to database: production_db
+[2025-09-28 03:00:03] INFO: Connection successful
+[2025-09-28 03:00:05] INFO: Backing up table: users
+[2025-09-28 03:00:06] INFO: Table 'users' backed up successfully - 30 rows
+[2025-09-28 03:00:07] INFO: Backing up table: transactions
+[2025-09-28 03:00:09] INFO: Table 'transactions' backed up successfully - 100 rows
+[2025-09-28 03:00:10] INFO: Total tables backed up: 2
+[2025-09-28 03:00:10] INFO: Total rows backed up: 130
+[2025-09-28 03:00:11] INFO: Running integrity check
+[2025-09-28 03:00:12] INFO: Integrity check: PASSED
+[2025-09-28 03:00:13] INFO: Backup completed successfully
+[2025-09-28 03:00:13] INFO: Backup file: /backup/database.sql
+[2025-09-28 03:00:13] INFO: Backup timestamp: 2025-09-28 03:00:00
+[?2004hroot@dc6ca25e21c7:/backup# service postgresql start; tmux wait -S done
+[?2004l * Starting PostgreSQL 16 database server       [160G [154G[ OK ]
+[?2004hroot@dc6ca25e21c7:/backup# wc -l /backup/users_export.csv /backup/transactions_backup.json; tmux wait -S done
+[?2004l   37 /backup/users_export.csv
+  743 /backup/transactions_backup.json
+  780 total
+[?2004hroot@dc6ca25e21c7:/backup# cat /backup/users_export.csv; tmux wait -S done
+[?2004luser_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
+11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
+12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
+13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
+14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
+15,olivia_pope,olivia_pope@example.com,2025-06-01 01:25:46,active
+16,peter_parker,peter_parker@example.com,2025-01-02 01:25:46,inactive
+17,quinn_baker,quinn_baker@example.com,2025-01-22 01:25:46,suspended
+18,rachel_green,rachel_green@example.com,2025-04-01 01:25:46,inactive
+19,steve_rogers,steve_rogers@example.com,2025-06-28 01:25:46,active
+20,tony_stark,tony_stark@example.com,2025-07-18 01:25:46,suspended
+21,uma_thurman,uma_thurman@example.com,2025-01-13 01:25:46,active
+22,victor_von,victor_von@example.com,2024-10-17 01:25:46,active
+23,wade_wilson,wade_wilson@example.com,2025-04-24 01:25:46,suspended
+24,xavier_prof,xavier_prof@example.com,2025-09-27 01:25:46,inactive
+25,yara_greyjoy,yara_greyjoy@example.com,2025-06-21 01:25:46,active
+26,zara_ahmed,zara_ahmed@example.com,2025-09-19 01:25:46,active
+27,alan_turing,alan_turing@example.com,2025-03-17 01:25:46,inactive
+28,betty_white,betty_white@example.com,2024-10-09 01:25:46,active
+29,clark_kent,clark_kent@example.com,2025-09-22 01:25:46,active
+30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
+,bad_user1,bad1@example.com,2024-01-01 10:00:00,active
+31,bad_user2,bademail.com,2024-01-01 10:00:00,active
+32,,bad3@example.com,2024-01-01 10:00:00,active
+33,bad_user4,bad4@example.com,2024-01-01 10:00:00,deleted
+34,bad_user5,,2024-01-01 10:00:00,active
+,,noemail,2024-01-01 10:00:00,invalid
+[?2004hroot@dc6ca25e21c7:/backup# cat /backup/transactions_backup.json; tmux wait -S done
+[?2004l[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 4,
+    "user_id": 10,
+    "amount": 757.37,
+    "timestamp": "2025-09-03 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 5,
+    "user_id": 9,
+    "amount": 366.3,
+    "timestamp": "2025-09-21 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 6,
+    "user_id": 6,
+    "amount": 540.38,
+    "timestamp": "2025-06-18 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 7,
+    "user_id": 1,
+    "amount": 450.03,
+    "timestamp": "2025-05-07 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 8,
+    "user_id": 12,
+    "amount": 875.23,
+    "timestamp": "2025-05-22 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 9,
+    "user_id": 22,
+    "amount": 89.57,
+    "timestamp": "2025-09-30 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 10,
+    "user_id": 23,
+    "amount": 715.22,
+    "timestamp": "2025-09-01 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 11,
+    "user_id": 3,
+    "amount": 554.6,
+    "timestamp": "2025-06-01 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 12,
+    "user_id": 4,
+    "amount": 596.38,
+    "timestamp": "2025-07-19 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 13,
+    "user_id": 22,
+    "amount": 922.1,
+    "timestamp": "2025-09-07 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 14,
+    "user_id": 6,
+    "amount": 881.41,
+    "timestamp": "2025-04-19 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 15,
+    "user_id": 10,
+    "amount": 429.26,
+    "timestamp": "2025-05-09 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 16,
+    "user_id": 23,
+    "amount": 965.98,
+    "timestamp": "2025-05-12 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 17,
+    "user_id": 1,
+    "amount": 974.97,
+    "timestamp": "2025-06-12 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 18,
+    "user_id": 26,
+    "amount": 213.36,
+    "timestamp": "2025-09-02 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 19,
+    "user_id": 7,
+    "amount": 317.1,
+    "timestamp": "2025-04-21 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 20,
+    "user_id": 19,
+    "amount": 671.88,
+    "timestamp": "2025-04-15 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 21,
+    "user_id": 22,
+    "amount": 533.07,
+    "timestamp": "2025-08-18 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 22,
+    "user_id": 9,
+    "amount": 513.68,
+    "timestamp": "2025-09-15 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 23,
+    "user_id": 1,
+    "amount": 634.99,
+    "timestamp": "2025-08-16 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 24,
+    "user_id": 11,
+    "amount": 611.58,
+    "timestamp": "2025-09-25 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 25,
+    "user_id": 14,
+    "amount": 430.56,
+    "timestamp": "2025-08-03 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 26,
+    "user_id": 26,
+    "amount": 252.95,
+    "timestamp": "2025-06-09 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 27,
+    "user_id": 15,
+    "amount": 426.67,
+    "timestamp": "2025-04-27 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 28,
+    "user_id": 20,
+    "amount": 934.18,
+    "timestamp": "2025-07-15 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 29,
+    "user_id": 1,
+    "amount": 672.93,
+    "timestamp": "2025-08-19 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 30,
+    "user_id": 26,
+    "amount": 963.54,
+    "timestamp": "2025-06-08 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 31,
+    "user_id": 2,
+    "amount": 142.48,
+    "timestamp": "2025-06-29 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 32,
+    "user_id": 3,
+    "amount": 967.95,
+    "timestamp": "2025-08-03 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 33,
+    "user_id": 14,
+    "amount": 636.2,
+    "timestamp": "2025-07-12 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 34,
+    "user_id": 11,
+    "amount": 207.14,
+    "timestamp": "2025-05-14 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 35,
+    "user_id": 24,
+    "amount": 842.26,
+    "timestamp": "2025-05-06 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 36,
+    "user_id": 19,
+    "amount": 146.05,
+    "timestamp": "2025-05-22 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 37,
+    "user_id": 29,
+    "amount": 937.42,
+    "timestamp": "2025-08-23 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 38,
+    "user_id": 10,
+    "amount": 433.44,
+    "timestamp": "2025-07-17 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 39,
+    "user_id": 22,
+    "amount": 698.58,
+    "timestamp": "2025-07-05 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 40,
+    "user_id": 24,
+    "amount": 571.19,
+    "timestamp": "2025-09-02 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 41,
+    "user_id": 18,
+    "amount": 161.8,
+    "timestamp": "2025-08-08 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 42,
+    "user_id": 14,
+    "amount": 92.43,
+    "timestamp": "2025-08-01 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 43,
+    "user_id": 13,
+    "amount": 402.84,
+    "timestamp": "2025-09-22 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 44,
+    "user_id": 14,
+    "amount": 773.87,
+    "timestamp": "2025-09-28 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 45,
+    "user_id": 16,
+    "amount": 768.53,
+    "timestamp": "2025-04-09 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 46,
+    "user_id": 22,
+    "amount": 511.78,
+    "timestamp": "2025-09-16 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 47,
+    "user_id": 27,
+    "amount": 265.3,
+    "timestamp": "2025-09-22 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 48,
+    "user_id": 29,
+    "amount": 164.35,
+    "timestamp": "2025-04-23 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 49,
+    "user_id": 6,
+    "amount": 231.22,
+    "timestamp": "2025-06-05 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 50,
+    "user_id": 7,
+    "amount": 429.88,
+    "timestamp": "2025-09-16 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 51,
+    "user_id": 21,
+    "amount": 345.49,
+    "timestamp": "2025-09-11 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 52,
+    "user_id": 24,
+    "amount": 892.01,
+    "timestamp": "2025-06-17 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 53,
+    "user_id": 30,
+    "amount": 196.84,
+    "timestamp": "2025-06-30 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 54,
+    "user_id": 20,
+    "amount": 77.84,
+    "timestamp": "2025-08-15 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 55,
+    "user_id": 30,
+    "amount": 774.32,
+    "timestamp": "2025-07-15 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 56,
+    "user_id": 26,
+    "amount": 514.54,
+    "timestamp": "2025-05-29 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 57,
+    "user_id": 5,
+    "amount": 478.52,
+    "timestamp": "2025-04-15 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 58,
+    "user_id": 17,
+    "amount": 412.44,
+    "timestamp": "2025-06-26 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 59,
+    "user_id": 26,
+    "amount": 340.49,
+    "timestamp": "2025-09-05 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 60,
+    "user_id": 20,
+    "amount": 253.61,
+    "timestamp": "2025-07-15 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 61,
+    "user_id": 2,
+    "amount": 780.9,
+    "timestamp": "2025-06-06 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 62,
+    "user_id": 28,
+    "amount": 944.77,
+    "timestamp": "2025-04-10 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 63,
+    "user_id": 6,
+    "amount": 240.91,
+    "timestamp": "2025-04-20 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 64,
+    "user_id": 29,
+    "amount": 308.69,
+    "timestamp": "2025-04-28 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 65,
+    "user_id": 26,
+    "amount": 18.72,
+    "timestamp": "2025-06-30 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 66,
+    "user_id": 1,
+    "amount": 949.95,
+    "timestamp": "2025-09-10 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 67,
+    "user_id": 3,
+    "amount": 797.62,
+    "timestamp": "2025-09-14 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 68,
+    "user_id": 26,
+    "amount": 667.64,
+    "timestamp": "2025-07-03 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 69,
+    "user_id": 3,
+    "amount": 205.15,
+    "timestamp": "2025-07-31 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 70,
+    "user_id": 18,
+    "amount": 115.81,
+    "timestamp": "2025-05-14 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 71,
+    "user_id": 25,
+    "amount": 296.04,
+    "timestamp": "2025-06-02 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 72,
+    "user_id": 9,
+    "amount": 610.6,
+    "timestamp": "2025-06-19 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 73,
+    "user_id": 18,
+    "amount": 239.31,
+    "timestamp": "2025-09-05 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 74,
+    "user_id": 24,
+    "amount": 685.05,
+    "timestamp": "2025-07-03 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 75,
+    "user_id": 8,
+    "amount": 425.5,
+    "timestamp": "2025-07-02 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 76,
+    "user_id": 28,
+    "amount": 832.01,
+    "timestamp": "2025-04-11 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 77,
+    "user_id": 17,
+    "amount": 566.98,
+    "timestamp": "2025-09-29 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 78,
+    "user_id": 20,
+    "amount": 184.88,
+    "timestamp": "2025-09-12 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 79,
+    "user_id": 22,
+    "amount": 696.11,
+    "timestamp": "2025-08-24 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 80,
+    "user_id": 25,
+    "amount": 743.48,
+    "timestamp": "2025-06-17 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 81,
+    "user_id": 30,
+    "amount": 846.9,
+    "timestamp": "2025-06-23 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 82,
+    "user_id": 30,
+    "amount": 704.56,
+    "timestamp": "2025-04-30 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 83,
+    "user_id": 14,
+    "amount": 383.59,
+    "timestamp": "2025-05-30 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 84,
+    "user_id": 7,
+    "amount": 871.13,
+    "timestamp": "2025-04-15 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 85,
+    "user_id": 20,
+    "amount": 991.49,
+    "timestamp": "2025-05-19 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 86,
+    "user_id": 30,
+    "amount": 460.58,
+    "timestamp": "2025-06-30 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 87,
+    "user_id": 23,
+    "amount": 997.75,
+    "timestamp": "2025-06-30 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 88,
+    "user_id": 27,
+    "amount": 791.22,
+    "timestamp": "2025-07-04 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 89,
+    "user_id": 26,
+    "amount": 437.89,
+    "timestamp": "2025-07-29 01:25:56",
+    "description": "Refund"
+  },
+  {
+    "transaction_id": 90,
+    "user_id": 26,
+    "amount": 399.33,
+    "timestamp": "2025-06-29 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 91,
+    "user_id": 15,
+    "amount": 946.07,
+    "timestamp": "2025-06-26 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 92,
+    "user_id": 30,
+    "amount": 242.29,
+    "timestamp": "2025-08-11 01:25:56",
+    "description": "Deposit"
+  },
+  {
+    "transaction_id": 93,
+    "user_id": 8,
+    "amount": 304.08,
+    "timestamp": "2025-05-03 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 94,
+    "user_id": 29,
+    "amount": 823.02,
+    "timestamp": "2025-07-30 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 95,
+    "user_id": 21,
+    "amount": 658.52,
+    "timestamp": "2025-04-07 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 96,
+    "user_id": 14,
+    "amount": 392.55,
+    "timestamp": "2025-07-09 01:25:56",
+    "description": "Withdrawal"
+  },
+  {
+    "transaction_id": 97,
+    "user_id": 20,
+    "amount": 195.0,
+    "timestamp": "2025-08-26 01:25:56",
+    "description": "Transfer"
+  },
+  {
+    "transaction_id": 98,
+    "user_id": 13,
+    "amount": 544.03,
+    "timestamp": "2025-08-12 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 99,
+    "user_id": 26,
+    "amount": 591.71,
+    "timestamp": "2025-08-12 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 100,
+    "user_id": 2,
+    "amount": 372.72,
+    "timestamp": "2025-07-05 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": null,
+    "user_id": 5,
+    "amount": 100.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 101,
+    "user_id": 10,
+    "amount": -50.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 102,
+    "user_id": 15,
+    "amount": 200.0,
+    "timestamp": null,
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 103,
+    "user_id": 999,
+    "amount": 150.0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 104,
+    "user_id": 8,
+    "amount": 0,
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  },
+  {
+    "transaction_id": 105,
+    "user_id": 12,
+    "amount": "invalid",
+    "timestamp": "2024-01-01 10:00:00",
+    "description": "Invalid"
+  }
+][?2004hroot@dc6ca25e21c7:/backup# cat /backup/database.sql; tmux wait -S done
+[?2004l-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table  
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Note: The data will be imported from CSV and JSON files
+-- This dump only contains the schema
+[?2004hroot@dc6ca25e21c7:/backup# psql -U postgres -c "CREATE DATABASE production_db;"; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@dc6ca25e21c7:/backup# psql -U postgres -d production_db -f /backup/database.sql; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@dc6ca25e21c7:/backup# psql -U postgres -d production_db -c "\dt"; tmux wait -S done
+[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -c 'CREATE DATABASE production_db;'"; tmux wait -S done
+[?2004lCREATE DATABASE
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -f /backup/database.sql"; tmux wait -S done
+[?2004lCREATE TABLE
+CREATE TABLE
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -c '\dt'"; tmux wait -S done
+[?2004l            List of relations
+ Schema |     Name     | Type  |  Owner   
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+[?2004hroot@dc6ca25e21c7:/backup# cat > /backup/clean_users.py << 'EOF'
+[?2004l[?2004h> import csv
+[?2004l[?2004h> import re
+[?2004l[?2004h> 
+[?2004l[?2004h> # Valid status values
+[?2004l[?2004h> valid_statuses = {'active', 'inactive', 'suspended'}
+[?2004l[?2004h> 
+[?2004l[?2004h> # Email regex pattern
+[?2004l[?2004h> email_pattern = re.compile(r'^[^@]+@[^@]+$')
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/backup/users_export.csv', 'r') as infile, open('/backup/clean_users.csv', 'w', newline='') as outfile:
+[?2004l[?2004h>     reader = csv.DictReader(infile)
+[?2004l[?2004h>     writer = csv.DictWriter(outfile, fieldnames=['user_id', 'username', 'email', 'created_at', 'status'])
+[?2004l[?2004h>     writer.writeheader()
+[?2004l[?2004h>     
+[?2004l[?2004h>     for row in reader:
+[?2004l[?2004h>         # Check if user_id is missing or empty
+[?2004l[?2004h>         if not row.get('user_id') or row['user_id'].strip() == '':
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check if username is empty
+[?2004l[?2004h>         if not row.get('username') or row['username'].strip() == '':
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check if email is valid (must contain @)
+[?2004l[?2004h>         if not row.get('email') or not email_pattern.match(row['email']):
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Check if status is valid
+[?2004l[?2004h>         if not row.get('status') or row['status'] not in valid_statuses:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Write valid row
+[?2004l[?2004h>         writer.writerow(row)
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# python3 /backup/clean_users.py; tmux wait -S done
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+[?2004l31 /backup/clean_users.csv
+[?2004hroot@dc6ca25e21c7:/backup# head -5 /backup/clean_users.csv; tmux wait -S done
+[?2004luser_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -c \"COPY users FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+[?2004lCOPY 30
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+[?2004l count 
+-------
+    30
+(1 row)
+
+[?2004hroot@dc6ca25e21c7:/backup# cat > /backup/clean_transactions.py << 'EOF'
+[?2004l[?2004h> import json
+[?2004l[?2004h> 
+[?2004l[?2004h> # Read the transactions file
+[?2004l[?2004h> with open('/backup/transactions_backup.json', 'r') as f:
+[?2004l[?2004h>     transactions = json.load(f)
+[?2004l[?2004h> 
+[?2004l[?2004h> valid_transactions = []
+[?2004l[?2004h> 
+[?2004l[?2004h> for trans in transactions:
+[?2004l[?2004h>     # Check if transaction_id is null or missing
+[?2004l[?2004h>     if trans.get('transaction_id') is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check if user_id is valid (1-30)
+[?2004l[?2004h>     user_id = trans.get('user_id')
+[?2004l[?2004h>     if user_id is None or user_id < 1 or user_id > 30:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check if amount is valid (positive number)
+[?2004l[?2004h>     amount = trans.get('amount')
+[?2004l[?2004h>     if amount is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check if amount is a valid number and positive
+[?2004l[?2004h>     try:
+[?2004l[?2004h>         amount_float = float(amount)
+[?2004l[?2004h>         if amount_float <= 0:
+[?2004l[?2004h>             continue
+[?2004l[?2004h>     except (ValueError, TypeError):
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check if timestamp is not null
+[?2004l[?2004h>     if trans.get('timestamp') is None:
+[?2004l[?2004h>         continue
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Add to valid transactions
+[?2004l[?2004h>     valid_transactions.append(trans)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write to output file
+[?2004l[?2004h> with open('/backup/valid_transactions.json', 'w') as f:
+[?2004l[?2004h>     json.dump(valid_transactions, f, indent=2)
+[?2004l[?2004h>     f.write('\n')
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# python3 /backup/clean_transactions.py; tmux wait -S done
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# head -20 /backup/valid_transactions.json; tmux wait -S done
+[?2004l[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+[?2004hroot@dc6ca25e21c7:/backup# tail -20 /backup/valid_transactions.json; tmux wait -S done
+[?2004l    "user_id": 13,
+    "amount": 544.03,
+    "timestamp": "2025-08-12 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 99,
+    "user_id": 26,
+    "amount": 591.71,
+    "timestamp": "2025-08-12 01:25:56",
+    "description": "Purchase"
+  },
+  {
+    "transaction_id": 100,
+    "user_id": 2,
+    "amount": 372.72,
+    "timestamp": "2025-07-05 01:25:56",
+    "description": "Subscription"
+  }
+]
+[?2004hroot@dc6ca25e21c7:/backup# cat > /backup/import_transactions.py << 'EOF'
+[?2004l[?2004h> import json
+[?2004l[?2004h> import psycopg2
+[?2004l[?2004h> 
+[?2004l[?2004h> # Connect to database
+[?2004l[?2004h> conn = psycopg2.connect(
+[?2004l[?2004h>     dbname='production_db',
+[?2004l[?2004h>     user='postgres',
+[?2004l[?2004h>     host='/var/run/postgresql'
+[?2004l[?2004h> )
+[?2004l[?2004h> cur = conn.cursor()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Read valid transactions
+[?2004l[?2004h> with open('/backup/valid_transactions.json', 'r') as f:
+[?2004l[?2004h>     transactions = json.load(f)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Insert transactions
+[?2004l[?2004h> for trans in transactions:
+[?2004l[?2004h>     cur.execute(
+[?2004l[?2004h>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+[?2004l[?2004h>         (trans['transaction_id'], trans['user_id'], trans['amount'], trans['timestamp'], trans['description'])
+[?2004l[?2004h>     )
+[?2004l[?2004h> 
+[?2004l[?2004h> conn.commit()
+[?2004l[?2004h> cur.close()
+[?2004l[?2004h> conn.close()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Imported {len(transactions)} transactions")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# python3 /backup/import_transactions.py; tmux wait -S done
+[?2004lTraceback (most recent call last):
+  File "/backup/import_transactions.py", line 2, in <module>
+    import psycopg2
+ModuleNotFoundError: No module named 'psycopg2'
+[?2004hroot@dc6ca25e21c7:/backup# cat > /backup/json_to_csv.py << 'EOF'
+[?2004l[?2004h> import json
+[?2004l[?2004h> import csv
+[?2004l[?2004h> 
+[?2004l[?2004h> # Read valid transactions
+[?2004l[?2004h> with open('/backup/valid_transactions.json', 'r') as f:
+[?2004l[?2004h>     transactions = json.load(f)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write to CSV
+[?2004l[?2004h> with open('/backup/transactions.csv', 'w', newline='') as f:
+[?2004l[?2004h>     writer = csv.DictWriter(f, fieldnames=['transaction_id', 'user_id', 'amount', 'timestamp', 'description'])
+[?2004l[?2004h>     writer.writeheader()
+[?2004l[?2004h>     for trans in transactions:
+[?2004l[?2004h>         writer.writerow(trans)
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Converted {len(transactions)} transactions to CSV")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@dc6ca25e21c7:/backup# python3 /backup/json_to_csv.py; tmux wait -S done
+[?2004lConverted 100 transactions to CSV
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -c \"COPY transactions FROM '/backup/transactions.csv' WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+[?2004lCOPY 100
+[?2004hroot@dc6ca25e21c7:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+[?2004l count 
+-------
+   100
+(1 row)
+
+[?2004hroot@dc6ca25e21c7:/backup# 

@@ -1,0 +1,40 @@
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (7, 1, 450.03, '2025-05-07 01:25:56', 'Refund');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (8, 12, 875.23, '2025-05-22 01:25:56', 'Payment');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (9, 22, 89.57, '2025-09-30 01:25:56', 'Deposit');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (10, 23, 715.22, '2025-09-01 01:25:56', 'Payment');
+root@649ce5c0dfcd:/backup# tail -10 /tmp/import_transactions.sql; tmux wait -S done
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (91, 15, 946.07, '2025-06-26 01:25:56', 'Deposit');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (92, 30, 242.29, '2025-08-11 01:25:56', 'Deposit');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (93, 8, 304.08, '2025-05-03 01:25:56', 'Purchase');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (94, 29, 823.02, '2025-07-30 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (95, 21, 658.52, '2025-04-07 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (96, 14, 392.55, '2025-07-09 01:25:56', 'Withdrawal');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (97, 20, 195.0, '2025-08-26 01:25:56', 'Transfer');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (98, 13, 544.03, '2025-08-12 01:25:56', 'Subscription');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (99, 26, 591.71, '2025-08-12 01:25:56', 'Purchase');
+INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (100, 2, 372.72, '2025-07-05 01:25:56', 'Subscription');root@649ce5c0d
+fcd:/backup# python3 << 'EOF'
+> import json
+>
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> with open('/tmp/import_transactions.sql', 'w') as f:
+>     for txn in transactions:
+>         desc = txn['description'].replace("'", "''")
+>         sql = f"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES ({txn['transaction_id']}, {txn['user_id']}, {txn['am
+ount']}, '{txn['timestamp']}', '{desc}');\n"
+>         f.write(sql)
+> print(f"Generated SQL for {len(transactions)} transactions")
+> EOF
+Generated SQL for 100 transactions
+root@649ce5c0dfcd:/backup# wc -l /tmp/import_transactions.sql; tmux wait -S done
+100 /tmp/import_transactions.sql
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -f /tmp/import_transactions.sql" > /tmp/import_output.txt 2>&1; tmux wait -S done
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+   100
+(1 row)
+
+root@649ce5c0dfcd:/backup#

@@ -1,0 +1,22 @@
+{
+    "state_analysis": "Excellent! The top_users.csv has 11 lines (1 header + 10 data rows) which is correct. The data matches the database query results perfectly. All files are properly newline-terminated. Let me do a final comprehensive verification to ensure all requirements are met.",
+    "explanation": "I'll perform a final verification to ensure all tasks are complete: check database accessibility, verify all required files exist with correct content, and confirm the recovery process is fully complete.",
+    "commands": [
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) as users FROM users; SELECT COUNT(*) as transactions FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "ls -1 /backup/ | grep -E '(clean_users.csv|valid_transactions.json|db_stats.txt|top_users.csv|backup_verification.txt|recovery_complete.txt)'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo 'All tasks completed successfully!'\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        }
+    ],
+    "is_task_complete": true
+}

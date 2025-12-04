@@ -1,0 +1,40 @@
+> for user in valid_users:
+>     cur.execute(
+>         "INSERT INTO users (user_id, username, email, created_at, status) VALUES (%s, %s, %s, %s, %s)",
+>         (user['user_id'], user['username'], user['email'], user['created_at'], user['status'])
+>     )
+>
+> print(f'Imported {len(valid_users)} users into database')
+>
+> # Import transactions
+> for txn in valid_transactions:
+>     cur.execute(
+>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+>         (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn.get('description', ''))
+>     )
+>
+> print(f'Imported {len(valid_transactions)} transactions into database')
+>
+> conn.commit()
+> cur.close()
+> conn.close()
+>
+> print('Data cleaning and import completed successfully')
+> EOF
+root@2b0e848428bd:/backup# python3 /tmp/clean_and_import.py; tmux wait -S done
+Traceback (most recent call last):
+  File "/tmp/clean_and_import.py", line 4, in <module>
+    import psycopg2
+ModuleNotFoundError: No module named 'psycopg2'
+root@2b0e848428bd:/backup# ls -la /backup/*.csv /backup/*.json; tmux wait -S done
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+root@2b0e848428bd:/backup# head -5 /backup/clean_users.csv; tmux wait -S done
+head: cannot open '/backup/clean_users.csv' for reading: No such file or directory
+root@2b0e848428bd:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+wc: /backup/clean_users.csv: No such file or directory
+root@2b0e848428bd:/backup# psql -U postgres -d production_db -c 'SELECT COUNT(*) FROM users;'; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@2b0e848428bd:/backup# psql -U postgres -d production_db -c 'SELECT COUNT(*) FROM transactions;'; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@2b0e848428bd:/backup#

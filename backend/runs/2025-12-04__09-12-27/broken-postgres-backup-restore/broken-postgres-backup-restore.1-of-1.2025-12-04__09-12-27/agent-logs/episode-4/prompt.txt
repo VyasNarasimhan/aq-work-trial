@@ -1,0 +1,40 @@
+>             status = row.get('status', '').strip()
+>             created_at = row.get('created_at', '').strip()
+>
+>             # Validate row
+>             if not user_id:  # Missing user_id
+>                 continue
+>             if not username:  # Empty username
+>                 continue
+>             if not email or not email_pattern.match(email):  # Invalid email
+>                 continue
+>             if status not in valid_statuses:  # Invalid status
+>                 continue
+>
+>             # Write valid row
+>             writer.writerow({
+>                 'user_id': user_id,
+>                 'username': username,
+>                 'email': email,
+>                 'created_at': created_at,
+>                 'status': status
+>             })
+>         except Exception as e:
+>             # Skip malformed rows
+>             continue
+> EOF
+root@f65ac99d5418:/backup# python3 /backup/clean_users.py; tmux wait -S done
+root@f65ac99d5418:/backup# head -10 /backup/clean_users.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+root@f65ac99d5418:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+31 /backup/clean_users.csv
+root@f65ac99d5418:/backup#

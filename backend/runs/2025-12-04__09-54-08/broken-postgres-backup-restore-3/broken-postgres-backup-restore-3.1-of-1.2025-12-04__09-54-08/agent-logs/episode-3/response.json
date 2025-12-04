@@ -1,0 +1,17 @@
+{
+    "state_analysis": "The transactions_backup.json file contains 106 transactions total. I can see valid transactions with proper structure. Now I need to create Python scripts to: 1) Clean users CSV (remove invalid rows), 2) Clean transactions JSON (remove null/invalid entries), and 3) Import both into the database.",
+    "explanation": "I'll create a comprehensive Python script to clean the users CSV file, removing rows with missing user_ids, invalid emails, empty usernames, or invalid status values, then import to database.",
+    "commands": [
+        {
+            "keystrokes": "cat > clean_and_import_users.py << 'EOF'\nimport csv\nimport re\nimport psycopg2\n\n# Valid status values\nVALID_STATUSES = {'active', 'inactive', 'suspended'}\n\ndef is_valid_email(email):\n    \"\"\"Check if email contains @\"\"\"\n    return email and '@' in email\n\ndef clean_users():\n    \"\"\"Clean users_export.csv and return valid rows\"\"\"\n    valid_rows = []\n    \n    with open('/backup/users_export.csv', 'r') as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            # Check for missing user_id\n            if not row.get('user_id') or row['user_id'].strip() == '':\n                continue\n            \n            # Check for empty username\n            if not row.get('username') or row['username'].strip() == '':\n                continue\n            \n            # Check for invalid email (must contain @)\n            if not is_valid_email(row.get('email', '')):\n                continue\n            \n            # Check for invalid status\n            if row.get('status', '').strip().lower() not in VALID_STATUSES:\n                continue\n            \n            valid_rows.append(row)\n    \n    return valid_rows\n\ndef write_clean_csv(rows):\n    \"\"\"Write cleaned data to clean_users.csv\"\"\"\n    with open('/backup/clean_users.csv', 'w', newline='') as f:\n        if rows:\n            writer = csv.DictWriter(f, fieldnames=['user_id', 'username', 'email', 'created_at', 'status'])\n            writer.writeheader()\n            writer.writerows(rows)\n\ndef import_to_db(rows):\n    \"\"\"Import cleaned users to database\"\"\"\n    conn = psycopg2.connect(\n        dbname='production_db',\n        user='postgres',\n        host='localhost'\n    )\n    cur = conn.cursor()\n    \n    for row in rows:\n        cur.execute(\n            \"INSERT INTO users (user_id, username, email, created_at, status) VALUES (%s, %s, %s, %s, %s)\",\n            (row['user_id'], row['username'], row['email'], row['created_at'], row['status'])\n        )\n    \n    conn.commit()\n    cur.close()\n    conn.close()\n\nif __name__ == '__main__':\n    print(\"Cleaning users data...\")\n    valid_rows = clean_users()\n    print(f\"Valid rows: {len(valid_rows)}\")\n    \n    print(\"Writing clean_users.csv...\")\n    write_clean_csv(valid_rows)\n    \n    print(\"Importing to database...\")\n    import_to_db(valid_rows)\n    \n    print(\"Done!\")\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "python3 clean_and_import_users.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        }
+    ],
+    "is_task_complete": false
+}

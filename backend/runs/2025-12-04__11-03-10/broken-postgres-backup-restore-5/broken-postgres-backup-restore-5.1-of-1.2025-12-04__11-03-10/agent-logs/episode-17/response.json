@@ -1,0 +1,37 @@
+{
+    "state_analysis": "Perfect! All files are properly newline-terminated (0x0a = newline). The database has been successfully restored with 30 users and 100 transactions. All required output files have been created with proper formatting. Let me do a final check to ensure all requirements are met.",
+    "explanation": "Perform a final comprehensive check to verify all requirements have been met: database restoration, data cleaning, report generation, and file creation.",
+    "commands": [
+        {
+            "keystrokes": "echo '=== FINAL REQUIREMENTS CHECK ===' && echo ''\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "echo '1. Database and Tables:' && su - postgres -c \"psql -d production_db -c 'SELECT tablename FROM pg_tables WHERE schemaname = '\"'\"'public'\"'\"';'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '2. Files Created:' && ls -1 /backup/*.txt /backup/clean_users.csv /backup/top_users.csv /backup/valid_transactions.json 2>/dev/null | xargs -n1 basename\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '3. Sample Data Check - Top Users (first 3):' && head -4 /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '4. Database Stats:' && cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '5. Recovery Status:' && cat /backup/recovery_complete.txt && echo 'All tasks completed successfully!'\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

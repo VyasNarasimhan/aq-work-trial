@@ -1,0 +1,22 @@
+{
+    "state_analysis": "Perfect! The database statistics report has been generated successfully. Now I need to create the top_users.csv report by querying the database to find the top 10 users by total transaction amount.",
+    "explanation": "Generating the top_users.csv report by querying the database to join users and transactions, calculate totals per user, and output the top 10.",
+    "commands": [
+        {
+            "keystrokes": "cat > /backup/generate_top_users.py << 'EOF'\nimport subprocess\nimport csv\n\n# Query for top 10 users by transaction amount\nquery = \"\"\"\nSELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount\nFROM users u\nJOIN transactions t ON u.user_id = t.user_id\nGROUP BY u.username\nORDER BY total_amount DESC, u.username ASC\nLIMIT 10;\n\"\"\"\n\nresult = subprocess.run(\n    ['su', '-', 'postgres', '-c', f'psql -d production_db -t -A -F\",\" -c \"{query}\"'],\n    capture_output=True, text=True\n)\n\nlines = result.stdout.strip().split('\\n')\n\n# Write to CSV\nwith open('/backup/top_users.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerow(['username', 'total_amount'])\n    for line in lines:\n        if line:\n            writer.writerow(line.split(','))\n\nprint(f'Top users report generated with {len(lines)} users')\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "python3 /backup/generate_top_users.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10.0
+        },
+        {
+            "keystrokes": "cat /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

@@ -1,0 +1,40 @@
+>
+> # Clean transactions JSON
+> print("Cleaning transactions JSON...")
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+> for txn in transactions:
+>     # Check transaction_id is not null
+>     if txn.get('transaction_id') is None:
+>         continue
+>     # Check amount is valid (positive number)
+>     try:
+>         amount = float(txn.get('amount', 0))
+>         if amount <= 0:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>     # Check timestamp is not null
+>     if not txn.get('timestamp'):
+>         continue
+>     # Check user_id is in valid range (1-30)
+>     try:
+>         user_id = int(txn.get('user_id', 0))
+>         if user_id < 1 or user_id > 30:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>     valid_transactions.append(txn)
+>
+> # Write cleaned transactions to JSON
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f)
+>     f.write('\n')
+>
+> print(f"Cleaned transactions: {len(valid_transactions)} valid records")
+>
+> print("Data cleaning complete!")
+> EOF
+root@74009b1efc62:/backup#

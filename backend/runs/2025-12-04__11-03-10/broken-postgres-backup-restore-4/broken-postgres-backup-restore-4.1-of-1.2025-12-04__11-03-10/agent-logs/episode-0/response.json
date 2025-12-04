@@ -1,0 +1,32 @@
+{
+    "state_analysis": "The terminal is at the /backup directory. I need to start by exploring the available backup files and understanding their structure, then proceed with the database restoration and data cleaning tasks.",
+    "explanation": "First, I'll list the files in /backup to see what we're working with, then examine each file to understand its structure and identify any corruption issues. After that, I'll start PostgreSQL and begin the restoration process.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/database.sql\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/users_export.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "head -20 /backup/transactions_backup.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "cat /backup/backup_metadata.log\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

@@ -1,0 +1,40 @@
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+root@4fba2045470e:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+31 /backup/clean_users.csv
+root@4fba2045470e:/backup# cat > /tmp/clean_transactions.py << 'EOF'
+> import json
+>
+> # Load transactions
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+>
+> for tx in transactions:
+>     # Check transaction_id is not null
+>     if tx.get('transaction_id') is None:
+>         continue
+>
+>     # Check amount is not null and is positive
+>     if tx.get('amount') is None or tx['amount'] <= 0:
+>         continue
+>
+>     # Check timestamp exists
+>     if not tx.get('timestamp'):
+>         continue
+>
+>     # Check user_id is valid (1-30)
+>     if tx.get('user_id') is None or tx['user_id'] < 1 or tx['user_id'] > 30:
+>         continue
+>
+>     valid_transactions.append(tx)
+>
+> # Write valid transactions
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+>
+> print(f'Cleaned {len(valid_transactions)} valid transactions out of {len(transactions)} total')
+> EOF
+root@4fba2045470e:/backup#

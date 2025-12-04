@@ -1,0 +1,17 @@
+{
+    "state_analysis": "Great! The data has been successfully cleaned and imported. Users and transactions are now in the database. Now I need to: 1) Generate database statistics report, 2) Create top users report, 3) Create backup verification report, and 4) Create the recovery completion marker.",
+    "explanation": "I'll verify the data was imported correctly, then create scripts to generate all the required reports: db_stats.txt, top_users.csv, and backup_verification.txt.",
+    "commands": [
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) FROM users;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "su - postgres -c \"psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

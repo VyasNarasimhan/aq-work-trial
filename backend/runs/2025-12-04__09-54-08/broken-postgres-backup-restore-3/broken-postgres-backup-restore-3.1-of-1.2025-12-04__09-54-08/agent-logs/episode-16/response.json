@@ -1,0 +1,22 @@
+{
+    "state_analysis": "Excellent! All required files are present and properly formatted. Let me do one final check to ensure all files are newline-terminated and verify the exact content format of each report.",
+    "explanation": "Final verification to ensure all files end with newlines and contain the correct data format as specified in the requirements.",
+    "commands": [
+        {
+            "keystrokes": "echo '=== Checking newline termination ===' && for f in clean_users.csv valid_transactions.json db_stats.txt top_users.csv backup_verification.txt recovery_complete.txt; do echo -n \"$f: \"; tail -c 1 /backup/$f | od -An -tx1; done\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Final content verification ===' && echo 'db_stats.txt:' && cat /backup/db_stats.txt && echo '' && echo 'backup_verification.txt:' && cat /backup/backup_verification.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== Final summary ===' && echo 'Users in DB:' && su - postgres -c \"psql -d production_db -t -c 'SELECT COUNT(*) FROM users;'\" && echo 'Transactions in DB:' && su - postgres -c \"psql -d production_db -t -c 'SELECT COUNT(*) FROM transactions;'\" && echo 'Files created:' && ls -1 /backup/ | grep -E '(clean_users.csv|valid_transactions.json|db_stats.txt|top_users.csv|backup_verification.txt|recovery_complete.txt)$' | wc -l\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

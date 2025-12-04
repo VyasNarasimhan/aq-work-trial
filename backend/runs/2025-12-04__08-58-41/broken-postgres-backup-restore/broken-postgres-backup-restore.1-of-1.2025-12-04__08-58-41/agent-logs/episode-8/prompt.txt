@@ -1,0 +1,40 @@
+root@2932292ad2c5:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+    30
+(1 row)
+
+root@2932292ad2c5:/backup# cat > /backup/import_transactions.py << 'EOF'
+> import json
+> import psycopg2
+>
+> # Load valid transactions
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> # Connect to database
+> conn = psycopg2.connect(
+>     dbname='production_db',
+>     user='postgres',
+>     host='/var/run/postgresql'
+> )
+> cur = conn.cursor()
+>
+> # Insert transactions
+> for txn in transactions:
+>     cur.execute(
+>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+>         (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn['description'])
+>     )
+>
+> conn.commit()
+> print(f"Imported {len(transactions)} transactions")
+> cur.close()
+> conn.close()
+> EOF
+root@2932292ad2c5:/backup# su - postgres -c "cd /backup && python3 import_transactions.py"; tmux wait -S done
+Traceback (most recent call last):
+  File "/backup/import_transactions.py", line 2, in <module>
+    import psycopg2
+ModuleNotFoundError: No module named 'psycopg2'
+root@2932292ad2c5:/backup#

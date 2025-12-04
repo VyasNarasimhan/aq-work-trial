@@ -1,0 +1,52 @@
+{
+    "state_analysis": "All reports have been generated successfully! Now I need to verify that all the required output files are created correctly and have the proper format.",
+    "explanation": "I'll verify all the generated files to ensure they meet the requirements: clean_users.csv, valid_transactions.json, db_stats.txt, top_users.csv, backup_verification.txt, and recovery_complete.txt.",
+    "commands": [
+        {
+            "keystrokes": "ls -la /backup/*.csv /backup/*.json /backup/*.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== clean_users.csv ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "head -5 /backup/clean_users.csv && echo '...' && wc -l /backup/clean_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== valid_transactions.json ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "head -20 /backup/valid_transactions.json\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== db_stats.txt ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "cat /backup/db_stats.txt\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "echo '=== top_users.csv ==='\n",
+            "is_blocking": true,
+            "timeout_sec": 2
+        },
+        {
+            "keystrokes": "cat /backup/top_users.csv\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        }
+    ],
+    "is_task_complete": false
+}

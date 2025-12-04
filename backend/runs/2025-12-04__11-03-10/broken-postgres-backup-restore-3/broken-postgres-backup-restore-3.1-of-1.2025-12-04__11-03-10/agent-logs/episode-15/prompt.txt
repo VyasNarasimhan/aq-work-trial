@@ -1,0 +1,40 @@
+0000000   R   E   C   O   V   E   R   Y   _   S   U   C   C   E   S   S
+0000020   F   U   L  \n
+0000024
+root@2b0e848428bd:/backup# dos2unix /backup/clean_users.csv 2>/dev/null || sed -i 's/\r$//' /backup/clean_users.csv; tmux wait -S done
+root@2b0e848428bd:/backup# tail -c 20 /backup/clean_users.csv | od -c; tmux wait -S done
+0000000   -   2   2       0   1   :   2   5   :   4   6   ,   a   c   t
+0000020   i   v   e  \n
+0000024
+root@2b0e848428bd:/backup# echo '=== Final Verification Summary ==='; tmux wait -S done
+=== Final Verification Summary ===
+root@2b0e848428bd:/backup# echo 'Database: production_db' && su - postgres -c "psql -l | grep production_db"; tmux wait -S done
+Database: production_db
+ production_db | postgres | UTF8     | libc            | C.UTF-8 | C.UTF-8 |            |           |
+root@2b0e848428bd:/backup# echo 'Tables:' && su - postgres -c "psql -d production_db -c '\\dt'"; tmux wait -S done
+Tables:
+            List of relations
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+root@2b0e848428bd:/backup# echo 'Row counts:' && su - postgres -c "psql -d production_db -c 'SELECT (SELECT COUNT(*) FROM users) as users, (SELECT COUNT(*) FROM
+ transactions) as transactions;'"; tmux wait -S done
+Row counts:
+ users | transactions
+-------+--------------
+    30 |          100
+(1 row)
+
+root@2b0e848428bd:/backup# echo 'All required files:' && ls -1 /backup/*.csv /backup/*.json /backup/*.txt | grep -E '(clean_users|valid_transactions|db_stats|to
+p_users|backup_verification|recovery_complete)'; tmux wait -S done
+All required files:
+/backup/backup_verification.txt
+/backup/clean_users.csv
+/backup/db_stats.txt
+/backup/recovery_complete.txt
+/backup/top_users.csv
+/backup/valid_transactions.json
+root@2b0e848428bd:/backup#

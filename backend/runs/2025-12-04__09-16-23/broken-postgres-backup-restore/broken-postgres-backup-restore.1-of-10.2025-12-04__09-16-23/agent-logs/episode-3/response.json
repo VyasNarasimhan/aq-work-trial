@@ -1,0 +1,32 @@
+{
+    "state_analysis": "The data cleaning was successful. I have 30 cleaned users in clean_users.csv and 100 valid transactions in valid_transactions.json. Now I need to import this data into the PostgreSQL database and then generate all the required reports.",
+    "explanation": "I'll now import the cleaned CSV data into the users table and the JSON data into the transactions table, then generate all required reports: db_stats.txt, top_users.csv, backup_verification.txt, and the recovery_complete.txt marker.",
+    "commands": [
+        {
+            "keystrokes": "psql -U postgres -d production_db -c \"COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);\"\n",
+            "is_blocking": true,
+            "timeout_sec": 10.0
+        },
+        {
+            "keystrokes": "cat > /tmp/import_transactions.py << 'EOF'\nimport json\nimport psycopg2\n\n# Load transactions\nwith open('/backup/valid_transactions.json', 'r') as f:\n    transactions = json.load(f)\n\n# Connect to database\nconn = psycopg2.connect(\n    dbname='production_db',\n    user='postgres',\n    host='localhost'\n)\ncur = conn.cursor()\n\n# Insert transactions\nfor txn in transactions:\n    cur.execute(\n        \"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)\",\n        (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn['description'])\n    )\n\nconn.commit()\ncur.close()\nconn.close()\n\nprint(f\"Imported {len(transactions)} transactions\")\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "python3 /tmp/import_transactions.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10.0
+        },
+        {
+            "keystrokes": "psql -U postgres -d production_db -c \"SELECT COUNT(*) as total_users FROM users;\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        },
+        {
+            "keystrokes": "psql -U postgres -d production_db -c \"SELECT COUNT(*) as total_transactions FROM transactions;\"\n",
+            "is_blocking": true,
+            "timeout_sec": 5.0
+        }
+    ],
+    "is_task_complete": false
+}

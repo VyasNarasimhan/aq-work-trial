@@ -1,0 +1,17 @@
+{
+    "state_analysis": "Database and tables are successfully created. The users table has columns: user_id (PK), username, email, created_at, status. The transactions table has: transaction_id (PK), user_id (FK), amount, timestamp, description. Now I need to clean the data files and import them.",
+    "explanation": "I'll create a Python script to clean the users CSV file by removing invalid rows (missing user_ids, invalid emails, empty usernames, invalid status values), then clean the transactions JSON file by removing invalid entries.",
+    "commands": [
+        {
+            "keystrokes": "cat > /backup/clean_data.py << 'EOF'\nimport csv\nimport json\nimport re\n\n# Clean users CSV\nprint(\"Cleaning users data...\")\nvalid_users = []\nvalid_statuses = {'active', 'inactive', 'suspended'}\nemail_pattern = re.compile(r'.+@.+')\n\nwith open('/backup/users_export.csv', 'r') as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        # Check if user_id exists and is not empty\n        if not row.get('user_id') or not row['user_id'].strip():\n            continue\n        # Check if username is not empty\n        if not row.get('username') or not row['username'].strip():\n            continue\n        # Check if email is valid (contains @)\n        if not row.get('email') or not email_pattern.match(row['email']):\n            continue\n        # Check if status is valid\n        if not row.get('status') or row['status'].strip() not in valid_statuses:\n            continue\n        valid_users.append(row)\n\nprint(f\"Valid users: {len(valid_users)}\")\n\n# Write cleaned users to CSV\nwith open('/backup/clean_users.csv', 'w', newline='') as f:\n    if valid_users:\n        writer = csv.DictWriter(f, fieldnames=['user_id', 'username', 'email', 'created_at', 'status'])\n        writer.writeheader()\n        writer.writerows(valid_users)\n\nprint(\"Users cleaned and saved to clean_users.csv\")\n\n# Clean transactions JSON\nprint(\"\\nCleaning transactions data...\")\nwith open('/backup/transactions_backup.json', 'r') as f:\n    transactions = json.load(f)\n\nvalid_transactions = []\nfor txn in transactions:\n    # Check transaction_id is not null\n    if txn.get('transaction_id') is None:\n        continue\n    # Check amount is not null and is positive\n    if txn.get('amount') is None or txn['amount'] <= 0:\n        continue\n    # Check timestamp exists\n    if not txn.get('timestamp'):\n        continue\n    # Check user_id is valid (1-30)\n    if txn.get('user_id') is None or txn['user_id'] < 1 or txn['user_id'] > 30:\n        continue\n    valid_transactions.append(txn)\n\nprint(f\"Valid transactions: {len(valid_transactions)}\")\n\n# Write valid transactions to JSON\nwith open('/backup/valid_transactions.json', 'w') as f:\n    json.dump(valid_transactions, f, indent=2)\n    f.write('\\n')\n\nprint(\"Transactions cleaned and saved to valid_transactions.json\")\nEOF\n",
+            "is_blocking": true,
+            "timeout_sec": 5
+        },
+        {
+            "keystrokes": "python3 /backup/clean_data.py\n",
+            "is_blocking": true,
+            "timeout_sec": 10
+        }
+    ],
+    "is_task_complete": false
+}

@@ -1,0 +1,642 @@
+root@8f19f1956b2f:/backup# ls -la /backup/; tmux wait -S done
+total 40
+drwxr-xr-x 1 root root  4096 Dec  4 16:59 .
+drwxr-xr-x 1 root root  4096 Dec  4 17:47 ..
+-rw-r--r-- 1 root root   945 Dec  4 16:54 backup_metadata.log
+-rw-r--r-- 1 root root   718 Dec  4 16:54 database.sql
+-rw-r--r-- 1 root root   703 Dec  4 16:54 postgresql.conf
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 users_export.csv
+root@8f19f1956b2f:/backup# service postgresql start; tmux wait -S done
+ * Starting PostgreSQL 16 database server                                                                                                                [ OK ]
+root@8f19f1956b2f:/backup# head -20 /backup/database.sql; tmux wait -S done
+-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+root@8f19f1956b2f:/backup# head -10 /backup/users_export.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+root@8f19f1956b2f:/backup# head -10 /backup/transactions_backup.json; tmux wait -S done
+[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+root@8f19f1956b2f:/backup# cat /backup/backup_metadata.log; tmux wait -S done
+[2025-09-28 03:00:00] INFO: Starting database backup process
+[2025-09-28 03:00:01] INFO: Backup initiated by: admin
+[2025-09-28 03:00:01] INFO: Backup type: Full
+[2025-09-28 03:00:02] INFO: Connecting to database: production_db
+[2025-09-28 03:00:03] INFO: Connection successful
+[2025-09-28 03:00:05] INFO: Backing up table: users
+[2025-09-28 03:00:06] INFO: Table 'users' backed up successfully - 30 rows
+[2025-09-28 03:00:07] INFO: Backing up table: transactions
+[2025-09-28 03:00:09] INFO: Table 'transactions' backed up successfully - 100 rows
+[2025-09-28 03:00:10] INFO: Total tables backed up: 2
+[2025-09-28 03:00:10] INFO: Total rows backed up: 130
+[2025-09-28 03:00:11] INFO: Running integrity check
+[2025-09-28 03:00:12] INFO: Integrity check: PASSED
+[2025-09-28 03:00:13] INFO: Backup completed successfully
+[2025-09-28 03:00:13] INFO: Backup file: /backup/database.sql
+[2025-09-28 03:00:13] INFO: Backup timestamp: 2025-09-28 03:00:00
+root@8f19f1956b2f:/backup# psql -U postgres -c 'CREATE DATABASE production_db;'; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@8f19f1956b2f:/backup# psql -U postgres -d production_db -f /backup/database.sql; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@8f19f1956b2f:/backup# psql -U postgres -d production_db -c '\dt'; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@8f19f1956b2f:/backup# su - postgres -c "psql -c 'CREATE DATABASE production_db;'"; tmux wait -S done
+CREATE DATABASE
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -f /backup/database.sql"; tmux wait -S done
+CREATE TABLE
+CREATE TABLE
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c '\dt'"; tmux wait -S done
+            List of relations
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+----------
+ public | transactions | table | postgres
+ public | users        | table | postgres
+(2 rows)
+
+root@8f19f1956b2f:/backup# cat > /backup/clean_users.py << 'EOF'
+> import csv
+> import re
+>
+> # Valid status values
+> valid_statuses = {'active', 'inactive', 'suspended'}
+>
+> # Email validation regex
+> email_pattern = re.compile(r'^[^@]+@[^@]+$')
+>
+> with open('/backup/users_export.csv', 'r') as infile, open('/backup/clean_users.csv', 'w', newline='') as outfile:
+>     reader = csv.DictReader(infile)
+>     writer = csv.DictWriter(outfile, fieldnames=['user_id', 'username', 'email', 'created_at', 'status'])
+>     writer.writeheader()
+>
+>     for row in reader:
+>         # Check for missing or empty user_id
+>         if not row.get('user_id', '').strip():
+>             continue
+>
+>         # Check for empty username
+>         if not row.get('username', '').strip():
+>             continue
+>
+>         # Check for invalid email (must contain @)
+>         email = row.get('email', '').strip()
+>         if not email or '@' not in email:
+>             continue
+>
+>         # Check for invalid status
+>         status = row.get('status', '').strip()
+>         if status not in valid_statuses:
+>             continue
+>
+>         # Write valid row
+>         writer.writerow({
+>             'user_id': row['user_id'].strip(),
+>             'username': row['username'].strip(),
+>             'email': email,
+>             'created_at': row.get('created_at', '').strip(),
+>             'status': status
+>         })
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/clean_users.py; tmux wait -S done
+root@8f19f1956b2f:/backup# head -15 /backup/clean_users.csv; tmux wait -S done
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
+4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
+5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
+6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
+7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
+8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
+9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
+10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
+11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
+12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
+13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
+14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
+root@8f19f1956b2f:/backup# wc -l /backup/clean_users.csv; tmux wait -S done
+31 /backup/clean_users.csv
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c \"COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv'
+WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+COPY 30
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+    30
+(1 row)
+
+root@8f19f1956b2f:/backup# cat > /backup/clean_transactions.py << 'EOF'
+> import json
+>
+> # Read the transactions backup file
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+>
+> for txn in transactions:
+>     # Check for null transaction_id
+>     if txn.get('transaction_id') is None:
+>         continue
+>
+>     # Check for null or negative amounts
+>     amount = txn.get('amount')
+>     if amount is None or amount <= 0:
+>         continue
+>
+>     # Check for missing timestamp
+>     if not txn.get('timestamp'):
+>         continue
+>
+>     # Check for invalid user_id (must be 1-30)
+>     user_id = txn.get('user_id')
+>     if user_id is None or user_id < 1 or user_id > 30:
+>         continue
+>
+>     # Transaction is valid
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions to output file
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/clean_transactions.py; tmux wait -S done
+Traceback (most recent call last):
+  File "/backup/clean_transactions.py", line 16, in <module>
+    if amount is None or amount <= 0:
+                         ^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'str' and 'int'
+root@8f19f1956b2f:/backup# wc -l /backup/valid_transactions.json; tmux wait -S done
+wc: /backup/valid_transactions.json: No such file or directory
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+    30
+(1 row)
+
+root@8f19f1956b2f:/backup# cat > /backup/clean_transactions.py << 'EOF'
+> import json
+>
+> # Read the transactions backup file
+> with open('/backup/transactions_backup.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> valid_transactions = []
+>
+> for txn in transactions:
+>     # Check for null transaction_id
+>     if txn.get('transaction_id') is None:
+>         continue
+>
+>     # Check for null or negative amounts
+>     amount = txn.get('amount')
+>     if amount is None:
+>         continue
+>
+>     # Convert amount to float if it's a string
+>     try:
+>         amount_val = float(amount)
+>         if amount_val <= 0:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     # Check for missing timestamp
+>     if not txn.get('timestamp'):
+>         continue
+>
+>     # Check for invalid user_id (must be 1-30)
+>     user_id = txn.get('user_id')
+>     if user_id is None:
+>         continue
+>
+>     try:
+>         user_id_val = int(user_id)
+>         if user_id_val < 1 or user_id_val > 30:
+>             continue
+>     except (ValueError, TypeError):
+>         continue
+>
+>     # Transaction is valid - keep original data
+>     valid_transactions.append(txn)
+>
+> # Write valid transactions to output file
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/clean_transactions.py; tmux wait -S done
+root@8f19f1956b2f:/backup# head -30 /backup/valid_transactions.json; tmux wait -S done
+[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 4,
+    "user_id": 10,
+    "amount": 757.37,
+    "timestamp": "2025-09-03 01:25:56",
+    "description": "Deposit"
+  },
+  {
+root@8f19f1956b2f:/backup# python3 -c "import json; data = json.load(open('/backup/valid_transactions.json')); print(f'Valid transactions: {len(data)}')"; tmux
+wait -S done
+Valid transactions: 100
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+    30
+(1 row)
+
+root@8f19f1956b2f:/backup# cat > /backup/import_transactions.py << 'EOF'
+> import json
+> import psycopg2
+>
+> # Connect to the database
+> conn = psycopg2.connect(
+>     dbname='production_db',
+>     user='postgres',
+>     host='/var/run/postgresql'
+> )
+> cur = conn.cursor()
+>
+> # Read valid transactions
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> # Insert transactions
+> for txn in transactions:
+>     cur.execute(
+>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+>         (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn['description'])
+>     )
+>
+> conn.commit()
+> cur.close()
+> conn.close()
+>
+> print(f"Imported {len(transactions)} transactions")
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/import_transactions.py; tmux wait -S done
+Traceback (most recent call last):
+  File "/backup/import_transactions.py", line 2, in <module>
+    import psycopg2
+ModuleNotFoundError: No module named 'psycopg2'
+root@8f19f1956b2f:/backup# cat > /backup/json_to_csv.py << 'EOF'
+> import json
+> import csv
+>
+> # Read valid transactions
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>
+> # Write to CSV
+> with open('/backup/transactions.csv', 'w', newline='') as f:
+>     writer = csv.writer(f)
+>     writer.writerow(['transaction_id', 'user_id', 'amount', 'timestamp', 'description'])
+>     for txn in transactions:
+>         writer.writerow([
+>             txn['transaction_id'],
+>             txn['user_id'],
+>             txn['amount'],
+>             txn['timestamp'],
+>             txn['description']
+>         ])
+>
+> print(f"Converted {len(transactions)} transactions to CSV")
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/json_to_csv.py; tmux wait -S done
+Converted 100 transactions to CSV
+root@8f19f1956b2f:/backup# head -10 /backup/transactions.csv; tmux wait -S done
+transaction_id,user_id,amount,timestamp,description
+1,16,46.0,2025-07-16 01:25:56,Subscription
+2,6,646.05,2025-05-02 01:25:56,Payment
+3,29,186.76,2025-07-30 01:25:56,Payment
+4,10,757.37,2025-09-03 01:25:56,Deposit
+5,9,366.3,2025-09-21 01:25:56,Refund
+6,6,540.38,2025-06-18 01:25:56,Transfer
+7,1,450.03,2025-05-07 01:25:56,Refund
+8,12,875.23,2025-05-22 01:25:56,Payment
+9,22,89.57,2025-09-30 01:25:56,Deposit
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c \"COPY transactions(transaction_id, user_id, amount, timestamp, description) FROM '/backup
+/transactions.csv' WITH (FORMAT csv, HEADER true);\""; tmux wait -S done
+COPY 100
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+   100
+(1 row)
+
+root@8f19f1956b2f:/backup# cat > /backup/generate_reports.py << 'EOF'
+> import subprocess
+> import json
+>
+> def run_query(query):
+>     result = subprocess.run(
+>         ['su', '-', 'postgres', '-c', f'psql -d production_db -t -A -c "{query}"'],
+>         capture_output=True,
+>         text=True
+>     )
+>     return result.stdout.strip()
+>
+> # Generate db_stats.txt
+> total_users = run_query('SELECT COUNT(*) FROM users;')
+> active_users = run_query("SELECT COUNT(*) FROM users WHERE status = 'active';")
+> total_transactions = run_query('SELECT COUNT(*) FROM transactions;')
+> total_amount = run_query('SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;')
+> avg_per_user = run_query('SELECT ROUND((SUM(amount) / COUNT(DISTINCT user_id))::numeric, 2) FROM transactions;')
+>
+> with open('/backup/db_stats.txt', 'w') as f:
+>     f.write('DATABASE STATISTICS\n')
+>     f.write('==================\n')
+>     f.write(f'Total Users: {total_users}\n')
+>     f.write(f'Active Users: {active_users}\n')
+>     f.write(f'Total Transactions: {total_transactions}\n')
+>     f.write(f'Total Amount: {total_amount}\n')
+>     f.write(f'Average per User: {avg_per_user}\n')
+>
+> print('Generated db_stats.txt')
+>
+> # Generate top_users.csv
+> top_users_query = '''
+> SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount
+> FROM users u
+> JOIN transactions t ON u.user_id = t.user_id
+> GROUP BY u.username
+> ORDER BY total_amount DESC, u.username ASC
+> LIMIT 10;
+> '''
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', f'psql -d production_db -c "COPY ({top_users_query.strip()}) TO STDOUT WITH CSV HEADER;"'],
+>     capture_output=True,
+>     text=True
+> )
+>
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write(result.stdout)
+>
+> print('Generated top_users.csv')
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Generated db_stats.txt
+Generated top_users.csv
+root@8f19f1956b2f:/backup# cat /backup/db_stats.txt; tmux wait -S done
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+root@8f19f1956b2f:/backup# cat /backup/top_users.csv; tmux wait -S done
+root@8f19f1956b2f:/backup# cat > /backup/backup_verification.txt << 'EOF'
+> BACKUP VERIFICATION
+> ===================
+> Backup Date: 2025-09-28 03:00:00
+> Tables Backed Up: 2
+> Total Rows: 130
+> Integrity Check: PASSED
+> EOF
+root@8f19f1956b2f:/backup# cat /backup/backup_verification.txt; tmux wait -S done
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+root@8f19f1956b2f:/backup# echo 'RECOVERY_SUCCESSFUL' > /backup/recovery_complete.txt; tmux wait -S done
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c \"COPY (SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount FROM users u J
+OIN transactions t ON u.user_id = t.user_id GROUP BY u.username ORDER BY total_amount DESC, u.username ASC LIMIT 10) TO '/backup/top_users.csv' WITH CSV HEADER;
+\""; tmux wait -S done
+ERROR:  could not open file "/backup/top_users.csv" for writing: Permission denied
+HINT:  COPY TO instructs the PostgreSQL server process to write a file. You may want a client-side facility such as psql's \copy.
+root@8f19f1956b2f:/backup# cat /backup/top_users.csv; tmux wait -S done
+root@8f19f1956b2f:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+0 /backup/top_users.csv
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c \"\\copy (SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount FROM users u
+ JOIN transactions t ON u.user_id = t.user_id GROUP BY u.username ORDER BY total_amount DESC, u.username ASC LIMIT 10) TO '/backup/top_users.csv' WITH CSV HEADE
+R\""; tmux wait -S done
+/backup/top_users.csv: Permission denied
+root@8f19f1956b2f:/backup# cat /backup/top_users.csv; tmux wait -S done
+root@8f19f1956b2f:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+0 /backup/top_users.csv
+root@8f19f1956b2f:/backup# cat > /backup/generate_top_users.py << 'EOF'
+> import subprocess
+> import csv
+>
+> # Query to get top 10 users
+> query = '''
+> SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount
+> FROM users u
+> JOIN transactions t ON u.user_id = t.user_id
+> GROUP BY u.username
+> ORDER BY total_amount DESC, u.username ASC
+> LIMIT 10;
+> '''
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', f'psql -d production_db -t -A -F"," -c "{query}"'],
+>     capture_output=True,
+>     text=True
+> )
+>
+> lines = result.stdout.strip().split('\n')
+>
+> with open('/backup/top_users.csv', 'w', newline='') as f:
+>     writer = csv.writer(f)
+>     writer.writerow(['username', 'total_amount'])
+>     for line in lines:
+>         if line.strip():
+>             parts = line.split(',')
+>             if len(parts) == 2:
+>                 writer.writerow([parts[0], parts[1]])
+>
+> print(f'Generated top_users.csv with {len(lines)} rows')
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/generate_top_users.py; tmux wait -S done
+Generated top_users.csv with 10 rows
+root@8f19f1956b2f:/backup# cat /backup/top_users.csv; tmux wait -S done
+username,total_amount
+zara_ahmed,4400.17
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@8f19f1956b2f:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+11 /backup/top_users.csv
+root@8f19f1956b2f:/backup# ls -la /backup/*.txt /backup/*.csv /backup/*.json | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|r
+ecovery_complete)'; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 17:49 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 17:48 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 17:49 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 17:49 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   230 Dec  4 17:50 /backup/top_users.csv
+-rw-r--r-- 1 root root 14573 Dec  4 17:48 /backup/valid_transactions.json
+root@8f19f1956b2f:/backup# cat /backup/recovery_complete.txt; tmux wait -S done
+RECOVERY_SUCCESSFUL
+root@8f19f1956b2f:/backup# tail -1 /backup/clean_users.csv | od -c | head -2; tmux wait -S done
+0000000   3   0   ,   d   o   n   n   a   _   n   o   b   l   e   ,   d
+0000020   o   n   n   a   _   n   o   b   l   e   @   e   x   a   m   p
+root@8f19f1956b2f:/backup# tail -1 /backup/valid_transactions.json | od -c | head -2; tmux wait -S done
+0000000   ]  \n
+0000002
+root@8f19f1956b2f:/backup# tail -1 /backup/db_stats.txt | od -c | head -2; tmux wait -S done
+0000000   A   v   e   r   a   g   e       p   e   r       U   s   e   r
+0000020   :       1   7   7   0   .   3   2  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/top_users.csv | od -c | head -2; tmux wait -S done
+0000000   c   h   a   r   l   i   e   _   b   r   o   w   n   ,   2   5
+0000020   2   5   .   3   2  \r  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/backup_verification.txt | od -c | head -2; tmux wait -S done
+0000000   I   n   t   e   g   r   i   t   y       C   h   e   c   k   :
+0000020       P   A   S   S   E   D  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/recovery_complete.txt | od -c | head -2; tmux wait -S done
+0000000   R   E   C   O   V   E   R   Y   _   S   U   C   C   E   S   S
+0000020   F   U   L  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/clean_users.csv; tmux wait -S done
+30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
+root@8f19f1956b2f:/backup# python3 -c "with open('/backup/clean_users.csv', 'a') as f: f.write('\n')" 2>/dev/null || echo ''; tmux wait -S done
+root@8f19f1956b2f:/backup# tail -1 /backup/clean_users.csv | od -c | head -2; tmux wait -S done
+0000000  \n
+0000001
+root@8f19f1956b2f:/backup# python3 -c "content = open('/backup/top_users.csv', 'rb').read(); open('/backup/top_users.csv', 'wb').write(content.replace(b'\r\n',
+b'\n'))"; tmux wait -S done
+root@8f19f1956b2f:/backup# tail -1 /backup/top_users.csv | od -c | head -2; tmux wait -S done
+0000000   c   h   a   r   l   i   e   _   b   r   o   w   n   ,   2   5
+0000020   2   5   .   3   2  \n
+root@8f19f1956b2f:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) as user_count FROM users; SELECT COUNT(*) as txn_count FROM transactions;
+'"; tmux wait -S done
+ user_count
+------------
+         30
+(1 row)
+
+ txn_count
+-----------
+       100
+(1 row)
+
+root@8f19f1956b2f:/backup# echo '=== File Verification ===' && ls -lh /backup/{clean_users.csv,valid_transactions.json,db_stats.txt,top_users.csv,backup_verific
+ation.txt,recovery_complete.txt}; tmux wait -S done
+=== File Verification ===
+-rw-r--r-- 1 root root  133 Dec  4 17:49 /backup/backup_verification.txt
+-rw-r--r-- 1 root root 2.1K Dec  4 17:50 /backup/clean_users.csv
+-rw-r--r-- 1 root root  145 Dec  4 17:49 /backup/db_stats.txt
+-rw-r--r-- 1 root root   20 Dec  4 17:49 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root  219 Dec  4 17:50 /backup/top_users.csv
+-rw-r--r-- 1 root root  15K Dec  4 17:48 /backup/valid_transactions.json
+root@8f19f1956b2f:/backup# echo '=== clean_users.csv sample ===' && head -3 /backup/clean_users.csv && echo '...' && tail -2 /backup/clean_users.csv; tmux wait
+-S done
+=== clean_users.csv sample ===
+user_id,username,email,created_at,status
+1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
+2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
+...
+30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
+
+root@8f19f1956b2f:/backup# echo '=== valid_transactions.json sample ===' && head -10 /backup/valid_transactions.json && echo '...'; tmux wait -S done
+=== valid_transactions.json sample ===
+[
+  {
+    "transaction_id": 1,
+    "user_id": 16,
+    "amount": 46.0,
+    "timestamp": "2025-07-16 01:25:56",
+    "description": "Subscription"
+  },
+  {
+    "transaction_id": 2,
+...
+root@8f19f1956b2f:/backup# echo '=== All reports ===' && cat /backup/db_stats.txt && echo '' && cat /backup/backup_verification.txt && echo '' && cat /backup/re
+covery_complete.txt; tmux wait -S done
+=== All reports ===
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+
+RECOVERY_SUCCESSFUL
+root@8f19f1956b2f:/backup# wc -l /backup/clean_users.csv /backup/top_users.csv; tmux wait -S done
+  32 /backup/clean_users.csv
+  11 /backup/top_users.csv
+  43 total
+root@8f19f1956b2f:/backup# python3 -c "import json; data=json.load(open('/backup/valid_transactions.json')); print(f'Valid transactions: {len(data)}'); print(f'
+Sample: {data[0]}')"; tmux wait -S done
+Valid transactions: 100
+Sample: {'transaction_id': 1, 'user_id': 16, 'amount': 46.0, 'timestamp': '2025-07-16 01:25:56', 'description': 'Subscription'}
+root@8f19f1956b2f:/backup# echo '=== Task Complete - All Requirements Met ===' && echo 'Database: production_db created and populated' && echo 'Users table: 30
+rows' && echo 'Transactions table: 100 rows' && echo 'All output files generated and properly formatted'; tmux wait -S done
+=== Task Complete - All Requirements Met ===
+Database: production_db created and populated
+Users table: 30 rows
+Transactions table: 100 rows
+All output files generated and properly formatted
+root@8f19f1956b2f:/backup#

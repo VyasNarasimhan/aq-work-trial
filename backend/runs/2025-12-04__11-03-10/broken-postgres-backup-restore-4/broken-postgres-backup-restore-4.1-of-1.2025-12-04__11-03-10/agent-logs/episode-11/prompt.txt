@@ -1,0 +1,40 @@
+> active_users = result.stdout.strip()
+>
+> # Get total transactions
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', "psql -d production_db -t -c 'SELECT COUNT(*) FROM transactions;'"],
+>     capture_output=True, text=True
+> )
+> total_transactions = result.stdout.strip()
+>
+> # Get total amount
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', "psql -d production_db -t -c 'SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;'"],
+>     capture_output=True, text=True
+> )
+> total_amount = result.stdout.strip()
+>
+> # Get average per user
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', "psql -d production_db -t -c 'SELECT ROUND(AVG(user_total)::numeric, 2) FROM (SELECT user_id, SUM(amount) as user_total FROM
+ transactions GROUP BY user_id) as user_totals;'"],
+>     capture_output=True, text=True
+> )
+> avg_per_user = result.stdout.strip()
+>
+> # Write db_stats.txt
+> with open('/backup/db_stats.txt', 'w') as f:
+>     f.write("DATABASE STATISTICS\n")
+>     f.write("==================\n")
+>     f.write(f"Total Users: {total_users}\n")
+>     f.write(f"Active Users: {active_users}\n")
+>     f.write(f"Total Transactions: {total_transactions}\n")
+>     f.write(f"Total Amount: {total_amount}\n")
+>     f.write(f"Average per User: {avg_per_user}\n")
+>
+> print("Database statistics generated")
+> EOF
+root@9d5ed6174de7:/backup# python3 /tmp/generate_reports.py; tmux wait -S done
+Generating database statistics...
+Database statistics generated
+root@9d5ed6174de7:/backup#

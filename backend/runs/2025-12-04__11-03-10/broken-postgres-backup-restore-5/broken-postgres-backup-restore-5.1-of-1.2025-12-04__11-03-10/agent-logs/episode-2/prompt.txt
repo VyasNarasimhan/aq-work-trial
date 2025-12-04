@@ -1,0 +1,40 @@
+    "transaction_id": 2,
+    "user_id": 6,
+    "amount": 646.05,
+    "timestamp": "2025-05-02 01:25:56",
+    "description": "Payment"
+  },
+  {
+    "transaction_id": 3,
+    "user_id": 29,
+    "amount": 186.76,
+    "timestamp": "2025-07-30 01:25:56",
+root@bc0c6c5ec4c0:/backup# service postgresql start; tmux wait -S done
+ * Starting PostgreSQL 16 database server                                                                                                                [ OK ]
+root@bc0c6c5ec4c0:/backup# cat database.sql; tmux wait -S done
+-- PostgreSQL database dump
+-- This dump contains the schema and some sample data
+-- Note: Some statements may have errors that need to be fixed
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    status VARCHAR(20)
+);
+
+-- Create transactions table
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    amount DECIMAL(10,2),
+    timestamp TIMESTAMP,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Note: The data will be imported from CSV and JSON files
+-- This dump only contains the schema
+root@bc0c6c5ec4c0:/backup#

@@ -1,0 +1,40 @@
+alice_smith,3682.87
+victor_von,3451.21
+donna_noble,3225.49
+xavier_prof,2990.51
+nick_fury,2709.20
+wade_wilson,2678.95
+tony_stark,2637.00
+frank_white,2539.97
+charlie_brown,2525.32
+root@8f19f1956b2f:/backup# wc -l /backup/top_users.csv; tmux wait -S done
+11 /backup/top_users.csv
+root@8f19f1956b2f:/backup# ls -la /backup/*.txt /backup/*.csv /backup/*.json | grep -E '(clean_users|valid_transactions|db_stats|top_users|backup_verification|r
+ecovery_complete)'; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 17:49 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 17:48 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 17:49 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 17:49 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   230 Dec  4 17:50 /backup/top_users.csv
+-rw-r--r-- 1 root root 14573 Dec  4 17:48 /backup/valid_transactions.json
+root@8f19f1956b2f:/backup# cat /backup/recovery_complete.txt; tmux wait -S done
+RECOVERY_SUCCESSFUL
+root@8f19f1956b2f:/backup# tail -1 /backup/clean_users.csv | od -c | head -2; tmux wait -S done
+0000000   3   0   ,   d   o   n   n   a   _   n   o   b   l   e   ,   d
+0000020   o   n   n   a   _   n   o   b   l   e   @   e   x   a   m   p
+root@8f19f1956b2f:/backup# tail -1 /backup/valid_transactions.json | od -c | head -2; tmux wait -S done
+0000000   ]  \n
+0000002
+root@8f19f1956b2f:/backup# tail -1 /backup/db_stats.txt | od -c | head -2; tmux wait -S done
+0000000   A   v   e   r   a   g   e       p   e   r       U   s   e   r
+0000020   :       1   7   7   0   .   3   2  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/top_users.csv | od -c | head -2; tmux wait -S done
+0000000   c   h   a   r   l   i   e   _   b   r   o   w   n   ,   2   5
+0000020   2   5   .   3   2  \r  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/backup_verification.txt | od -c | head -2; tmux wait -S done
+0000000   I   n   t   e   g   r   i   t   y       C   h   e   c   k   :
+0000020       P   A   S   S   E   D  \n
+root@8f19f1956b2f:/backup# tail -1 /backup/recovery_complete.txt | od -c | head -2; tmux wait -S done
+0000000   R   E   C   O   V   E   R   Y   _   S   U   C   C   E   S   S
+0000020   F   U   L  \n
+root@8f19f1956b2f:/backup#

@@ -274,15 +274,17 @@ class S3Client:
     def list_terminus_trial_names(self, benchmark_id: str) -> list[str]:
         """List all trial directory names for a terminus benchmark.
 
-        Trials are at: results/{benchmark_id}/run-1/task/task.X-of-N.benchmark-.../
+        tb CLI structure: results/{benchmark_id}/run-1/{task_id}/{trial_name}/
+        Each task_id folder contains one trial folder.
 
         Args:
             benchmark_id: ID of the benchmark.
 
         Returns:
-            List of trial directory names sorted by trial number.
+            List of (task_id, trial_name) tuples as "{task_id}/{trial_name}" strings,
+            sorted by trial number extracted from the trial_name.
         """
-        s3_prefix = f"results/{benchmark_id}/run-1/task/"
+        s3_prefix = f"results/{benchmark_id}/run-1/"
         trials = set()
 
         try:
@@ -291,32 +293,43 @@ class S3Client:
                 for obj in page.get("Contents", []):
                     key = obj["Key"]
                     relative = key[len(s3_prefix):]
-                    if "/" in relative:
-                        trial_name = relative.split("/")[0]
-                        if trial_name.startswith("task."):
-                            trials.add(trial_name)
+                    parts = relative.split("/")
+                    # Structure: {task_id}/{trial_name}/...
+                    # Skip files directly under run-1/ (like results.json)
+                    if len(parts) >= 3:
+                        task_id = parts[0]
+                        trial_name = parts[1]
+                        # Skip if task_id looks like a file (contains '.')
+                        if "." not in task_id or task_id.endswith("-1") or task_id.endswith("-10"):
+                            trials.add(f"{task_id}/{trial_name}")
 
-            # Sort by trial number (e.g., task.1-of-10... before task.2-of-10...)
-            def get_trial_num(name: str) -> int:
+            # Sort by trial number extracted from trial_name
+            # trial_name format: {task_id}.1-of-1.{timestamp}
+            def get_trial_num(path: str) -> int:
                 try:
-                    return int(name.split(".")[1].split("-")[0])
+                    trial_name = path.split("/")[1]
+                    # Extract number after first dot: task-name-1.1-of-1.timestamp
+                    parts = trial_name.split(".")
+                    if len(parts) >= 2:
+                        return int(parts[1].split("-")[0])
+                    return 999
                 except (IndexError, ValueError):
                     return 999
             return sorted(trials, key=get_trial_num)
         except ClientError:
             return []
 
-    def list_terminus_trial_files(self, benchmark_id: str, trial_name: str) -> list[str]:
+    def list_terminus_trial_files(self, benchmark_id: str, trial_path: str) -> list[str]:
         """List all files in a terminus trial directory.
 
         Args:
             benchmark_id: ID of the benchmark.
-            trial_name: Trial directory name (e.g., task.1-of-10.benchmark-...).
+            trial_path: Trial path as "{task_id}/{trial_name}".
 
         Returns:
             List of relative file paths within the trial directory.
         """
-        s3_prefix = f"results/{benchmark_id}/run-1/task/{trial_name}/"
+        s3_prefix = f"results/{benchmark_id}/run-1/{trial_path}/"
         files = []
 
         try:
@@ -330,18 +343,18 @@ class S3Client:
         except ClientError:
             return []
 
-    def get_terminus_trial_file(self, benchmark_id: str, trial_name: str, file_path: str) -> bytes | None:
+    def get_terminus_trial_file(self, benchmark_id: str, trial_path: str, file_path: str) -> bytes | None:
         """Get a specific file from a terminus trial.
 
         Args:
             benchmark_id: ID of the benchmark.
-            trial_name: Trial directory name.
+            trial_path: Trial path as "{task_id}/{trial_name}".
             file_path: Relative path within the trial directory.
 
         Returns:
             File contents as bytes or None if not found.
         """
-        s3_key = f"results/{benchmark_id}/run-1/task/{trial_name}/{file_path}"
+        s3_key = f"results/{benchmark_id}/run-1/{trial_path}/{file_path}"
         try:
             response = self.client.get_object(Bucket=self.bucket, Key=s3_key)
             return response["Body"].read()
@@ -350,18 +363,18 @@ class S3Client:
                 return None
             raise
 
-    def download_terminus_trial(self, benchmark_id: str, trial_name: str, local_dir: Path) -> bool:
+    def download_terminus_trial(self, benchmark_id: str, trial_path: str, local_dir: Path) -> bool:
         """Download all files for a terminus trial to local directory.
 
         Args:
             benchmark_id: ID of the benchmark.
-            trial_name: Trial directory name.
+            trial_path: Trial path as "{task_id}/{trial_name}".
             local_dir: Local directory to download to.
 
         Returns:
             True if successful, False otherwise.
         """
-        s3_prefix = f"results/{benchmark_id}/run-1/task/{trial_name}/"
+        s3_prefix = f"results/{benchmark_id}/run-1/{trial_path}/"
 
         try:
             paginator = self.client.get_paginator("list_objects_v2")

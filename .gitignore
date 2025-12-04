@@ -1,5 +1,6 @@
 terraform
 examples
+terminus-example
 
 backend/.venv/
 backend/jobs

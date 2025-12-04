@@ -1,0 +1,40 @@
+>         if txn.get('amount') is None:
+>             continue
+>
+>         try:
+>             amount = float(txn['amount'])
+>             if amount <= 0:
+>                 continue
+>         except (ValueError, TypeError):
+>             continue
+>
+>         # Check for missing timestamp
+>         if not txn.get('timestamp'):
+>             continue
+>
+>         valid_transactions.append(txn)
+>
+>     return valid_transactions
+>
+> def write_valid_json(transactions):
+>     """Write valid transactions to valid_transactions.json"""
+>     with open('/backup/valid_transactions.json', 'w') as f:
+>         json.dump(transactions, f, indent=2)
+>         f.write('\n')  # Ensure newline termination
+>
+> if __name__ == '__main__':
+>     print("Cleaning transactions data...")
+>     valid_txns = clean_transactions()
+>     print(f"Valid transactions: {len(valid_txns)}")
+>
+>     print("Writing valid_transactions.json...")
+>     write_valid_json(valid_txns)
+>
+>     print("Done!")
+> EOF
+root@649ce5c0dfcd:/backup# python3 clean_transactions.py; tmux wait -S done
+Cleaning transactions data...
+Valid transactions: 100
+Writing valid_transactions.json...
+Done!
+root@649ce5c0dfcd:/backup#

@@ -1,0 +1,40 @@
+> sql_statements = []
+> for txn in transactions:
+>     sql = f"INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES ({txn['transaction_id']}, {txn['user_id']}, {txn['amount
+']}, '{txn['timestamp']}', '{txn['description']}');"
+>     sql_statements.append(sql)
+>
+> # Write to temp SQL file
+> with open('/tmp/import_transactions.sql', 'w') as f:
+>     f.write('\n'.join(sql_statements))
+>
+> print("Executing SQL import...")
+> result = subprocess.run(
+>     ['psql', '-U', 'postgres', '-d', 'production_db', '-f', '/tmp/import_transactions.sql'],
+>     capture_output=True,
+>     text=True
+> )
+>
+> if result.returncode == 0:
+>     print("Import successful!")
+> else:
+>     print(f"Error: {result.stderr}")
+> EOF
+root@649ce5c0dfcd:/backup# python3 import_transactions.py; tmux wait -S done
+Importing 100 transactions...
+Executing SQL import...
+Error: psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+
+root@649ce5c0dfcd:/backup# psql -U postgres -d production_db -c "SELECT COUNT(*) FROM transactions;"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@649ce5c0dfcd:/backup# psql -U postgres -d production_db -c "SELECT COUNT(*) FROM users;"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -f /tmp/import_transactions.sql" 2>&1 | tail -20; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
+root@649ce5c0dfcd:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
+root@649ce5c0dfcd:/backup#

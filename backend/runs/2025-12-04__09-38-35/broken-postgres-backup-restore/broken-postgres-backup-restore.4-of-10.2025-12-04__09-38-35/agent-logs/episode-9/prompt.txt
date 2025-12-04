@@ -1,0 +1,40 @@
+> total_transactions = run_query('SELECT COUNT(*) FROM transactions;')
+> total_amount = run_query('SELECT ROUND(SUM(amount)::numeric, 2) FROM transactions;')
+> avg_per_user = run_query('SELECT ROUND((SUM(amount) / COUNT(DISTINCT user_id))::numeric, 2) FROM transactions;')
+>
+> with open('/backup/db_stats.txt', 'w') as f:
+>     f.write('DATABASE STATISTICS\n')
+>     f.write('==================\n')
+>     f.write(f'Total Users: {total_users}\n')
+>     f.write(f'Active Users: {active_users}\n')
+>     f.write(f'Total Transactions: {total_transactions}\n')
+>     f.write(f'Total Amount: {total_amount}\n')
+>     f.write(f'Average per User: {avg_per_user}\n')
+>
+> print('Generated db_stats.txt')
+>
+> # Generate top_users.csv
+> top_users_query = '''
+> SELECT u.username, ROUND(SUM(t.amount)::numeric, 2) as total_amount
+> FROM users u
+> JOIN transactions t ON u.user_id = t.user_id
+> GROUP BY u.username
+> ORDER BY total_amount DESC, u.username ASC
+> LIMIT 10;
+> '''
+>
+> result = subprocess.run(
+>     ['su', '-', 'postgres', '-c', f'psql -d production_db -c "COPY ({top_users_query.strip()}) TO STDOUT WITH CSV HEADER;"'],
+>     capture_output=True,
+>     text=True
+> )
+>
+> with open('/backup/top_users.csv', 'w') as f:
+>     f.write(result.stdout)
+>
+> print('Generated top_users.csv')
+> EOF
+root@8f19f1956b2f:/backup# python3 /backup/generate_reports.py; tmux wait -S done
+Generated db_stats.txt
+Generated top_users.csv
+root@8f19f1956b2f:/backup#

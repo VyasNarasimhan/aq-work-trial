@@ -1,0 +1,40 @@
+> # Write valid transactions
+> with open('/backup/valid_transactions.json', 'w') as f:
+>     json.dump(valid_transactions, f, indent=2)
+>     f.write('\n')
+>
+> print(f'Valid transactions: {len(valid_transactions)} valid records')
+>
+> # Connect to database and import data
+> conn = psycopg2.connect(
+>     dbname='production_db',
+>     user='postgres',
+>     host='localhost'
+> )
+> cur = conn.cursor()
+>
+> # Import users
+> for user in valid_users:
+>     cur.execute(
+>         "INSERT INTO users (user_id, username, email, created_at, status) VALUES (%s, %s, %s, %s, %s)",
+>         (user['user_id'], user['username'], user['email'], user['created_at'], user['status'])
+>     )
+>
+> print(f'Imported {len(valid_users)} users into database')
+>
+> # Import transactions
+> for txn in valid_transactions:
+>     cur.execute(
+>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+>         (txn['transaction_id'], txn['user_id'], txn['amount'], txn['timestamp'], txn.get('description', ''))
+>     )
+>
+> print(f'Imported {len(valid_transactions)} transactions into database')
+>
+> conn.commit()
+> cur.close()
+> conn.close()
+>
+> print('Data cleaning and import completed successfully')
+> EOF
+root@2b0e848428bd:/backup#

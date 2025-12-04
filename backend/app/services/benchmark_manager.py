@@ -586,6 +586,22 @@ class BenchmarkManager:
         # Harbor: Queries S3 for each run number (1 to total_runs)
         return self._get_harbor_runs(benchmark)
 
+    def _extract_run_number_from_task_id(self, task_id: str) -> int:
+        """Extract run number from task_id like 'broken-postgres-backup-restore-7' → 7.
+
+        The task_id ends with -{N} where N is the run number.
+        """
+        import re
+
+        if not task_id:
+            return 999  # Sort to end if no task_id
+
+        # Match the last number after a hyphen: "task-name-7" → 7
+        match = re.search(r'-(\d+)$', task_id)
+        if match:
+            return int(match.group(1))
+        return 999
+
     def _get_terminus_runs(self, benchmark: dict) -> list[dict]:
         """Get run information for terminus benchmark from S3.
 
@@ -615,8 +631,12 @@ class BenchmarkManager:
 
         if terminus_results and isinstance(terminus_results, list):
             # Parse each trial result from results.json
-            for idx, trial_result in enumerate(terminus_results):
-                run_number = idx + 1
+            for trial_result in terminus_results:
+                # Extract run number from task_id (e.g., "broken-postgres-backup-restore-7" → 7)
+                # The results array is NOT sorted - trials complete in arbitrary order
+                task_id = trial_result.get("task_id", "")
+                run_number = self._extract_run_number_from_task_id(task_id)
+
                 is_resolved = trial_result.get("is_resolved", False)
                 trial_name = trial_result.get("trial_name", f"task.{run_number}-of-{total_runs}")
 
@@ -642,6 +662,7 @@ class BenchmarkManager:
                     "id": trial_id,
                     "run_number": run_number,
                     "name": trial_name,
+                    "task_id": task_id,  # Store for log lookup
                     "status": "completed",
                     "passed": is_resolved,
                     "test_cases": test_cases,
@@ -654,6 +675,9 @@ class BenchmarkManager:
                     "aws_batch_status": aws_status,
                 }
                 runs.append(run_info)
+
+            # Sort runs by run_number since results.json is not in order
+            runs.sort(key=lambda r: r["run_number"])
         else:
             # No results yet - check if job is still running
             # Also try to get trial names from S3 to show progress
@@ -1088,7 +1112,7 @@ class BenchmarkManager:
     def _get_terminus_run_logs(self, benchmark: dict, run_id: str) -> dict | None:
         """Get logs for a terminus run from S3.
 
-        Terminus stores logs at run-1/task/task.X-of-10.../agent-logs/episode-N/.
+        Terminus stores logs at run-1/{task_id}/{trial_name}/agent-logs/episode-N/.
         """
         import re
         import tempfile
@@ -1105,35 +1129,56 @@ class BenchmarkManager:
             "episodes": [],
         }
 
-        # Find the run number from run_id
-        run_number = None
+        # Find the task_id for this run
+        # The run_id might be "run-N" format or a UUID
+        target_task_id = None
+
+        # Method 1: run_id is "run-N" format - derive task_id from run number
         match = re.match(r"run-(\d+)", run_id)
         if match:
             run_number = int(match.group(1))
-
-        # Also try UUID format - search in terminus results
-        if run_number is None:
+            # Need to find task_id from results.json that corresponds to this run number
             terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+            if terminus_results and isinstance(terminus_results, dict):
+                terminus_results = terminus_results.get("results", [])
             if terminus_results and isinstance(terminus_results, list):
-                for idx, result in enumerate(terminus_results):
-                    if result.get("trial_id") == run_id:
-                        run_number = idx + 1
+                for result in terminus_results:
+                    task_id = result.get("task_id", "")
+                    if self._extract_run_number_from_task_id(task_id) == run_number:
+                        target_task_id = task_id
                         break
 
-        if run_number is None:
+        # Method 2: run_id is a UUID - find the matching result and get its task_id
+        if target_task_id is None:
+            terminus_results = self.s3_client.get_terminus_results(benchmark_id)
+            if terminus_results and isinstance(terminus_results, dict):
+                terminus_results = terminus_results.get("results", [])
+            if terminus_results and isinstance(terminus_results, list):
+                for result in terminus_results:
+                    if result.get("trial_id") == run_id or result.get("id") == run_id:
+                        target_task_id = result.get("task_id")
+                        break
+
+        if target_task_id is None:
             return logs
 
-        # Get list of terminus trials to find the matching one
-        trial_names = self.s3_client.list_terminus_trial_names(benchmark_id)
-        if not trial_names or run_number > len(trial_names):
-            return logs
+        # Get list of terminus trials and find the one matching our task_id
+        # trial_paths are "{task_id}/{trial_name}" format
+        trial_paths = self.s3_client.list_terminus_trial_names(benchmark_id)
+        trial_path = None
+        for tp in trial_paths:
+            # tp is like "broken-postgres-backup-restore-7/broken-postgres-backup-restore-7.1-of-1.timestamp"
+            if tp.startswith(target_task_id + "/"):
+                trial_path = tp
+                break
 
-        trial_name = trial_names[run_number - 1]
+        if trial_path is None:
+            return logs
 
         # Download trial files to temp directory
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
-            self.s3_client.download_terminus_trial(benchmark_id, trial_name, temp_path)
+            self.s3_client.download_terminus_trial(benchmark_id, trial_path, temp_path)
 
             # Read agent logs from agent-logs/episode-N directories
             agent_logs_dir = temp_path / "agent-logs"
@@ -1161,8 +1206,9 @@ class BenchmarkManager:
                             content = response_file.read_text()
                             response_data = json.loads(content)
 
-                            analysis = response_data.get("analysis", "")
-                            plan = response_data.get("plan", "")
+                            # Terminal-Bench uses "state_analysis" and "explanation"
+                            analysis = response_data.get("state_analysis", "") or response_data.get("analysis", "")
+                            plan = response_data.get("explanation", "") or response_data.get("plan", "")
 
                             # Extract commands
                             commands_list = response_data.get("commands", [])

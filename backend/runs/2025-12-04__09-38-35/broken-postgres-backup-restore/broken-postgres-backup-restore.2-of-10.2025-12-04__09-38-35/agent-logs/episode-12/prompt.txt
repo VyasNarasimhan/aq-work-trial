@@ -1,0 +1,40 @@
+>             (row['user_id'], row['username'], row['email'], row['created_at'], row['status'])
+>         )
+>
+> print(f"Imported {cur.rowcount} users")
+>
+> # Import transactions
+> with open('/backup/valid_transactions.json', 'r') as f:
+>     transactions = json.load(f)
+>     for tx in transactions:
+>         cur.execute(
+>             "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
+>             (tx['transaction_id'], tx['user_id'], tx['amount'], tx['timestamp'], tx['description'])
+>         )
+>
+> print(f"Imported {len(transactions)} transactions")
+>
+> conn.commit()
+> cur.close()
+> conn.close()
+>
+> print("Data import completed successfully")
+> EOF
+root@4fba2045470e:/backup# su - postgres -c "cd /backup && python3 /tmp/import_data.py"; tmux wait -S done
+Traceback (most recent call last):
+  File "/tmp/import_data.py", line 1, in <module>
+    import psycopg2
+ModuleNotFoundError: No module named 'psycopg2'
+root@4fba2045470e:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
+ count
+-------
+     0
+(1 row)
+
+root@4fba2045470e:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
+ count
+-------
+     0
+(1 row)
+
+root@4fba2045470e:/backup#

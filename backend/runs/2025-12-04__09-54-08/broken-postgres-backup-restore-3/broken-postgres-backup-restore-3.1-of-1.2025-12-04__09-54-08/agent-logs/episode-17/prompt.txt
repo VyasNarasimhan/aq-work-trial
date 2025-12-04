@@ -1,0 +1,40 @@
+ification.txt recovery_complete.txt; do echo -n "$f: "; tail -c 1 /backup/$f | od -An -tx1; done; tmux wait -S done
+=== Checking newline termination ===
+clean_users.csv:  0a
+valid_transactions.json:  0a
+db_stats.txt:  0a
+top_users.csv:  0a
+backup_verification.txt:  0a
+recovery_complete.txt:  0a
+root@649ce5c0dfcd:/backup# echo '=== Final content verification ===' && echo 'db_stats.txt:' && cat /backup/db_stats.txt && echo '' && echo 'backup_verification
+.txt:' && cat /backup/backup_verification.txt; tmux wait -S done
+=== Final content verification ===
+db_stats.txt:
+DATABASE STATISTICS
+==================
+Total Users: 30
+Active Users: 13
+Total Transactions: 100
+Total Amount: 53109.46
+Average per User: 1770.32
+
+backup_verification.txt:
+BACKUP VERIFICATION
+===================
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+root@649ce5c0dfcd:/backup# echo '=== Final summary ===' && echo 'Users in DB:' && su - postgres -c "psql -d production_db -t -c 'SELECT COUNT(*) FROM users;'" &
+& echo 'Transactions in DB:' && su - postgres -c "psql -d production_db -t -c 'SELECT COUNT(*) FROM transactions;'" && echo 'Files created:' && ls -1 /backup/ |
+ grep -E '(clean_users.csv|valid_transactions.json|db_stats.txt|top_users.csv|backup_verification.txt|recovery_complete.txt)$' | wc -l; tmux wait -S done
+=== Final summary ===
+Users in DB:
+    30
+
+Transactions in DB:
+   100
+
+Files created:
+6
+root@649ce5c0dfcd:/backup#

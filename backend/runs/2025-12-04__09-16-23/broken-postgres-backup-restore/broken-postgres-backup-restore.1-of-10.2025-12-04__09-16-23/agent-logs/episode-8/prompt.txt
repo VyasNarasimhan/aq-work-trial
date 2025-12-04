@@ -1,0 +1,40 @@
+Backup Date: 2025-09-28 03:00:00
+Tables Backed Up: 2
+Total Rows: 130
+Integrity Check: PASSED
+root@fa3327fd3fc4:/backup# cat /backup/recovery_complete.txt; tmux wait -S done
+RECOVERY_SUCCESSFUL
+root@fa3327fd3fc4:/backup# ls -la /backup/*.txt /backup/*.csv /backup/*.json; tmux wait -S done
+-rw-r--r-- 1 root root   133 Dec  4 17:18 /backup/backup_verification.txt
+-rw-r--r-- 1 root root  2052 Dec  4 17:17 /backup/clean_users.csv
+-rw-r--r-- 1 root root   145 Dec  4 17:18 /backup/db_stats.txt
+-rw-r--r-- 1 root root    20 Dec  4 17:18 /backup/recovery_complete.txt
+-rw-r--r-- 1 root root   219 Dec  4 17:18 /backup/top_users.csv
+-rw-r--r-- 1 root root 15425 Dec  4 16:54 /backup/transactions_backup.json
+-rw-r--r-- 1 root root  2351 Dec  4 16:54 /backup/users_export.csv
+-rw-r--r-- 1 root root 11971 Dec  4 17:17 /backup/valid_transactions.json
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/clean_users.csv | od -c; tmux wait -S done
+0000000   2   2       0   1   :   2   5   :   4   6   ,   a   c   t   i
+0000020   v   e  \r  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/valid_transactions.json | od -c; tmux wait -S done
+0000000   "   :       "   S   u   b   s   c   r   i   p   t   i   o   n
+0000020   "   }   ]  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/db_stats.txt | od -c; tmux wait -S done
+0000000   e       p   e   r       U   s   e   r   :       1   7   7   0
+0000020   .   3   2  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/top_users.csv | od -c; tmux wait -S done
+0000000   a   r   l   i   e   _   b   r   o   w   n   ,   2   5   2   5
+0000020   .   3   2  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/backup_verification.txt | od -c; tmux wait -S done
+0000000   g   r   i   t   y       C   h   e   c   k   :       P   A   S
+0000020   S   E   D  \n
+0000024
+root@fa3327fd3fc4:/backup# tail -c 20 /backup/recovery_complete.txt | od -c; tmux wait -S done
+0000000   R   E   C   O   V   E   R   Y   _   S   U   C   C   E   S   S
+0000020   F   U   L  \n
+0000024
+root@fa3327fd3fc4:/backup#
