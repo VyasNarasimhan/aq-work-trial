@@ -7,16 +7,16 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    # Configuration
-    app.config["UPLOAD_FOLDER"] = Path(__file__).parent.parent / "uploads"
-    app.config["JOBS_DIR"] = Path(__file__).parent.parent / "jobs"
+    # Configuration - use /tmp for uploads/jobs to avoid triggering Flask reload
+    app.config["UPLOAD_FOLDER"] = Path("/tmp/aq-benchmark/uploads")
+    app.config["JOBS_DIR"] = Path("/tmp/aq-benchmark/jobs")
     app.config["DATA_DIR"] = Path(__file__).parent.parent / "data"
     app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024  # 100MB
 
     # Ensure directories exist
-    app.config["UPLOAD_FOLDER"].mkdir(exist_ok=True)
-    app.config["JOBS_DIR"].mkdir(exist_ok=True)
-    app.config["DATA_DIR"].mkdir(exist_ok=True)
+    app.config["UPLOAD_FOLDER"].mkdir(parents=True, exist_ok=True)
+    app.config["JOBS_DIR"].mkdir(parents=True, exist_ok=True)
+    app.config["DATA_DIR"].mkdir(parents=True, exist_ok=True)
 
     # Register blueprints
     from app.routes.uploads import bp as uploads_bp
