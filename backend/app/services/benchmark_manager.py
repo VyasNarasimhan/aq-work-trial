@@ -275,6 +275,7 @@ class BenchmarkManager:
         """Poll harbor job - checks run-{N}/status.json for each run."""
         import time
 
+        # Get initial job_id (won't change during polling)
         benchmark = self.benchmarks.get(benchmark_id)
         if not benchmark:
             return
@@ -282,6 +283,8 @@ class BenchmarkManager:
         job_id = benchmark.get("batch_job_id")
         if not job_id:
             return
+
+        total_runs = benchmark.get("total_runs", 10)
 
         # Poll until job completes or fails
         while True:
@@ -297,23 +300,25 @@ class BenchmarkManager:
             completed_count = 0
             passed_count = 0
 
-            for run_number in range(1, benchmark.get("total_runs", 10) + 1):
+            for run_number in range(1, total_runs + 1):
                 run_status = self.s3_client.get_run_status(benchmark_id, run_number)
                 if run_status and run_status.get("status") == "completed":
                     completed_count += 1
                     if run_status.get("passed"):
                         passed_count += 1
 
-            # Update benchmark counts
-            benchmark["completed_runs"] = completed_count
-            benchmark["passed_runs"] = passed_count
+            # Update benchmark counts - use self.benchmarks[benchmark_id] directly
+            # to avoid stale reference after _load_benchmarks() is called elsewhere
+            if benchmark_id in self.benchmarks:
+                self.benchmarks[benchmark_id]["completed_runs"] = completed_count
+                self.benchmarks[benchmark_id]["passed_runs"] = passed_count
 
             # Check if all runs are completed based on S3 data
-            total_runs = benchmark.get("total_runs", 10)
             if completed_count >= total_runs:
                 # All runs completed - mark benchmark as done
-                benchmark["status"] = "completed"
-                benchmark["finished_at"] = datetime.now().isoformat()
+                if benchmark_id in self.benchmarks:
+                    self.benchmarks[benchmark_id]["status"] = "completed"
+                    self.benchmarks[benchmark_id]["finished_at"] = datetime.now().isoformat()
                 self._save_benchmarks()
                 break
 
@@ -328,24 +333,26 @@ class BenchmarkManager:
                 completed_count = 0
                 passed_count = 0
 
-                for run_number in range(1, benchmark.get("total_runs", 10) + 1):
+                for run_number in range(1, total_runs + 1):
                     run_status = self.s3_client.get_run_status(benchmark_id, run_number)
                     if run_status:
                         completed_count += 1
                         if run_status.get("passed"):
                             passed_count += 1
 
-                benchmark["completed_runs"] = completed_count
-                benchmark["passed_runs"] = passed_count
-                benchmark["status"] = "completed"
-                benchmark["finished_at"] = datetime.now().isoformat()
+                if benchmark_id in self.benchmarks:
+                    self.benchmarks[benchmark_id]["completed_runs"] = completed_count
+                    self.benchmarks[benchmark_id]["passed_runs"] = passed_count
+                    self.benchmarks[benchmark_id]["status"] = "completed"
+                    self.benchmarks[benchmark_id]["finished_at"] = datetime.now().isoformat()
                 self._save_benchmarks()
                 break
 
             elif aws_status == "FAILED":
-                benchmark["status"] = "failed"
-                benchmark["error"] = job_status.get("statusReason", "Batch job failed")
-                benchmark["finished_at"] = datetime.now().isoformat()
+                if benchmark_id in self.benchmarks:
+                    self.benchmarks[benchmark_id]["status"] = "failed"
+                    self.benchmarks[benchmark_id]["error"] = job_status.get("statusReason", "Batch job failed")
+                    self.benchmarks[benchmark_id]["finished_at"] = datetime.now().isoformat()
                 self._save_benchmarks()
                 break
 
@@ -506,8 +513,6 @@ class BenchmarkManager:
 
     def get_benchmark(self, benchmark_id: str) -> dict | None:
         """Get benchmark status."""
-        # Reload from disk to get fresh data (handles multi-process scenarios)
-        self._load_benchmarks()
         benchmark = self.benchmarks.get(benchmark_id)
         if not benchmark:
             return None
@@ -529,9 +534,6 @@ class BenchmarkManager:
 
     def list_benchmarks(self) -> list[dict]:
         """List all benchmarks."""
-        # Reload from disk to get fresh data (handles multi-process scenarios)
-        self._load_benchmarks()
-        # Use _format_benchmark directly to avoid double-loading in get_benchmark
         return [self._format_benchmark(b) for b in self.benchmarks.values() if b]
 
     def _format_benchmark(self, benchmark: dict) -> dict:
@@ -552,8 +554,6 @@ class BenchmarkManager:
 
     def get_runs(self, benchmark_id: str) -> list[dict] | None:
         """Get all runs for a benchmark."""
-        # Reload from disk to get fresh data
-        self._load_benchmarks()
         benchmark = self.benchmarks.get(benchmark_id)
         if not benchmark:
             return None
