@@ -884,6 +884,32 @@ class BenchmarkManager:
                                     "status": status,
                                 })
 
+                        # Go test JSON format: {"Action":"pass","Test":"TestName"...}
+                        elif line.startswith("{"):
+                            try:
+                                event = json.loads(line)
+                                action = event.get("Action")
+                                test_name = event.get("Test")
+                                if test_name and action in ("pass", "fail"):
+                                    status = "passed" if action == "pass" else "failed"
+                                    test_results.append({
+                                        "name": test_name,
+                                        "status": status,
+                                    })
+                            except json.JSONDecodeError:
+                                pass
+
+                        # Formatted Go test output: ✓ PASS: TestName or ✗ FAIL: TestName
+                        elif line.startswith("✓ PASS:") or line.startswith("✗ FAIL:"):
+                            formatted_match = re.match(r'[✓✗] (PASS|FAIL): (\S+)', line)
+                            if formatted_match:
+                                status = "passed" if formatted_match.group(1) == "PASS" else "failed"
+                                test_name = formatted_match.group(2)
+                                test_results.append({
+                                    "name": test_name,
+                                    "status": status,
+                                })
+
                     return test_results
             except Exception:
                 pass
