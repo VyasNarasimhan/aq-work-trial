@@ -1328,7 +1328,8 @@ class BenchmarkManager:
                     if file_path.endswith("trial.log"):
                         logs["trial_log"] = full_path.read_text()
                     elif file_path.endswith("test-stdout.txt"):
-                        logs["test_stdout"] = full_path.read_text()
+                        raw_stdout = full_path.read_text()
+                        logs["test_stdout"] = self._format_go_test_output(raw_stdout)
                     elif file_path.endswith("test-stderr.txt"):
                         logs["test_stderr"] = full_path.read_text()
                     elif "/agent/" in file_path and file_path.endswith((".log", ".txt")):
@@ -1416,7 +1417,9 @@ class BenchmarkManager:
             stdout_file = verifier_dir / "test-stdout.txt"
             stderr_file = verifier_dir / "test-stderr.txt"
             if stdout_file.exists():
-                logs["test_stdout"] = stdout_file.read_text()
+                raw_stdout = stdout_file.read_text()
+                # Format Go test JSON output if detected
+                logs["test_stdout"] = self._format_go_test_output(raw_stdout)
             if stderr_file.exists():
                 logs["test_stderr"] = stderr_file.read_text()
 
@@ -1473,3 +1476,59 @@ class BenchmarkManager:
                     continue
 
         return episodes
+
+    def _format_go_test_output(self, raw_output: str) -> str:
+        """Parse Go test JSON output and format it for display.
+
+        Go test -json outputs one JSON object per line with test events.
+        This function extracts test results and formats them nicely.
+        """
+        lines = raw_output.split("\n")
+        tests = []
+        has_go_json = False
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+
+            # Try to parse as Go test JSON
+            if line.startswith("{"):
+                try:
+                    event = json.loads(line)
+                    action = event.get("Action")
+                    test_name = event.get("Test")
+
+                    # Only process test-level pass/fail events
+                    if test_name and action in ("pass", "fail"):
+                        has_go_json = True
+                        elapsed = event.get("Elapsed", 0) or 0
+                        tests.append({
+                            "name": test_name,
+                            "status": "PASS" if action == "pass" else "FAIL",
+                            "elapsed": elapsed,
+                        })
+                except json.JSONDecodeError:
+                    pass
+
+        # If no Go JSON detected, return original output
+        if not has_go_json:
+            return raw_output
+
+        # Format the test results nicely
+        output_lines = ["Go Test Results", "=" * 50, ""]
+
+        passed = sum(1 for t in tests if t["status"] == "PASS")
+        failed = sum(1 for t in tests if t["status"] == "FAIL")
+
+        for test in tests:
+            status_icon = "✓" if test["status"] == "PASS" else "✗"
+            output_lines.append(
+                f"{status_icon} {test['status']}: {test['name']} ({test['elapsed']:.2f}s)"
+            )
+
+        output_lines.append("")
+        output_lines.append("-" * 50)
+        output_lines.append(f"Total: {len(tests)} tests, {passed} passed, {failed} failed")
+
+        return "\n".join(output_lines)
