@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 bp = Blueprint("benchmarks", __name__, url_prefix="/api/benchmarks")
 
-# Terminus and model selection disabled for now
-VALID_HARNESSES = {"harbor"}
+# Valid harnesses and defaults
+VALID_HARNESSES = {"harbor", "terminus"}
 DEFAULT_HARNESS = "harbor"
 DEFAULT_MODEL = "openrouter/openai/gpt-5"
 
@@ -20,9 +20,12 @@ def create_benchmark():
     """Start a new benchmark from an uploaded zip."""
     data = request.json or {}
     upload_id = data.get("upload_id")
-    # Harness and model selection disabled - use defaults
-    harness = DEFAULT_HARNESS
-    model = DEFAULT_MODEL
+    harness = data.get("harness", DEFAULT_HARNESS)
+    model = data.get("model", DEFAULT_MODEL)
+
+    # Validate harness
+    if harness not in VALID_HARNESSES:
+        return jsonify({"error": f"Invalid harness: {harness}. Must be one of: {', '.join(VALID_HARNESSES)}"}), 400
 
     if not upload_id:
         return jsonify({"error": "upload_id required"}), 400

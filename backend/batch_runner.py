@@ -12,6 +12,7 @@ import asyncio
 import json
 import logging
 import os
+import signal
 import sys
 import tempfile
 import uuid
@@ -19,7 +20,24 @@ from datetime import datetime
 from pathlib import Path
 
 import boto3
+
+# Timeout for the entire job (in minutes)
+# If trials hang (e.g., on LLM API calls), this ensures the job eventually completes
+JOB_TIMEOUT_MINUTES = 120
+
 from botocore.exceptions import ClientError
+
+
+class JobTimeoutError(Exception):
+    """Raised when a job exceeds the allowed timeout."""
+    pass
+
+
+def create_timeout_handler(timeout_minutes: int):
+    """Create a signal handler that raises JobTimeoutError."""
+    def handler(signum, frame):
+        raise JobTimeoutError(f"Job timed out after {timeout_minutes} minutes")
+    return handler
 
 # Configure verbose logging
 logging.basicConfig(
@@ -958,6 +976,11 @@ def main():
             logger.warning("Terminus harness requested but task.toml found. Switching to Harbor.")
             harness = "harbor"
 
+        # Set up job timeout to prevent trials from hanging indefinitely
+        logger.info(f"Setting job timeout to {JOB_TIMEOUT_MINUTES} minutes")
+        signal.signal(signal.SIGALRM, create_timeout_handler(JOB_TIMEOUT_MINUTES))
+        signal.alarm(JOB_TIMEOUT_MINUTES * 60)
+
         if harness == "terminus":
             # Terminus: Run job and upload entire output directory to run-1/
             logger.info(f"Starting Terminus job with {n_attempts} trials, {n_concurrent_trials} concurrent")
@@ -1076,6 +1099,51 @@ def main():
             overall_status = "completed"
             logger.info(f"All trials processed. Uploaded: {len(uploaded_trials)}/{n_attempts}")
 
+    except JobTimeoutError as e:
+        logger.warning(f"Job timeout: {e}")
+
+        # Cancel the alarm since we're handling the timeout
+        signal.alarm(0)
+
+        # Upload any completed trials that weren't caught by the watcher
+        if job_dir.exists():
+            try:
+                trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()])
+                for run_number, trial_dir in enumerate(trial_dirs, start=1):
+                    if trial_dir.name not in uploaded_trials and is_trial_complete(trial_dir):
+                        logger.info(f"Uploading completed trial {run_number} after timeout")
+                        upload_single_trial(s3_client, bucket, benchmark_id, trial_dir, run_number)
+                        uploaded_trials.add(trial_dir.name)
+            except Exception as upload_error:
+                logger.error(f"Failed to upload completed trials after timeout: {upload_error}")
+
+        # Create failed status for any incomplete runs with timeout message
+        trial_dirs = sorted([d for d in job_dir.iterdir() if d.is_dir()]) if job_dir.exists() else []
+        completed_run_numbers = set()
+        for run_number, trial_dir in enumerate(trial_dirs, start=1):
+            if trial_dir.name in uploaded_trials:
+                completed_run_numbers.add(run_number)
+
+        for run_number in range(1, n_attempts + 1):
+            if run_number not in completed_run_numbers:
+                logger.warning(f"Run-{run_number} timed out, creating failed status")
+                status = {
+                    "run_id": str(uuid.uuid4()),
+                    "benchmark_id": benchmark_id,
+                    "run_number": run_number,
+                    "status": "failed",
+                    "started_at": started_at,
+                    "finished_at": datetime.now().isoformat(),
+                    "passed": False,
+                    "error": f"Trial timed out after {JOB_TIMEOUT_MINUTES} minutes",
+                }
+                upload_status_to_s3(s3_client, bucket, benchmark_id, run_number, status)
+
+        # Mark overall job as completed (not failed) since we have partial results
+        overall_status = "completed"
+        overall_error = str(e)
+        logger.info(f"Timeout handled. Uploaded: {len(uploaded_trials)}/{n_attempts} trials completed")
+
     except Exception as e:
         logger.error(f"Error running job: {e}")
         logger.exception("Full traceback:")
@@ -1096,8 +1164,9 @@ def main():
                 logger.error(f"Failed to upload partial results: {upload_error}")
 
     finally:
+        # Cancel the timeout alarm
+        signal.alarm(0)
         # Results are uploaded incrementally by the watcher
-        pass
 
     logger.info("=" * 60)
     logger.info(f"Finished at: {datetime.now().isoformat()}")

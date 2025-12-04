@@ -608,6 +608,11 @@ class BenchmarkManager:
         # Try to get terminus results.json (contains all trial results)
         terminus_results = self.s3_client.get_terminus_results(benchmark_id)
 
+        # Handle wrapped format: {"id": ..., "results": [...]}
+        # Terminal-Bench outputs this format instead of a direct array
+        if terminus_results and isinstance(terminus_results, dict):
+            terminus_results = terminus_results.get("results", [])
+
         if terminus_results and isinstance(terminus_results, list):
             # Parse each trial result from results.json
             for idx, trial_result in enumerate(terminus_results):
@@ -626,8 +631,15 @@ class BenchmarkManager:
                 passed_count = sum(1 for tc in test_cases if tc.get("status") == "passed")
                 total_count = len(test_cases)
 
+                # Handle field name differences between formats:
+                # - Terminal-Bench uses "id" instead of "trial_id"
+                # - Terminal-Bench uses "trial_started_at"/"trial_ended_at" instead of "started_at"/"finished_at"
+                trial_id = trial_result.get("trial_id") or trial_result.get("id", f"run-{run_number}")
+                started_at = trial_result.get("started_at") or trial_result.get("trial_started_at")
+                finished_at = trial_result.get("finished_at") or trial_result.get("trial_ended_at")
+
                 run_info = {
-                    "id": trial_result.get("trial_id", f"run-{run_number}"),
+                    "id": trial_id,
                     "run_number": run_number,
                     "name": trial_name,
                     "status": "completed",
@@ -635,8 +647,8 @@ class BenchmarkManager:
                     "test_cases": test_cases,
                     "passed_count": passed_count,
                     "total_count": total_count,
-                    "started_at": trial_result.get("started_at"),
-                    "finished_at": trial_result.get("finished_at"),
+                    "started_at": started_at,
+                    "finished_at": finished_at,
                     "error": None,
                     "aws_batch_job_id": job_id,
                     "aws_batch_status": aws_status,

@@ -3,16 +3,31 @@
 import { useCallback, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
+import { HarnessSelector } from "./HarnessSelector";
+import { ModelSelector } from "./ModelSelector";
+import type { HarnessType, ModelType } from "@/types";
+import { DEFAULT_MODEL } from "@/types";
 
-// Hardcoded values - terminus and model selection disabled for now
-const HARNESS = "harbor";
-const MODEL = "openrouter/openai/gpt-5";
+const DEFAULT_HARNESS: HarnessType = "harbor";
+
+interface UploadResult {
+  upload_id: string;
+  task_name: string;
+  detected_format: "harbor" | "terminus" | "unknown";
+}
 
 export function DropZone() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<string>("");
+
+  // Harness and model selection state
+  const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
+  const [selectedHarness, setSelectedHarness] =
+    useState<HarnessType>(DEFAULT_HARNESS);
+  const [selectedModel, setSelectedModel] = useState<ModelType>(DEFAULT_MODEL);
+  const [startingBenchmark, setStartingBenchmark] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -30,21 +45,48 @@ export function DropZone() {
     try {
       const result = await api.uploadFile(file);
 
-      // Immediately start benchmark after upload
-      setUploadProgress(`Starting benchmark for "${result.task_name}"...`);
-
-      const { id } = await api.createBenchmark(
-        result.upload_id,
-        HARNESS,
-        MODEL
-      );
-      router.push(`/benchmarks?id=${id}`);
+      // Show harness selection instead of immediately creating benchmark
+      setUploadResult(result);
+      // Auto-select harness based on detected format
+      if (result.detected_format === "harbor") {
+        setSelectedHarness("harbor");
+      } else if (result.detected_format === "terminus") {
+        setSelectedHarness("terminus");
+      }
+      setUploading(false);
+      setUploadProgress("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
       setUploading(false);
       setUploadProgress("");
     }
-  }, [router]);
+  }, []);
+
+  const handleStartBenchmark = useCallback(async () => {
+    if (!uploadResult) return;
+
+    setStartingBenchmark(true);
+    setError(null);
+
+    try {
+      const { id } = await api.createBenchmark(
+        uploadResult.upload_id,
+        selectedHarness,
+        selectedModel
+      );
+      router.push(`/benchmarks?id=${id}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to start benchmark");
+      setStartingBenchmark(false);
+    }
+  }, [uploadResult, selectedHarness, selectedModel, router]);
+
+  const handleCancel = useCallback(() => {
+    setUploadResult(null);
+    setSelectedHarness(DEFAULT_HARNESS);
+    setSelectedModel(DEFAULT_MODEL);
+    setError(null);
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -70,8 +112,71 @@ export function DropZone() {
   );
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    if (!uploadResult) {
+      fileInputRef.current?.click();
+    }
   };
+
+  // Show harness selection after upload
+  if (uploadResult) {
+    return (
+      <div className="border-2 border-gray-200 rounded-xl p-8 bg-white">
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Configure Benchmark
+            </h3>
+            <p className="text-gray-600 mt-1">
+              Task: <span className="font-medium">{uploadResult.task_name}</span>
+            </p>
+          </div>
+
+          <HarnessSelector
+            value={selectedHarness}
+            onChange={setSelectedHarness}
+            detectedFormat={uploadResult.detected_format}
+            disabled={startingBenchmark}
+          />
+
+          <ModelSelector
+            value={selectedModel}
+            onChange={setSelectedModel}
+            disabled={startingBenchmark}
+          />
+
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleCancel}
+              disabled={startingBenchmark}
+              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleStartBenchmark}
+              disabled={startingBenchmark}
+              className="flex-1 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {startingBenchmark ? (
+                <>
+                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  Starting...
+                </>
+              ) : (
+                "Start Benchmark"
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
