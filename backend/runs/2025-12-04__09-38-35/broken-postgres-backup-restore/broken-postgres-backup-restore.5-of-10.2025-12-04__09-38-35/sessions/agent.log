@@ -1,428 +1,0 @@
-[?2004hroot@eebd667a1fdc:/backup# asciinema rec --stdin /logs/agent.cast
-[?2004l[0;32masciinema: recording asciicast to /logs/agent.cast[0m
-[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
-[?2004hroot@eebd667a1fdc:/backup# clear
-[?2004l[H[J[3J[?2004hroot@eebd667a1fdc:/backup# ls -la /backup/; tmux wait -S done
-[?2004ltotal 40
-drwxr-xr-x 1 root root  4096 Dec  4 16:59 [0m[01;34m.[0m
-drwxr-xr-x 1 root root  4096 Dec  4 17:50 [01;34m..[0m
--rw-r--r-- 1 root root   945 Dec  4 16:54 backup_metadata.log
--rw-r--r-- 1 root root   718 Dec  4 16:54 database.sql
--rw-r--r-- 1 root root   703 Dec  4 16:54 postgresql.conf
--rw-r--r-- 1 root root 15425 Dec  4 16:54 transactions_backup.json
--rw-r--r-- 1 root root  2351 Dec  4 16:54 users_export.csv
-[?2004hroot@eebd667a1fdc:/backup# service postgresql start; tmux wait -S done
-[?2004l * Starting PostgreSQL 16 database server       [160G [154G[ OK ]
-[?2004hroot@eebd667a1fdc:/backup# head -20 /backup/database.sql; tmux wait -S done
-[?2004l-- PostgreSQL database dump
--- This dump contains the schema and some sample data
--- Note: Some statements may have errors that need to be fixed
-
--- Create users table
-CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP,
-    status VARCHAR(20)
-);
-
--- Create transactions table  
-CREATE TABLE IF NOT EXISTS transactions (
-    transaction_id INTEGER PRIMARY KEY,
-    user_id INTEGER,
-    amount DECIMAL(10,2),
-    timestamp TIMESTAMP,
-    description TEXT,
-[?2004hroot@eebd667a1fdc:/backup# head -20 /backup/users_export.csv; tmux wait -S done
-[?2004luser_id,username,email,created_at,status
-1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
-2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
-3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
-4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
-5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
-6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
-7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
-8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
-9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
-10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
-11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
-12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
-13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
-14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
-15,olivia_pope,olivia_pope@example.com,2025-06-01 01:25:46,active
-16,peter_parker,peter_parker@example.com,2025-01-02 01:25:46,inactive
-17,quinn_baker,quinn_baker@example.com,2025-01-22 01:25:46,suspended
-18,rachel_green,rachel_green@example.com,2025-04-01 01:25:46,inactive
-19,steve_rogers,steve_rogers@example.com,2025-06-28 01:25:46,active
-[?2004hroot@eebd667a1fdc:/backup# head -20 /backup/transactions_backup.json; tmux wait -S done
-[?2004l[
-  {
-    "transaction_id": 1,
-    "user_id": 16,
-    "amount": 46.0,
-    "timestamp": "2025-07-16 01:25:56",
-    "description": "Subscription"
-  },
-  {
-    "transaction_id": 2,
-    "user_id": 6,
-    "amount": 646.05,
-    "timestamp": "2025-05-02 01:25:56",
-    "description": "Payment"
-  },
-  {
-    "transaction_id": 3,
-    "user_id": 29,
-    "amount": 186.76,
-    "timestamp": "2025-07-30 01:25:56",
-[?2004hroot@eebd667a1fdc:/backup# cat /backup/backup_metadata.log; tmux wait -S done
-[?2004l[2025-09-28 03:00:00] INFO: Starting database backup process
-[2025-09-28 03:00:01] INFO: Backup initiated by: admin
-[2025-09-28 03:00:01] INFO: Backup type: Full
-[2025-09-28 03:00:02] INFO: Connecting to database: production_db
-[2025-09-28 03:00:03] INFO: Connection successful
-[2025-09-28 03:00:05] INFO: Backing up table: users
-[2025-09-28 03:00:06] INFO: Table 'users' backed up successfully - 30 rows
-[2025-09-28 03:00:07] INFO: Backing up table: transactions
-[2025-09-28 03:00:09] INFO: Table 'transactions' backed up successfully - 100 rows
-[2025-09-28 03:00:10] INFO: Total tables backed up: 2
-[2025-09-28 03:00:10] INFO: Total rows backed up: 130
-[2025-09-28 03:00:11] INFO: Running integrity check
-[2025-09-28 03:00:12] INFO: Integrity check: PASSED
-[2025-09-28 03:00:13] INFO: Backup completed successfully
-[2025-09-28 03:00:13] INFO: Backup file: /backup/database.sql
-[2025-09-28 03:00:13] INFO: Backup timestamp: 2025-09-28 03:00:00
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -c 'CREATE DATABASE production_db;'; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -f /backup/database.sql; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c '\dt'; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c '\d users'; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c '\d transactions'; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# wc -l /backup/users_export.csv; tmux wait -S done
-[?2004l37 /backup/users_export.csv
-[?2004hroot@eebd667a1fdc:/backup# cat /backup/users_export.csv; tmux wait -S done
-[?2004luser_id,username,email,created_at,status
-1,alice_smith,alice_smith@example.com,2024-11-21 01:25:46,inactive
-2,bob_jones,bob_jones@example.com,2025-06-28 01:25:46,active
-3,charlie_brown,charlie_brown@example.com,2025-08-13 01:25:46,suspended
-4,diana_prince,diana_prince@example.com,2025-08-05 01:25:46,inactive
-5,eve_adams,eve_adams@example.com,2025-09-08 01:25:46,inactive
-6,frank_white,frank_white@example.com,2025-09-04 01:25:46,active
-7,grace_lee,grace_lee@example.com,2025-06-05 01:25:46,active
-8,henry_ford,henry_ford@example.com,2025-07-25 01:25:46,inactive
-9,iris_west,iris_west@example.com,2025-03-23 01:25:46,suspended
-10,jack_ryan,jack_ryan@example.com,2024-10-19 01:25:46,inactive
-11,kate_mills,kate_mills@example.com,2025-06-27 01:25:46,active
-12,leo_king,leo_king@example.com,2024-12-21 01:25:46,inactive
-13,mary_jane,mary_jane@example.com,2025-10-03 01:25:46,suspended
-14,nick_fury,nick_fury@example.com,2025-04-03 01:25:46,suspended
-15,olivia_pope,olivia_pope@example.com,2025-06-01 01:25:46,active
-16,peter_parker,peter_parker@example.com,2025-01-02 01:25:46,inactive
-17,quinn_baker,quinn_baker@example.com,2025-01-22 01:25:46,suspended
-18,rachel_green,rachel_green@example.com,2025-04-01 01:25:46,inactive
-19,steve_rogers,steve_rogers@example.com,2025-06-28 01:25:46,active
-20,tony_stark,tony_stark@example.com,2025-07-18 01:25:46,suspended
-21,uma_thurman,uma_thurman@example.com,2025-01-13 01:25:46,active
-22,victor_von,victor_von@example.com,2024-10-17 01:25:46,active
-23,wade_wilson,wade_wilson@example.com,2025-04-24 01:25:46,suspended
-24,xavier_prof,xavier_prof@example.com,2025-09-27 01:25:46,inactive
-25,yara_greyjoy,yara_greyjoy@example.com,2025-06-21 01:25:46,active
-26,zara_ahmed,zara_ahmed@example.com,2025-09-19 01:25:46,active
-27,alan_turing,alan_turing@example.com,2025-03-17 01:25:46,inactive
-28,betty_white,betty_white@example.com,2024-10-09 01:25:46,active
-29,clark_kent,clark_kent@example.com,2025-09-22 01:25:46,active
-30,donna_noble,donna_noble@example.com,2024-11-22 01:25:46,active
-,bad_user1,bad1@example.com,2024-01-01 10:00:00,active
-31,bad_user2,bademail.com,2024-01-01 10:00:00,active
-32,,bad3@example.com,2024-01-01 10:00:00,active
-33,bad_user4,bad4@example.com,2024-01-01 10:00:00,deleted
-34,bad_user5,,2024-01-01 10:00:00,active
-,,noemail,2024-01-01 10:00:00,invalid
-[?2004hroot@eebd667a1fdc:/backup# cat /backup/transactions_backup.json | python3 -m json.tool | head -100; tmux wait -S done
-[?2004l[
-    {
-        "transaction_id": 1,
-        "user_id": 16,
-        "amount": 46.0,
-        "timestamp": "2025-07-16 01:25:56",
-        "description": "Subscription"
-    },
-    {
-        "transaction_id": 2,
-        "user_id": 6,
-        "amount": 646.05,
-        "timestamp": "2025-05-02 01:25:56",
-        "description": "Payment"
-    },
-    {
-        "transaction_id": 3,
-        "user_id": 29,
-        "amount": 186.76,
-        "timestamp": "2025-07-30 01:25:56",
-        "description": "Payment"
-    },
-    {
-        "transaction_id": 4,
-        "user_id": 10,
-        "amount": 757.37,
-        "timestamp": "2025-09-03 01:25:56",
-        "description": "Deposit"
-    },
-    {
-        "transaction_id": 5,
-        "user_id": 9,
-        "amount": 366.3,
-        "timestamp": "2025-09-21 01:25:56",
-        "description": "Refund"
-    },
-    {
-        "transaction_id": 6,
-        "user_id": 6,
-        "amount": 540.38,
-        "timestamp": "2025-06-18 01:25:56",
-        "description": "Transfer"
-    },
-    {
-        "transaction_id": 7,
-        "user_id": 1,
-        "amount": 450.03,
-        "timestamp": "2025-05-07 01:25:56",
-        "description": "Refund"
-    },
-    {
-        "transaction_id": 8,
-        "user_id": 12,
-        "amount": 875.23,
-        "timestamp": "2025-05-22 01:25:56",
-        "description": "Payment"
-    },
-    {
-        "transaction_id": 9,
-        "user_id": 22,
-        "amount": 89.57,
-        "timestamp": "2025-09-30 01:25:56",
-        "description": "Deposit"
-    },
-    {
-        "transaction_id": 10,
-        "user_id": 23,
-        "amount": 715.22,
-        "timestamp": "2025-09-01 01:25:56",
-        "description": "Payment"
-    },
-    {
-        "transaction_id": 11,
-        "user_id": 3,
-        "amount": 554.6,
-        "timestamp": "2025-06-01 01:25:56",
-        "description": "Transfer"
-    },
-    {
-        "transaction_id": 12,
-        "user_id": 4,
-        "amount": 596.38,
-        "timestamp": "2025-07-19 01:25:56",
-        "description": "Withdrawal"
-    },
-    {
-        "transaction_id": 13,
-        "user_id": 22,
-        "amount": 922.1,
-        "timestamp": "2025-09-07 01:25:56",
-        "description": "Deposit"
-    },
-    {
-        "transaction_id": 14,
-        "user_id": 6,
-        "amount": 881.41,
-        "timestamp": "2025-04-19 01:25:56",
-        "description": "Transfer"
-    },
-    {
-[?2004hroot@eebd667a1fdc:/backup# python3 -c "import json; data=json.load(open('/backup/transactions_backup.json')); print(f'Total transactions: {len(data)}'); print('Sample invalid entries:'); [print(t) for t in data if t.get('transaction_id') is None or t.get('amount',0) <= 0 or t.get('user_id',0) < 1 or t.get('user_id',0) > 30][:10]"; tmux wait -S done
-[?2004lTotal transactions: 106
-Sample invalid entries:
-{'transaction_id': None, 'user_id': 5, 'amount': 100.0, 'timestamp': '2024-01-01 10:00:00', 'description': 'Invalid'}
-{'transaction_id': 101, 'user_id': 10, 'amount': -50.0, 'timestamp': '2024-01-01 10:00:00', 'description': 'Invalid'}
-{'transaction_id': 103, 'user_id': 999, 'amount': 150.0, 'timestamp': '2024-01-01 10:00:00', 'description': 'Invalid'}
-{'transaction_id': 104, 'user_id': 8, 'amount': 0, 'timestamp': '2024-01-01 10:00:00', 'description': 'Invalid'}
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-TypeError: '<=' not supported between instances of 'str' and 'int'
-[?2004hroot@eebd667a1fdc:/backup# cat > /backup/clean_data.py << 'EOF'
-[?2004l[?2004h> import csv
-[?2004l[?2004h> import json
-[?2004l[?2004h> import re
-[?2004l[?2004h> 
-[?2004l[?2004h> # Clean users CSV
-[?2004l[?2004h> print("Cleaning users data...")
-[?2004l[?2004h> valid_users = []
-[?2004l[?2004h> with open('/backup/users_export.csv', 'r') as f:
-[?2004l[?2004h>     reader = csv.DictReader(f)
-[?2004l[?2004h>     for row in reader:
-[?2004l[?2004h>         # Check for missing user_id
-[?2004l[?2004h>         if not row.get('user_id') or row['user_id'].strip() == '':
-[?2004l[?2004h>             continue
-[?2004l[?2004h>         
-[?2004l[?2004h>         # Check for empty username
-[?2004l[?2004h>         if not row.get('username') or row['username'].strip() == '':
-[?2004l[?2004h>             continue
-[?2004l[?2004h>         
-[?2004l[?2004h>         # Check for valid email (must contain @)
-[?2004l[?2004h>         email = row.get('email', '').strip()
-[?2004l[?2004h>         if not email or '@' not in email:
-[?2004l[?2004h>             continue
-[?2004l[?2004h>         
-[?2004l[?2004h>         # Check for valid status
-[?2004l[?2004h>         status = row.get('status', '').strip()
-[?2004l[?2004h>         if status not in ['active', 'inactive', 'suspended']:
-[?2004l[?2004h>             continue
-[?2004l[?2004h>         
-[?2004l[?2004h>         valid_users.append(row)
-[?2004l[?2004h> 
-[?2004l[?2004h> print(f"Valid users: {len(valid_users)}")
-[?2004l[?2004h> 
-[?2004l[?2004h> # Write cleaned users
-[?2004l[?2004h> with open('/backup/clean_users.csv', 'w', newline='') as f:
-[?2004l[?2004h>     writer = csv.DictWriter(f, fieldnames=['user_id', 'username', 'email', 'created_at', 'status'])
-[?2004l[?2004h>     writer.writeheader()
-[?2004l[?2004h>     writer.writerows(valid_users)
-[?2004l[?2004h> 
-[?2004l[?2004h> print("Users cleaned and saved to clean_users.csv")
-[?2004l[?2004h> 
-[?2004l[?2004h> # Clean transactions JSON
-[?2004l[?2004h> print("\nCleaning transactions data...")
-[?2004l[?2004h> with open('/backup/transactions_backup.json', 'r') as f:
-[?2004l[?2004h>     transactions = json.load(f)
-[?2004l[?2004h> 
-[?2004l[?2004h> valid_transactions = []
-[?2004l[?2004h> for t in transactions:
-[?2004l[?2004h>     # Check for null transaction_id
-[?2004l[?2004h>     if t.get('transaction_id') is None:
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     # Check for null or invalid user_id (must be 1-30)
-[?2004l[?2004h>     user_id = t.get('user_id')
-[?2004l[?2004h>     if user_id is None or not isinstance(user_id, int) or user_id < 1 or user_id > 30:
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     # Check for null, negative, or zero amounts
-[?2004l[?2004h>     amount = t.get('amount')
-[?2004l[?2004h>     if amount is None:
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     # Convert string amounts to float if needed
-[?2004l[?2004h>     try:
-[?2004l[?2004h>         amount_val = float(amount)
-[?2004l[?2004h>     except (ValueError, TypeError):
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     if amount_val <= 0:
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     # Check for missing timestamp
-[?2004l[?2004h>     if not t.get('timestamp'):
-[?2004l[?2004h>         continue
-[?2004l[?2004h>     
-[?2004l[?2004h>     valid_transactions.append(t)
-[?2004l[?2004h> 
-[?2004l[?2004h> print(f"Valid transactions: {len(valid_transactions)}")
-[?2004l[?2004h> 
-[?2004l[?2004h> # Write valid transactions
-[?2004l[?2004h> with open('/backup/valid_transactions.json', 'w') as f:
-[?2004l[?2004h>     json.dump(valid_transactions, f, indent=2)
-[?2004l[?2004h>     f.write('\n')
-[?2004l[?2004h> 
-[?2004l[?2004h> print("Transactions cleaned and saved to valid_transactions.json")
-[?2004l[?2004h> EOF
-[?2004l[?2004hroot@eebd667a1fdc:/backup# python3 /backup/clean_data.py; tmux wait -S done
-[?2004lCleaning users data...
-Valid users: 30
-Users cleaned and saved to clean_users.csv
-
-Cleaning transactions data...
-Valid transactions: 100
-Transactions cleaned and saved to valid_transactions.json
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c "COPY users(user_id, username, email, created_at, status) FROM '/backup/clean_users.csv' WITH (FORMAT csv, HEADER true);"; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c "SELECT COUNT(*) FROM users;"; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# cat > /backup/import_transactions.py << 'EOF'
-[?2004l[?2004h> import json
-[?2004l[?2004h> import psycopg2
-[?2004l[?2004h> 
-[?2004l[?2004h> # Connect to database
-[?2004l[?2004h> conn = psycopg2.connect(
-[?2004l[?2004h>     dbname='production_db',
-[?2004l[?2004h>     user='postgres',
-[?2004l[?2004h>     host='localhost'
-[?2004l[?2004h> )
-[?2004l[?2004h> cur = conn.cursor()
-[?2004l[?2004h> 
-[?2004l[?2004h> # Load transactions
-[?2004l[?2004h> with open('/backup/valid_transactions.json', 'r') as f:
-[?2004l[?2004h>     transactions = json.load(f)
-[?2004l[?2004h> 
-[?2004l[?2004h> print(f"Importing {len(transactions)} transactions...")
-[?2004l[?2004h> 
-[?2004l[?2004h> # Insert transactions
-[?2004l[?2004h> for t in transactions:
-[?2004l[?2004h>     cur.execute(
-[?2004l[?2004h>         "INSERT INTO transactions (transaction_id, user_id, amount, timestamp, description) VALUES (%s, %s, %s, %s, %s)",
-[?2004l[?2004h>         (t['transaction_id'], t['user_id'], t['amount'], t['timestamp'], t['description'])
-[?2004l[?2004h>     )
-[?2004l[?2004h> 
-[?2004l[?2004h> conn.commit()
-[?2004l[?2004h> print("Transactions imported successfully")
-[?2004l[?2004h> 
-[?2004l[?2004h> cur.close()
-[?2004l[?2004h> conn.close()
-[?2004l[?2004h> EOF
-[?2004l[?2004hroot@eebd667a1fdc:/backup# python3 /backup/import_transactions.py; tmux wait -S done
-[?2004lTraceback (most recent call last):
-  File "/backup/import_transactions.py", line 2, in <module>
-    import psycopg2
-ModuleNotFoundError: No module named 'psycopg2'
-[?2004hroot@eebd667a1fdc:/backup# psql -U postgres -d production_db -c "SELECT COUNT(*) FROM transactions;"; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
-[?2004hroot@eebd667a1fdc:/backup# su - postgres -c "psql -d production_db -c 'COPY users(user_id, username, email, created_at, status) FROM \'/backup/clean_users.csv\' WITH (FORMAT csv, HEADER true);'"; tmux wait -S done
-[?2004l-bash: -c: line 1: syntax error near unexpected token `('
--bash: -c: line 1: `psql -d production_db -c 'COPY users(user_id, username, email, created_at, status) FROM \'/backup/clean_users.csv\' WITH (FORMAT csv, HEADER true);''
-[?2004hroot@eebd667a1fdc:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM users;'"; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
-[?2004hroot@eebd667a1fdc:/backup# cat > /backup/convert_json_to_csv.py << 'EOF'
-[?2004l[?2004h> import json
-[?2004l[?2004h> import csv
-[?2004l[?2004h> 
-[?2004l[?2004h> # Load transactions
-[?2004l[?2004h> with open('/backup/valid_transactions.json', 'r') as f:
-[?2004l[?2004h>     transactions = json.load(f)
-[?2004l[?2004h> 
-[?2004l[?2004h> # Write to CSV
-[?2004l[?2004h> with open('/backup/transactions_temp.csv', 'w', newline='') as f:
-[?2004l[?2004h>     writer = csv.writer(f)
-[?2004l[?2004h>     for t in transactions:
-[?2004l[?2004h>         writer.writerow([t['transaction_id'], t['user_id'], t['amount'], t['timestamp'], t['description']])
-[?2004l[?2004h> 
-[?2004l[?2004h> print(f"Converted {len(transactions)} transactions to CSV")
-[?2004l[?2004h> EOF
-[?2004l[?2004hroot@eebd667a1fdc:/backup# python3 /backup/convert_json_to_csv.py; tmux wait -S done
-[?2004lConverted 100 transactions to CSV
-[?2004hroot@eebd667a1fdc:/backup# su - postgres -c "psql -d production_db -c \"COPY transactions(transaction_id, user_id, amount, timestamp, description) FROM '/backup/transactions_temp.csv' WITH (FORMAT csv);\""; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
-[?2004hroot@eebd667a1fdc:/backup# su - postgres -c "psql -d production_db -c 'SELECT COUNT(*) FROM transactions;'"; tmux wait -S done
-[?2004lpsql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "production_db" does not exist
-[?2004hroot@eebd667a1fdc:/backup# su - postgres
-[?2004l[?2004hpostgres@eebd667a1fdc:~$ psql -c 'CREATE DATABASE production_db;'; tmux wait -S done
-[?2004lCREATE DATABASE
-error connecting to /tmp/tmux-100/default (No such file or directory)
-[?2004hpostgres@eebd667a1fdc:~$ psql -d production_db -f /backup/database.sql; tmux wait -S done
-[?2004lCREATE TABLE
-CREATE TABLE
-error connecting to /tmp/tmux-100/default (No such file or directory)
-[?2004hpostgres@eebd667a1fdc:~$ 
