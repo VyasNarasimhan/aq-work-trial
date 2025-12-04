@@ -9,6 +9,7 @@ import { ResultsDashboard } from "@/components/benchmark/ResultsDashboard";
 import { useEffect, useState, Suspense } from "react";
 import { api } from "@/lib/api";
 import { LogViewer } from "@/components/logs/LogViewer";
+import { formatDateCompact } from "@/lib/utils/formatDate";
 import type { RunLogs, Run, Benchmark } from "@/types";
 
 export default function BenchmarksPage() {
@@ -141,7 +142,7 @@ function BenchmarksList() {
                     </div>
                     <p className="text-sm text-gray-500 mt-1">
                       {benchmark.started_at
-                        ? new Date(benchmark.started_at).toLocaleString()
+                        ? formatDateCompact(benchmark.started_at)
                         : "Not started"}
                     </p>
                   </div>
@@ -248,7 +249,7 @@ function BenchmarkDetail({ id }: { id: string }) {
           <p className="text-gray-500 text-sm mt-1">
             Started{" "}
             {benchmark.started_at
-              ? new Date(benchmark.started_at).toLocaleString()
+              ? formatDateCompact(benchmark.started_at)
               : "N/A"}
           </p>
         </div>
@@ -272,7 +273,7 @@ function BenchmarkDetail({ id }: { id: string }) {
           <div className="mt-8 text-center text-gray-500 text-sm">
             Benchmark completed{" "}
             {benchmark.finished_at
-              ? new Date(benchmark.finished_at).toLocaleString()
+              ? formatDateCompact(benchmark.finished_at)
               : ""}
           </div>
         )}
