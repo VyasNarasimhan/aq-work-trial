@@ -12,7 +12,8 @@ import { API_BASE } from "./config";
 // Standalone exports for direct imports
 export async function getRunLogs(benchmarkId: string, runId: string): Promise<RunLogs> {
   const res = await fetch(
-    `${API_BASE}/benchmarks/${benchmarkId}/runs/${runId}/logs`
+    `${API_BASE}/benchmarks/${benchmarkId}/runs/${runId}/logs`,
+    { cache: 'no-store' }
   );
   if (!res.ok) throw new Error("Failed to fetch logs");
   return res.json();
@@ -52,26 +53,27 @@ export const api = {
   },
 
   async listBenchmarks(): Promise<Benchmark[]> {
-    const res = await fetch(`${API_BASE}/benchmarks`);
+    const res = await fetch(`${API_BASE}/benchmarks`, { cache: 'no-store' });
     if (!res.ok) throw new Error("Failed to fetch benchmarks");
     return res.json();
   },
 
   async getBenchmark(id: string): Promise<Benchmark> {
-    const res = await fetch(`${API_BASE}/benchmarks/${id}`);
+    const res = await fetch(`${API_BASE}/benchmarks/${id}`, { cache: 'no-store' });
     if (!res.ok) throw new Error("Benchmark not found");
     return res.json();
   },
 
   async getRuns(benchmarkId: string): Promise<Run[]> {
-    const res = await fetch(`${API_BASE}/benchmarks/${benchmarkId}/runs`);
+    const res = await fetch(`${API_BASE}/benchmarks/${benchmarkId}/runs`, { cache: 'no-store' });
     if (!res.ok) throw new Error("Failed to fetch runs");
     return res.json();
   },
 
   async getRunLogs(benchmarkId: string, runId: string): Promise<RunLogs> {
     const res = await fetch(
-      `${API_BASE}/benchmarks/${benchmarkId}/runs/${runId}/logs`
+      `${API_BASE}/benchmarks/${benchmarkId}/runs/${runId}/logs`,
+      { cache: 'no-store' }
     );
     if (!res.ok) throw new Error("Failed to fetch logs");
     return res.json();

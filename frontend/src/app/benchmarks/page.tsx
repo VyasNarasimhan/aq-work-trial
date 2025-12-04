@@ -146,7 +146,7 @@ function BenchmarksList() {
                         : "Not started"}
                     </p>
                   </div>
-                  <div className="text-right">
+                  {/* <div className="text-right">
                     <div
                       className={`
                       inline-block px-3 py-1 rounded-full text-sm font-medium
@@ -166,7 +166,7 @@ function BenchmarksList() {
                     <p className="text-sm text-gray-500 mt-1">
                       {benchmark.passed_runs}/{benchmark.total_runs} passed
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </Link>
             ))}
