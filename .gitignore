@@ -8,6 +8,7 @@ backend/uploads
 backend/.env
 backend/app/*/__pycache__
 backend/data
+backend/runs
 
 frontend/node_modules/
 frontend/.next/
